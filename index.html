@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-12-19 dim. 16:08 -->
+<!-- 2021-12-19 dim. 20:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lrm;</title>
+<title>Invabot</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Virgile Daugé" />
 <style type="text/css">
@@ -201,6 +201,8 @@
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
 <style type="text/css">
  pre.src {background-color: #263238; color: #EEFFFF;}</style>
+<style type="text/css">
+ pre.src {background-color: #263238; color: #EEFFFF;}</style>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -250,26 +252,30 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
+<h1 class="title">Invabot</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org0ee219e">1. Concept :</a></li>
-<li><a href="#org545950c">2. Configuration</a></li>
-<li><a href="#org14cf06b">3. Utilitaires</a>
+<li><a href="#org36470d8">1. Concept :</a></li>
+<li><a href="#org35e0145">2. Configuration</a></li>
+<li><a href="#orgb7afce1">3. Utilitaires</a>
 <ul>
-<li><a href="#orgedee111">3.1. Chargement du token</a></li>
-<li><a href="#org6205770">3.2. Identifiant</a></li>
-<li><a href="#org4918dc3">3.3. Récupération du roster</a></li>
-<li><a href="#org2b47f74">3.4. Récupération de la strat</a></li>
+<li><a href="#orgf9295e7">3.1. Chargement de la config</a></li>
+<li><a href="#orgf5cbbb2">3.2. Chargement du token</a></li>
+<li><a href="#org0f2f210">3.3. Identifiant</a></li>
+<li><a href="#orgee2f1d1">3.4. Récupération du roster</a></li>
+<li><a href="#org32e2e35">3.5. Récupération de la strat</a></li>
 </ul>
 </li>
-<li><a href="#orgc73824a">4. Bot avec discord.py</a>
+<li><a href="#org9c10e78">4. Bot avec discord.py</a>
 <ul>
-<li><a href="#org7f682fc">4.1. Récupération des joueurs</a>
+<li><a href="#org6a27f85">4.1. DM des joueurs qui n'ont pas renseigné leurs rôles</a></li>
+<li><a href="#org8f5d809">4.2. Run</a></li>
+<li><a href="#org7d86279">4.3. Récupération des joueurs</a>
 <ul>
-<li><a href="#org5d17113">4.1.1. Récupération de tous les joueurs inscrits sur le gdoc</a></li>
-<li><a href="#orge2fa1b1">4.1.2. Filtrage des joueurs</a></li>
+<li><a href="#org88eee1c">4.3.1. Récupération de tous les joueurs inscrits sur le gdoc</a></li>
+<li><a href="#org6e639a3">4.3.2. Filtrage des joueurs</a></li>
 </ul>
 </li>
 </ul>
@@ -277,8 +283,8 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="outline-container-org0ee219e" class="outline-2">
-<h2 id="org0ee219e"><span class="section-number-2">1</span> Concept :</h2>
+<div id="outline-container-org36470d8" class="outline-2">
+<h2 id="org36470d8"><span class="section-number-2">1</span> Concept :</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Le bot
@@ -286,8 +292,8 @@ Le bot
 </div>
 </div>
 
-<div id="outline-container-org545950c" class="outline-2">
-<h2 id="org545950c"><span class="section-number-2">2</span> Configuration</h2>
+<div id="outline-container-org35e0145" class="outline-2">
+<h2 id="org35e0145"><span class="section-number-2">2</span> Configuration</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 La configuration du bot passera par un fichier json unique, contenant
@@ -317,7 +323,18 @@ des Gdoc à lire.
 <span style="color: #c792ea;">}</span>
 </pre>
 </div>
+</div>
+</div>
 
+
+
+<div id="outline-container-orgb7afce1" class="outline-2">
+<h2 id="orgb7afce1"><span class="section-number-2">3</span> Utilitaires</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgf9295e7" class="outline-3">
+<h3 id="orgf9295e7"><span class="section-number-3">3.1</span> Chargement de la config</h3>
+<div class="outline-text-3" id="text-3-1">
 <p>
 Le chargement de cette config se fera pour l'instant une seule fois au
 démarrage du bot.
@@ -333,23 +350,20 @@ démarrage du bot.
 </div>
 </div>
 
-<div id="outline-container-org14cf06b" class="outline-2">
-<h2 id="org14cf06b"><span class="section-number-2">3</span> Utilitaires</h2>
-<div class="outline-text-2" id="text-3">
-</div>
-<div id="outline-container-orgedee111" class="outline-3">
-<h3 id="orgedee111"><span class="section-number-3">3.1</span> Chargement du token</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-orgf5cbbb2" class="outline-3">
+<h3 id="orgf5cbbb2"><span class="section-number-3">3.2</span> Chargement du token</h3>
+<div class="outline-text-3" id="text-3-2">
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #89DDFF;">with</span> <span style="color: #82aaff;">open</span><span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'bot.token'</span>, <span style="color: #c3e88d;">'r'</span><span style="color: #c792ea;">)</span> <span style="color: #89DDFF;">as</span> datafile:
+<pre class="src src-python"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement du token</span>
+<span style="color: #89DDFF;">with</span> <span style="color: #82aaff;">open</span><span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'bot.token'</span>, <span style="color: #c3e88d;">'r'</span><span style="color: #c792ea;">)</span> <span style="color: #89DDFF;">as</span> datafile:
     <span style="color: #ffcb6b;">token</span> = datafile.read<span style="color: #c792ea;">()</span>
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org6205770" class="outline-3">
-<h3 id="org6205770"><span class="section-number-3">3.2</span> Identifiant</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-org0f2f210" class="outline-3">
+<h3 id="org0f2f210"><span class="section-number-3">3.3</span> Identifiant</h3>
+<div class="outline-text-3" id="text-3-3">
 <p>
 Il est nécessaire d'avoir un identifiant unique entre discord et le
 gdoc pour faire le lien. Discord gère les identifiants sous forme d'un
@@ -371,11 +385,12 @@ depuis un objet <i>discord.User</i> :
 </div>
 </div>
 
-<div id="outline-container-org4918dc3" class="outline-3">
-<h3 id="org4918dc3"><span class="section-number-3">3.3</span> Récupération du roster</h3>
-<div class="outline-text-3" id="text-3-3">
+<div id="outline-container-orgee2f1d1" class="outline-3">
+<h3 id="orgee2f1d1"><span class="section-number-3">3.4</span> Récupération du roster</h3>
+<div class="outline-text-3" id="text-3-4">
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_roster</span><span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>:
+<pre class="src src-python"><span style="color: #89DDFF;">import</span> pandas <span style="color: #89DDFF;">as</span> pd
+<span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_roster</span><span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>:
     <span style="color: #ffcb6b;">url</span> = f<span style="color: #c3e88d;">"{config['gdoc']['url']}gviz/tq?tqx=out:csv&amp;sheet={config['gdoc']['page_roster']}"</span>
     <span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>pd.read_csv<span style="color: #f78c6c;">(</span>url<span style="color: #f78c6c;">)</span>.iloc<span style="color: #f78c6c;">[</span>1:, 0:6<span style="color: #f78c6c;">]</span>.dropna<span style="color: #f78c6c;">()</span>.set_index<span style="color: #f78c6c;">(</span><span style="color: #c3e88d;">'dtag'</span><span style="color: #f78c6c;">)</span><span style="color: #c792ea;">)</span>
     <span style="color: #89DDFF;">return</span> pd.read_csv<span style="color: #c792ea;">(</span>url<span style="color: #c792ea;">)</span>.iloc<span style="color: #c792ea;">[</span>1:, 0:6<span style="color: #c792ea;">]</span>.dropna<span style="color: #c792ea;">()</span>.set_index<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'dtag'</span><span style="color: #c792ea;">)</span>
@@ -392,9 +407,9 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 </pre>
 </div>
 </div>
-<div id="outline-container-org2b47f74" class="outline-3">
-<h3 id="org2b47f74"><span class="section-number-3">3.4</span> Récupération de la strat</h3>
-<div class="outline-text-3" id="text-3-4">
+<div id="outline-container-org32e2e35" class="outline-3">
+<h3 id="org32e2e35"><span class="section-number-3">3.5</span> Récupération de la strat</h3>
+<div class="outline-text-3" id="text-3-5">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_strat</span><span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>:
     <span style="color: #ffcb6b;">url</span> = f<span style="color: #c3e88d;">"{config['gdoc']['url']}gviz/tq?tqx=out:csv&amp;sheet={config['gdoc']['page_strat']}"</span>
@@ -414,20 +429,21 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 </div>
 </div>
 
-<div id="outline-container-orgc73824a" class="outline-2">
-<h2 id="orgc73824a"><span class="section-number-2">4</span> Bot avec discord.py</h2>
+<div id="outline-container-org9c10e78" class="outline-2">
+<h2 id="org9c10e78"><span class="section-number-2">4</span> Bot avec discord.py</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 <a href="https://discordpy.readthedocs.io/en/stable/">https://discordpy.readthedocs.io/en/stable/</a>
 </p>
 
+<p>
+Création du bot
+</p>
 <div class="org-src-container">
-<pre class="src src-python">
-<span style="color: #89DDFF;">import</span> pandas <span style="color: #89DDFF;">as</span> pd
-<span style="color: #89DDFF;">import</span> discord
+<pre class="src src-python"><span style="color: #89DDFF;">import</span> discord
 <span style="color: #89DDFF;">from</span> discord.ext <span style="color: #89DDFF;">import</span> commands
 
-<span style="color: #ffcb6b;">bot</span> = commands.Bot<span style="color: #c792ea;">(</span>command_prefix=<span style="color: #c3e88d;">"$"</span><span style="color: #c792ea;">)</span>
+<span style="color: #ffcb6b;">bot</span> = commands.Bot<span style="color: #c792ea;">(</span>command_prefix=<span style="color: #c3e88d;">"!"</span><span style="color: #c792ea;">)</span>
 
 <span style="color: #ffcb6b;">msgs</span> = <span style="color: #c792ea;">{}</span>
 <span style="color: #ffcb6b;">msgs_ids</span> = <span style="color: #c792ea;">[]</span>
@@ -437,8 +453,83 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
     <span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'We have logged in as {0.user}'</span>.<span style="color: #82aaff;">format</span><span style="color: #f78c6c;">(</span>bot<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">)</span>
     <span style="color: #ffcb6b;">game</span> = discord.Game<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">"Venez chez Bakhu"</span><span style="color: #c792ea;">)</span>
     <span style="color: #89DDFF;">await</span> bot.change_presence<span style="color: #c792ea;">(</span>status=discord.Status.online, activity=game<span style="color: #c792ea;">)</span>
+</pre>
+</div>
 
-<span style="color: #c792ea;">@bot.event</span>
+<p>
+Commande d'ajout du panneau d'inscription, sur lequel les joueurs dans
+le fort doivent se signaler sera `!inva nomVille`
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #c792ea;">@bot.command</span><span style="color: #c792ea;">()</span>
+<span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">inva</span><span style="color: #c792ea;">(</span>ctx, arg<span style="color: #c792ea;">)</span>:
+    <span style="color: #ffcb6b;">embed</span> = discord.Embed.from_dict<span style="color: #c792ea;">(</span>config<span style="color: #f78c6c;">[</span><span style="color: #c3e88d;">"embeds"</span><span style="color: #f78c6c;">][</span><span style="color: #c3e88d;">"panneau"</span><span style="color: #f78c6c;">]</span><span style="color: #c792ea;">)</span>
+    <span style="color: #ffcb6b;">embed.title</span> += f<span style="color: #c3e88d;">' {arg}'</span>
+
+    <span style="color: #ffcb6b;">msg</span> = <span style="color: #89DDFF;">await</span> ctx.channel.send<span style="color: #c792ea;">(</span>embed=embed<span style="color: #c792ea;">)</span>
+    <span style="color: #89DDFF;">await</span> msg.add_reaction<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'&#9745;'</span><span style="color: #c792ea;">)</span>
+
+    <span style="color: #ffcb6b;">author_id</span> = dtag<span style="color: #c792ea;">(</span>ctx.author<span style="color: #c792ea;">)</span>
+    <span style="color: #ffcb6b;">msgs</span><span style="color: #c792ea;">[</span>author_id<span style="color: #c792ea;">]</span> = msg.<span style="color: #82aaff;">id</span>
+    <span style="color: #89DDFF;">global</span> msgs_ids
+    <span style="color: #ffcb6b;">msgs_ids</span> += <span style="color: #c792ea;">[</span>msg.<span style="color: #82aaff;">id</span><span style="color: #c792ea;">]</span>
+</pre>
+</div>
+
+<p>
+La commande de demande de <b>composition</b> sera la suivante `!comp`. La
+fonction associée doit récupérer le message <i>panneau</i> à partir de
+l'identité de l'appelant. Puis, récupérer la liste des joueurs qui ont
+réagi sur le panneau.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #c792ea;">@bot.command</span><span style="color: #c792ea;">()</span>
+<span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">comp</span><span style="color: #c792ea;">(</span>ctx<span style="color: #c792ea;">)</span>:
+    <span style="color: #ffcb6b;">author_dtag</span> = dtag<span style="color: #c792ea;">(</span>ctx.author<span style="color: #c792ea;">)</span>
+    <span style="color: #ffcb6b;">channel</span> = ctx.channel
+
+    <span style="color: #556369;"># </span><span style="color: #556369;">On s'assure que l'utilisateur qui demande le calcul ait d&#233;j&#224; fait la commande principale</span>
+    <span style="color: #89DDFF;">if</span> author_dtag <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> msgs:
+        <span style="color: #89DDFF;">await</span> channel.send<span style="color: #c792ea;">(</span>f<span style="color: #c3e88d;">"Pas de messages trouv&#233;s pour {author_dtag}. Commencez par utiliser la commande :\n $inva nomVille"</span><span style="color: #c792ea;">)</span>
+        <span style="color: #89DDFF;">return</span>
+
+    <span style="color: #556369;"># </span><span style="color: #556369;">R&#233;cup&#233;ration du message avec les r&#233;acs</span>
+    <span style="color: #ffcb6b;">msg_id</span> = msgs<span style="color: #c792ea;">[</span>author_dtag<span style="color: #c792ea;">]</span>
+    <span style="color: #ffcb6b;">main_msg</span> = <span style="color: #89DDFF;">await</span> channel.fetch_message<span style="color: #c792ea;">(</span>msg_id<span style="color: #c792ea;">)</span>
+
+    <span style="color: #556369;"># </span><span style="color: #556369;">R&#233;cup&#233;ration de la liste des users</span>
+    <span style="color: #ffcb6b;">selected</span> = <span style="color: #89DDFF;">await</span> main_msg.reactions<span style="color: #c792ea;">[</span>0<span style="color: #c792ea;">]</span>.users<span style="color: #c792ea;">()</span>.flatten<span style="color: #c792ea;">()</span>
+    <span style="color: #ffcb6b;">selected_tags</span> = <span style="color: #c792ea;">[</span>dtag<span style="color: #f78c6c;">(</span>u<span style="color: #f78c6c;">)</span> <span style="color: #89DDFF;">for</span> u <span style="color: #89DDFF;">in</span> selected<span style="color: #c792ea;">][</span>1:<span style="color: #c792ea;">]</span>
+    <span style="color: #ffcb6b;">selected_snow</span> = <span style="color: #c792ea;">{</span>t: u.<span style="color: #82aaff;">id</span> <span style="color: #89DDFF;">for</span> t, u <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">zip</span><span style="color: #f78c6c;">(</span>selected_tags, selected<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">}</span>
+    <span style="color: #89DDFF;">await</span> channel.send<span style="color: #c792ea;">(</span>f<span style="color: #c3e88d;">'Joueurs s&#233;l&#233;ction&#233;s : {selected}'</span><span style="color: #c792ea;">)</span>
+
+    <span style="color: #556369;"># </span><span style="color: #556369;">R&#233;cup&#233;ration des don&#233;nes du Gdoc roster</span>
+    <span style="color: #ffcb6b;">df</span> = get_roster<span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>
+
+    <span style="color: #556369;"># </span><span style="color: #556369;">Joueurs s&#233;l&#233;ctionn&#233;s n'ayant pas rempli le Gdoc</span>
+    <span style="color: #ffcb6b;">not_registered</span> = <span style="color: #c792ea;">[</span>u <span style="color: #89DDFF;">for</span> u <span style="color: #89DDFF;">in</span> selected_tags <span style="color: #89DDFF;">if</span> u <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> df.index<span style="color: #c792ea;">]</span>
+
+    <span style="color: #556369;"># </span><span style="color: #556369;">Filtrage du gdoc avec les joueurs s&#233;l&#233;ctionn&#233;s</span>
+    <span style="color: #ffcb6b;">df</span> = df.<span style="color: #82aaff;">filter</span><span style="color: #c792ea;">(</span>items=selected, axis=0<span style="color: #c792ea;">)</span>
+    <span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>selected, not_registered, df<span style="color: #c792ea;">)</span>
+</pre>
+</div>
+</div>
+
+
+
+<div id="outline-container-org6a27f85" class="outline-3">
+<h3 id="org6a27f85"><span class="section-number-3">4.1</span> DM des joueurs qui n'ont pas renseigné leurs rôles</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Cette phase n'est pas absolument nécessaire, mais elle permet de
+notifier directement en message privé les utilisateurs qui se
+signalent dans le fort mais qui n'ont pas correctement rempli le
+gdoc. Cela leur laisse potentiellement le temps de le faire avant que
+le lead demande le calcul de la composition du groupement de défense.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #c792ea;">@bot.event</span>
 <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">on_reaction_add</span><span style="color: #c792ea;">(</span>reaction, user<span style="color: #c792ea;">)</span>:
      <span style="color: #556369;"># </span><span style="color: #556369;">On v&#233;rifie que la r&#233;action est sur un message panneau</span>
      <span style="color: #89DDFF;">if</span> reaction.message.<span style="color: #82aaff;">id</span> <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> msgs_ids:
@@ -458,60 +549,17 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
      <span style="color: #89DDFF;">else</span>:
          <span style="color: #556369;"># </span><span style="color: #556369;">Plus tard, ajouter l'utilisateur aux tryhard s'il n'y est pas d&#233;j&#224;</span>
          <span style="color: #89DDFF;">pass</span>
-
-
-<span style="color: #c792ea;">@bot.event</span>
-<span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">on_message</span><span style="color: #c792ea;">(</span>message<span style="color: #c792ea;">)</span>:
-    <span style="color: #89DDFF;">if</span> message.author == bot.user:
-        <span style="color: #89DDFF;">return</span>
-
-    <span style="color: #89DDFF;">if</span> message.content.startswith<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'$inva'</span><span style="color: #c792ea;">)</span>:
-
-        <span style="color: #ffcb6b;">embed</span> = discord.Embed.from_dict<span style="color: #c792ea;">(</span>config<span style="color: #f78c6c;">[</span><span style="color: #c3e88d;">"embeds"</span><span style="color: #f78c6c;">][</span><span style="color: #c3e88d;">"panneau"</span><span style="color: #f78c6c;">]</span><span style="color: #c792ea;">)</span>
-        <span style="color: #ffcb6b;">embed.title</span> += f<span style="color: #c3e88d;">'{message.content[5:]}'</span>
-
-        <span style="color: #ffcb6b;">msg</span> = <span style="color: #89DDFF;">await</span> message.channel.send<span style="color: #c792ea;">(</span>embed=embed<span style="color: #c792ea;">)</span>
-        <span style="color: #89DDFF;">await</span> msg.add_reaction<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'&#9745;'</span><span style="color: #c792ea;">)</span>
-
-        <span style="color: #ffcb6b;">author_id</span> = dtag<span style="color: #c792ea;">(</span>message.author<span style="color: #c792ea;">)</span>
-        <span style="color: #ffcb6b;">msgs</span><span style="color: #c792ea;">[</span>author_id<span style="color: #c792ea;">]</span> = msg.<span style="color: #82aaff;">id</span>
-        <span style="color: #89DDFF;">global</span> msgs_ids
-        <span style="color: #ffcb6b;">msgs_ids</span> += <span style="color: #c792ea;">[</span>msg.<span style="color: #82aaff;">id</span><span style="color: #c792ea;">]</span>
-
-    <span style="color: #89DDFF;">if</span> message.content.startswith<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'$invc'</span><span style="color: #c792ea;">)</span>:
-
-        <span style="color: #ffcb6b;">author_dtag</span> = dtag<span style="color: #c792ea;">(</span>message.author<span style="color: #c792ea;">)</span>
-        <span style="color: #ffcb6b;">channel</span> = message.channel
-
-        <span style="color: #556369;"># </span><span style="color: #556369;">On s'assure que l'utilisateur qui demande le calcul ait d&#233;j&#224; fait la commande principale</span>
-        <span style="color: #89DDFF;">if</span> author_dtag <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> msgs:
-            <span style="color: #89DDFF;">await</span> channel.send<span style="color: #c792ea;">(</span>f<span style="color: #c3e88d;">"Pas de messages trouv&#233;s pour {author_dtag}. Commencez par utiliser la commande :\n $inva nomVille"</span><span style="color: #c792ea;">)</span>
-            <span style="color: #89DDFF;">return</span>
-
-        <span style="color: #556369;"># </span><span style="color: #556369;">R&#233;cup&#233;ration du message avec les r&#233;acs</span>
-        <span style="color: #ffcb6b;">msg_id</span> = msgs<span style="color: #c792ea;">[</span>author_dtag<span style="color: #c792ea;">]</span>
-        <span style="color: #ffcb6b;">main_msg</span> = <span style="color: #89DDFF;">await</span> message.channel.fetch_message<span style="color: #c792ea;">(</span>msg_id<span style="color: #c792ea;">)</span>
-
-        <span style="color: #556369;"># </span><span style="color: #556369;">R&#233;cup&#233;ration de la liste des users</span>
-        <span style="color: #ffcb6b;">selected</span> = <span style="color: #89DDFF;">await</span> main_msg.reactions<span style="color: #c792ea;">[</span>0<span style="color: #c792ea;">]</span>.users<span style="color: #c792ea;">()</span>.flatten<span style="color: #c792ea;">()</span>
-        <span style="color: #ffcb6b;">selected_tags</span> = <span style="color: #c792ea;">[</span>dtag<span style="color: #f78c6c;">(</span>u<span style="color: #f78c6c;">)</span> <span style="color: #89DDFF;">for</span> u <span style="color: #89DDFF;">in</span> selected<span style="color: #c792ea;">][</span>1:<span style="color: #c792ea;">]</span>
-        <span style="color: #ffcb6b;">selected_snow</span> = <span style="color: #c792ea;">{</span>t: u.<span style="color: #82aaff;">id</span> <span style="color: #89DDFF;">for</span> t, u <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">zip</span><span style="color: #f78c6c;">(</span>selected_tags, selected<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">}</span>
-        <span style="color: #89DDFF;">await</span> channel.send<span style="color: #c792ea;">(</span>f<span style="color: #c3e88d;">'Joueurs s&#233;l&#233;ction&#233;s : {selected}'</span><span style="color: #c792ea;">)</span>
-
-        <span style="color: #556369;"># </span><span style="color: #556369;">R&#233;cup&#233;ration des don&#233;nes du Gdoc roster</span>
-        <span style="color: #ffcb6b;">df</span> = get_roster<span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>
-
-        <span style="color: #556369;"># </span><span style="color: #556369;">Joueurs s&#233;l&#233;ctionn&#233;s n'ayant pas rempli le Gdoc</span>
-        <span style="color: #ffcb6b;">not_registered</span> = <span style="color: #c792ea;">[</span>u <span style="color: #89DDFF;">for</span> u <span style="color: #89DDFF;">in</span> selected_tags <span style="color: #89DDFF;">if</span> u <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> df.index<span style="color: #c792ea;">]</span>
-
-        <span style="color: #556369;"># </span><span style="color: #556369;">Filtrage du gdoc avec les joueurs s&#233;l&#233;ctionn&#233;s</span>
-        <span style="color: #ffcb6b;">df</span> = df.<span style="color: #82aaff;">filter</span><span style="color: #c792ea;">(</span>items=selected, axis=0<span style="color: #c792ea;">)</span>
-        <span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>selected, not_registered, df<span style="color: #c792ea;">)</span>
-
-bot.run<span style="color: #c792ea;">(</span>token<span style="color: #c792ea;">)</span>
 </pre>
 </div>
-
+</div>
+</div>
+<div id="outline-container-org8f5d809" class="outline-3">
+<h3 id="org8f5d809"><span class="section-number-3">4.2</span> Run</h3>
+<div class="outline-text-3" id="text-4-2">
+<div class="org-src-container">
+<pre class="src src-python">bot.run<span style="color: #c792ea;">(</span>token<span style="color: #c792ea;">)</span>
+</pre>
+</div>
 <p>
 Identification des Rôles :
 </p>
@@ -527,14 +575,15 @@ Identification des Rôles :
 </pre>
 </div>
 </div>
-
-<div id="outline-container-org7f682fc" class="outline-3">
-<h3 id="org7f682fc"><span class="section-number-3">4.1</span> Récupération des joueurs</h3>
-<div class="outline-text-3" id="text-4-1">
 </div>
-<div id="outline-container-org5d17113" class="outline-4">
-<h4 id="org5d17113"><span class="section-number-4">4.1.1</span> Récupération de tous les joueurs inscrits sur le gdoc</h4>
-<div class="outline-text-4" id="text-4-1-1">
+
+<div id="outline-container-org7d86279" class="outline-3">
+<h3 id="org7d86279"><span class="section-number-3">4.3</span> Récupération des joueurs</h3>
+<div class="outline-text-3" id="text-4-3">
+</div>
+<div id="outline-container-org88eee1c" class="outline-4">
+<h4 id="org88eee1c"><span class="section-number-4">4.3.1</span> Récupération de tous les joueurs inscrits sur le gdoc</h4>
+<div class="outline-text-4" id="text-4-3-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_players_data</span><span style="color: #c792ea;">()</span>:
     <span style="color: #ffcb6b;">sheet_name</span> = <span style="color: #c3e88d;">"Pref"</span>
@@ -552,9 +601,9 @@ Identification des Rôles :
 </div>
 </div>
 
-<div id="outline-container-orge2fa1b1" class="outline-4">
-<h4 id="orge2fa1b1"><span class="section-number-4">4.1.2</span> Filtrage des joueurs</h4>
-<div class="outline-text-4" id="text-4-1-2">
+<div id="outline-container-org6e639a3" class="outline-4">
+<h4 id="org6e639a3"><span class="section-number-4">4.3.2</span> Filtrage des joueurs</h4>
+<div class="outline-text-4" id="text-4-3-2">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #ffcb6b;">keys_to_extract</span> = <span style="color: #c792ea;">[]</span>
 <span style="color: #ffcb6b;">a_subset</span> = <span style="color: #c792ea;">{</span>key: players<span style="color: #f78c6c;">[</span>key<span style="color: #f78c6c;">]</span> <span style="color: #89DDFF;">for</span> key <span style="color: #89DDFF;">in</span> keys_to_extract<span style="color: #c792ea;">}</span>
@@ -567,7 +616,7 @@ Identification des Rôles :
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Virgile Daugé</p>
-<p class="date">Created: 2021-12-19 dim. 16:08</p>
+<p class="date">Created: 2021-12-19 dim. 20:39</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

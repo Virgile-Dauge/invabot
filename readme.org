@@ -1,4 +1,5 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+TITLE: Invabot
 * Concept :
 
 Le bot
@@ -31,6 +32,11 @@ des Gdoc à lire.
   }
 #+end_src
 
+
+
+* Utilitaires
+** Chargement de la config
+
 Le chargement de cette config se fera pour l'instant une seule fois au
 démarrage du bot.
 
@@ -41,9 +47,9 @@ démarrage du bot.
       config = json.load(datafile)
 #+end_src
 
-* Utilitaires
 ** Chargement du token
 #+begin_src python :tangle bot.py
+  # Chargement du token
   with open('bot.token', 'r') as datafile:
       token = datafile.read()
 #+end_src
@@ -66,6 +72,7 @@ depuis un objet /discord.User/ :
 ** Récupération du roster
 
 #+begin_src python :tangle bot.py
+  import pandas as pd
   def get_roster(config):
       url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
       print(pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag'))
@@ -100,13 +107,12 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 * Bot avec discord.py
 https://discordpy.readthedocs.io/en/stable/
 
+Création du bot
 #+begin_src python :tangle bot.py
-
-  import pandas as pd
   import discord
   from discord.ext import commands
 
-  bot = commands.Bot(command_prefix="$")
+  bot = commands.Bot(command_prefix="!")
 
   msgs = {}
   msgs_ids = []
@@ -116,7 +122,71 @@ https://discordpy.readthedocs.io/en/stable/
       print('We have logged in as {0.user}'.format(bot))
       game = discord.Game("Venez chez Bakhu")
       await bot.change_presence(status=discord.Status.online, activity=game)
+#+end_src
 
+Commande d'ajout du panneau d'inscription, sur lequel les joueurs dans
+le fort doivent se signaler sera `!inva nomVille`
+#+begin_src python :tangle bot.py
+  @bot.command()
+  async def inva(ctx, arg):
+      embed = discord.Embed.from_dict(config["embeds"]["panneau"])
+      embed.title += f' {arg}'
+
+      msg = await ctx.channel.send(embed=embed)
+      await msg.add_reaction('☑')
+
+      author_id = dtag(ctx.author)
+      msgs[author_id] = msg.id
+      global msgs_ids
+      msgs_ids += [msg.id]
+#+end_src
+
+La commande de demande de *composition* sera la suivante `!comp`. La
+fonction associée doit récupérer le message /panneau/ à partir de
+l'identité de l'appelant. Puis, récupérer la liste des joueurs qui ont
+réagi sur le panneau.
+#+begin_src python :tangle bot.py
+  @bot.command()
+  async def comp(ctx):
+      author_dtag = dtag(ctx.author)
+      channel = ctx.channel
+
+      # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
+      if author_dtag not in msgs:
+          await channel.send(f"Pas de messages trouvés pour {author_dtag}. Commencez par utiliser la commande :\n $inva nomVille")
+          return
+
+      # Récupération du message avec les réacs
+      msg_id = msgs[author_dtag]
+      main_msg = await channel.fetch_message(msg_id)
+
+      # Récupération de la liste des users
+      selected = await main_msg.reactions[0].users().flatten()
+      selected_tags = [dtag(u) for u in selected][1:]
+      selected_snow = {t: u.id for t, u in zip(selected_tags, selected)}
+      await channel.send(f'Joueurs séléctionés : {selected}')
+
+      # Récupération des donénes du Gdoc roster
+      df = get_roster(config)
+
+      # Joueurs séléctionnés n'ayant pas rempli le Gdoc
+      not_registered = [u for u in selected_tags if u not in df.index]
+
+      # Filtrage du gdoc avec les joueurs séléctionnés
+      df = df.filter(items=selected, axis=0)
+      print(selected, not_registered, df)
+#+end_src
+
+
+
+** DM des joueurs qui n'ont pas renseigné leurs rôles
+
+Cette phase n'est pas absolument nécessaire, mais elle permet de
+notifier directement en message privé les utilisateurs qui se
+signalent dans le fort mais qui n'ont pas correctement rempli le
+gdoc. Cela leur laisse potentiellement le temps de le faire avant que
+le lead demande le calcul de la composition du groupement de défense.
+#+begin_src python :tangle bot.py
   @bot.event
   async def on_reaction_add(reaction, user):
        # On vérifie que la réaction est sur un message panneau
@@ -137,61 +207,12 @@ https://discordpy.readthedocs.io/en/stable/
        else:
            # Plus tard, ajouter l'utilisateur aux tryhard s'il n'y est pas déjà
            pass
-
-
-  @bot.event
-  async def on_message(message):
-      if message.author == bot.user:
-          return
-
-      if message.content.startswith('$inva'):
-
-          embed = discord.Embed.from_dict(config["embeds"]["panneau"])
-          embed.title += f'{message.content[5:]}'
-
-          msg = await message.channel.send(embed=embed)
-          await msg.add_reaction('☑')
-
-          author_id = dtag(message.author)
-          msgs[author_id] = msg.id
-          global msgs_ids
-          msgs_ids += [msg.id]
-
-      if message.content.startswith('$invc'):
-
-          author_dtag = dtag(message.author)
-          channel = message.channel
-
-          # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
-          if author_dtag not in msgs:
-              await channel.send(f"Pas de messages trouvés pour {author_dtag}. Commencez par utiliser la commande :\n $inva nomVille")
-              return
-
-          # Récupération du message avec les réacs
-          msg_id = msgs[author_dtag]
-          main_msg = await message.channel.fetch_message(msg_id)
-
-          # Récupération de la liste des users
-          selected = await main_msg.reactions[0].users().flatten()
-          selected_tags = [dtag(u) for u in selected][1:]
-          selected_snow = {t: u.id for t, u in zip(selected_tags, selected)}
-          await channel.send(f'Joueurs séléctionés : {selected}')
-
-          # Récupération des donénes du Gdoc roster
-          df = get_roster(config)
-
-          # Joueurs séléctionnés n'ayant pas rempli le Gdoc
-          not_registered = [u for u in selected_tags if u not in df.index]
-
-          # Filtrage du gdoc avec les joueurs séléctionnés
-          df = df.filter(items=selected, axis=0)
-          print(selected, not_registered, df)
-
-  bot.run(token)
 #+end_src
+** Run
 
-#+RESULTS:
-
+#+begin_src python :tangle bot.py
+bot.run(token)
+#+end_src
 Identification des Rôles :
 #+begin_src python :tangle gdoc.py
   roles = {}

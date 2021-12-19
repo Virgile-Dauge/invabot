@@ -3,12 +3,14 @@ import json
 with open('config.json', 'r') as datafile:
     config = json.load(datafile)
 
+# Chargement du token
 with open('bot.token', 'r') as datafile:
     token = datafile.read()
 
 def dtag(user):
     return f'{user.name}#{user.discriminator}'
 
+import pandas as pd
 def get_roster(config):
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
     print(pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag'))
@@ -18,11 +20,10 @@ def get_strat(config):
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
     return pd.read_csv(url).iloc[0:5, 0:12]
 
-import pandas as pd
 import discord
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix="$")
+bot = commands.Bot(command_prefix="!")
 
 msgs = {}
 msgs_ids = []
@@ -32,6 +33,19 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(bot))
     game = discord.Game("Venez chez Bakhu")
     await bot.change_presence(status=discord.Status.online, activity=game)
+
+@bot.command()
+async def inva(ctx, arg):
+    embed = discord.Embed.from_dict(config["embeds"]["panneau"])
+    embed.title += f' {arg}'
+
+    msg = await ctx.channel.send(embed=embed)
+    await msg.add_reaction('☑')
+
+    author_id = dtag(ctx.author)
+    msgs[author_id] = msg.id
+    global msgs_ids
+    msgs_ids += [msg.id]
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -54,53 +68,34 @@ async def on_reaction_add(reaction, user):
          # Plus tard, ajouter l'utilisateur aux tryhard s'il n'y est pas déjà
          pass
 
+@bot.command()
+async def comp(ctx):
+    author_dtag = dtag(ctx.author)
+    channel = ctx.channel
 
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
+    # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
+    if author_dtag not in msgs:
+        await channel.send(f"Pas de messages trouvés pour {author_dtag}. Commencez par utiliser la commande :\n $inva nomVille")
         return
 
-    if message.content.startswith('$inva'):
+    # Récupération du message avec les réacs
+    msg_id = msgs[author_dtag]
+    main_msg = await channel.fetch_message(msg_id)
 
-        embed = discord.Embed.from_dict(config["embeds"]["panneau"])
-        embed.title += f'{message.content[5:]}'
+    # Récupération de la liste des users
+    selected = await main_msg.reactions[0].users().flatten()
+    selected_tags = [dtag(u) for u in selected][1:]
+    selected_snow = {t: u.id for t, u in zip(selected_tags, selected)}
+    await channel.send(f'Joueurs séléctionés : {selected}')
 
-        msg = await message.channel.send(embed=embed)
-        await msg.add_reaction('☑')
+    # Récupération des donénes du Gdoc roster
+    df = get_roster(config)
 
-        author_id = dtag(message.author)
-        msgs[author_id] = msg.id
-        global msgs_ids
-        msgs_ids += [msg.id]
+    # Joueurs séléctionnés n'ayant pas rempli le Gdoc
+    not_registered = [u for u in selected_tags if u not in df.index]
 
-    if message.content.startswith('$invc'):
-
-        author_dtag = dtag(message.author)
-        channel = message.channel
-
-        # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
-        if author_dtag not in msgs:
-            await channel.send(f"Pas de messages trouvés pour {author_dtag}. Commencez par utiliser la commande :\n $inva nomVille")
-            return
-
-        # Récupération du message avec les réacs
-        msg_id = msgs[author_dtag]
-        main_msg = await message.channel.fetch_message(msg_id)
-
-        # Récupération de la liste des users
-        selected = await main_msg.reactions[0].users().flatten()
-        selected_tags = [dtag(u) for u in selected][1:]
-        selected_snow = {t: u.id for t, u in zip(selected_tags, selected)}
-        await channel.send(f'Joueurs séléctionés : {selected}')
-
-        # Récupération des donénes du Gdoc roster
-        df = get_roster(config)
-
-        # Joueurs séléctionnés n'ayant pas rempli le Gdoc
-        not_registered = [u for u in selected_tags if u not in df.index]
-
-        # Filtrage du gdoc avec les joueurs séléctionnés
-        df = df.filter(items=selected, axis=0)
-        print(selected, not_registered, df)
+    # Filtrage du gdoc avec les joueurs séléctionnés
+    df = df.filter(items=selected, axis=0)
+    print(selected, not_registered, df)
 
 bot.run(token)
