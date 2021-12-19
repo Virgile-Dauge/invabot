@@ -1,0 +1,20 @@
+{
+
+"embeds": {
+    "panneau": {
+        "title": "Confirme ta séléction à l'invasion de",
+        "color": 2003199,
+        "description": "Réagis avec :ballot_box_with_check: à ce message **uniquement si tu es déjà dans le fort**. Attention, retourne vite en jeu, l'auto-AFK kick est rapide (2min). \n\n Si tu as réagi par erreur, merci de décocher ta réaction. :wink: \n\n*(Et si vous aussi vous pensez que bakhu est la meilleure guilde)*"
+    },
+    "dm": {
+        "title": "Dis nous tout !",
+        "color": 2003199,
+        "description": "Tu es inscrit en invasion, mais tu n'as pas renseigné **les rôles** que tu peux jouer. Il n'est donc par conséquent pas possible de t'assigner un poste automatiquement. Allez, file remplir [ce document]("
+    }
+},
+"gdoc": {
+    "url": "https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/",
+    "page_strat": "Strat",
+    "page_roster": "Roster"
+}
+}

@@ -1,0 +1,230 @@
+* Concept :
+
+Le bot
+
+* Configuration
+
+La configuration du bot passera par un fichier json unique, contenant
+le corps des différents messages à transmettre ainsi que les adresses
+des Gdoc à lire.
+#+begin_src json :tangle config.json
+  {
+
+  "embeds": {
+      "panneau": {
+          "title": "Confirme ta séléction à l'invasion de",
+          "color": 2003199,
+          "description": "Réagis avec :ballot_box_with_check: à ce message **uniquement si tu es déjà dans le fort**. Attention, retourne vite en jeu, l'auto-AFK kick est rapide (2min). \n\n Si tu as réagi par erreur, merci de décocher ta réaction. :wink: \n\n*(Et si vous aussi vous pensez que bakhu est la meilleure guilde)*"
+      },
+      "dm": {
+          "title": "Dis nous tout !",
+          "color": 2003199,
+          "description": "Tu es inscrit en invasion, mais tu n'as pas renseigné **les rôles** que tu peux jouer. Il n'est donc par conséquent pas possible de t'assigner un poste automatiquement. Allez, file remplir [ce document]("
+      }
+  },
+  "gdoc": {
+      "url": "https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/",
+      "page_strat": "Strat",
+      "page_roster": "Roster"
+  }
+  }
+#+end_src
+
+Le chargement de cette config se fera pour l'instant une seule fois au
+démarrage du bot.
+
+#+begin_src python :tangle bot.py
+  # Chargement de la config du bot
+  import json
+  with open('config.json', 'r') as datafile:
+      config = json.load(datafile)
+#+end_src
+
+* Utilitaires
+** Chargement du token
+#+begin_src python :tangle bot.py
+  with open('bot.token', 'r') as datafile:
+      token = datafile.read()
+#+end_src
+** Identifiant
+
+Il est nécessaire d'avoir un identifiant unique entre discord et le
+gdoc pour faire le lien. Discord gère les identifiants sous forme d'un
+entier appelé /snowflake/. Toutefois, il est difficilement accessible
+pour les joueurs, et ce sont les joueurs qui vont devoir renseigner
+leur identifiant unique sur le gdoc. Il est donc plus simple
+d'utiliser ici le *discord tag*, par exemple `Virgile#1234`.
+
+Je propose ici une rapide fonction d'aide pour récupérer le dtag
+depuis un objet /discord.User/ :
+#+begin_src python :tangle bot.py
+  def dtag(user):
+      return f'{user.name}#{user.discriminator}'
+#+end_src
+
+** Récupération du roster
+
+#+begin_src python :tangle bot.py
+  def get_roster(config):
+      url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
+      print(pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag'))
+      return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
+#+end_src
+
+#+begin_example
+                Pseudo             0           1     2           3
+dtag
+Chopekk#1234   Chopekk    DPS-Debuff    Mousquet  Heal  Anti-trash
+Virgile#2345  virgilio      Mousquet  Anti-trash  Répa        Arti
+Virgile#3456     Tezig  Lance-flamme  Anti-trash   Arc        Arti
+Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
+#+end_example
+** Récupération de la strat
+
+#+begin_src python :tangle bot.py
+  def get_strat(config):
+      url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
+      return pd.read_csv(url).iloc[0:5, 0:12]
+#+end_src
+
+#+begin_example
+     Groupe 1 Groupe 2    Groupe 3 Groupe 4    Groupe 5    Groupe 6    Groupe 7    Groupe 8 Groupe 9     Groupe 10
+0  Anti-Trash      Arc  Anti-Trash      Arc  Anti-Trash    Mousquet  Anti-Trash    Mousquet     Répa  Lance-flamme
+1        Heal      Arc        Heal      Arc        Heal    Mousquet        Heal    Mousquet     Répa  Lance-flamme
+2  DPS-Debuff      Arc  DPS-Debuff      Arc  DPS-Debuff    Mousquet  DPS-Debuff    Mousquet     Répa  Lance-flamme
+3  DPS-Debuff      Arc  DPS-Debuff      Arc  DPS-Debuff  DPS-Debuff  DPS-Debuff  DPS-Debuff     Répa  Lance-flamme
+4        Arti     Arti        Arti     Arti        Arti        Arti        Arti        Arti     Répa  Lance-flamme
+#+end_example
+
+* Bot avec discord.py
+https://discordpy.readthedocs.io/en/stable/
+
+#+begin_src python :tangle bot.py
+
+  import pandas as pd
+  import discord
+  from discord.ext import commands
+
+  bot = commands.Bot(command_prefix="$")
+
+  msgs = {}
+  msgs_ids = []
+
+  @bot.event
+  async def on_ready():
+      print('We have logged in as {0.user}'.format(bot))
+      game = discord.Game("Venez chez Bakhu")
+      await bot.change_presence(status=discord.Status.online, activity=game)
+
+  @bot.event
+  async def on_reaction_add(reaction, user):
+       # On vérifie que la réaction est sur un message panneau
+       if reaction.message.id not in msgs_ids:
+           return
+       if user == bot.user:
+           return
+
+       # Récupération des donénes du Gdoc roster
+       df = get_roster(config)
+       if dtag(user) not in df.index:
+           embed = discord.Embed.from_dict(config["embeds"]["dm"])
+           embed.description += f'{config["gdoc"]["url"]}) ***!***'
+           try:
+               await user.send(embed=embed)
+           except discord.errors.HTTPException as e:
+               pass
+       else:
+           # Plus tard, ajouter l'utilisateur aux tryhard s'il n'y est pas déjà
+           pass
+
+
+  @bot.event
+  async def on_message(message):
+      if message.author == bot.user:
+          return
+
+      if message.content.startswith('$inva'):
+
+          embed = discord.Embed.from_dict(config["embeds"]["panneau"])
+          embed.title += f'{message.content[5:]}'
+
+          msg = await message.channel.send(embed=embed)
+          await msg.add_reaction('☑')
+
+          author_id = dtag(message.author)
+          msgs[author_id] = msg.id
+          global msgs_ids
+          msgs_ids += [msg.id]
+
+      if message.content.startswith('$invc'):
+
+          author_dtag = dtag(message.author)
+          channel = message.channel
+
+          # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
+          if author_dtag not in msgs:
+              await channel.send(f"Pas de messages trouvés pour {author_dtag}. Commencez par utiliser la commande :\n $inva nomVille")
+              return
+
+          # Récupération du message avec les réacs
+          msg_id = msgs[author_dtag]
+          main_msg = await message.channel.fetch_message(msg_id)
+
+          # Récupération de la liste des users
+          selected = await main_msg.reactions[0].users().flatten()
+          selected_tags = [dtag(u) for u in selected][1:]
+          selected_snow = {t: u.id for t, u in zip(selected_tags, selected)}
+          await channel.send(f'Joueurs séléctionés : {selected}')
+
+          # Récupération des donénes du Gdoc roster
+          df = get_roster(config)
+
+          # Joueurs séléctionnés n'ayant pas rempli le Gdoc
+          not_registered = [u for u in selected_tags if u not in df.index]
+
+          # Filtrage du gdoc avec les joueurs séléctionnés
+          df = df.filter(items=selected, axis=0)
+          print(selected, not_registered, df)
+
+  bot.run(token)
+#+end_src
+
+#+RESULTS:
+
+Identification des Rôles :
+#+begin_src python :tangle gdoc.py
+  roles = {}
+  for index, row in strat.iterrows():
+      for v in row:
+        if v in roles:
+          roles[v] += 1
+        else:
+          roles[v] = 1
+  print(roles)
+#+end_src
+
+** Récupération des joueurs
+
+*** Récupération de tous les joueurs inscrits sur le gdoc
+
+#+begin_src python :tangle gdoc.py
+  def get_players_data():
+      sheet_name = "Pref"
+      url = f"https://docs.google.com/spreadsheets/d/{data_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}"
+      df = pd.read_csv(url).iloc[1:, 0:5].dropna().set_index('Pseudo')
+      d = {t[0]: [p for p in t[1:] if p != 'Aucun'] for t in df.itertuples()}
+      sorted_tuples = sorted(d.items(), key=lambda item: len(item[1]))
+      sorted_dict = {k: v for k, v in sorted_tuples}
+      return sorted_dict
+
+  players = get_players_data()
+  print(players, len(players))
+#+end_src
+
+#+RESULTS:
+
+*** Filtrage des joueurs
+#+begin_src python :tangle gdoc.py
+keys_to_extract = []
+a_subset = {key: players[key] for key in keys_to_extract}
+#+end_src
