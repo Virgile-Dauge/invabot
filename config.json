@@ -10,6 +10,11 @@
         "title": "Dis nous tout !",
         "color": 2003199,
         "description": "Tu es inscrit en invasion, mais tu n'as pas renseigné **les rôles** que tu peux jouer. Il n'est donc par conséquent pas possible de t'assigner un poste automatiquement. Allez, file remplir [ce document]("
+    },
+    "help": {
+        "title": "Manuel d'utilisation d'invabot",
+        "color": 2003199,
+        "fields": [{"name": "Blue Team", "value": "Something", "inline" : "True"}]
     }
 },
 "gdoc": {

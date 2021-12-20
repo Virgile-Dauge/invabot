@@ -1,5 +1,39 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+TITLE: Invabot
+
+* Documentation des rôles
+#+begin_export html
+<script async src="https://nwdb.info/embed.js"></script>
+#+end_export
+Cette section a pour objectif de présenter les différents rôles utiles
+en invasion. Chaque rôle comporte des composantes indispensables,
+illustrées par le sigle suivant : /(obligatoire)/. Afin de mieux
+maîtriser la répartition des rôles, il sera demandé aux joueurs
+d'évaluer leur pertinence pour chacun de ces rôles.
+
+Un joueur peut s'estimer :
+
+- Capable :: S'il répond à tous les critères /(obligatoire)/
+- Opti :: S'il répond a tous les critères /(obligatoire)/ *ET* /(recommandé)/
+
+** Artilleur
+
+- *Objectif* :: Tuer les bombers, les tireurs, les artilleries
+  ennemies et les trash mob, en respectant cet ordre de priorité.
+
+- *Arme principale* :: Épée avec la compétence [[https://nwdb.info/db/ability/ultimate_sword_swordmaster][Leadership]] /(obligatoire)/
+- *Arme secondaire* :: Bâton de feu/vie /(recommandés)/
+
+#+caption: Placement des artilleurs
+[[file:fort.png]]
+
+** Lancier (DPS débuff)
+
+- *Objectif* :: Appliquer */rend/* et */weaken/* aux boss et les DPS
+- *Arme principale* :: Lance avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] (obligatoire) et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] ou [[https://nwdb.info/db/perk/perkid_weaponmelee_dmgback][Rogue]] (recommandés). [[https://nwdb.info/build?skills=6-nr5qo4-qtbfgg_10-l71p4w-tsmm2s][Build lance]] (obligatoire)
+- *Arme secondaire* :: Arc préféré, mais peut être une arme de CàC
+- *Armure* :: Légère avec perks [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] (obligatoire) [[https://nwdb.info/db/perk/perkid_ability_spear_skewer][Enfeebling Skewer]] (obligatoire) [[https://nwdb.info/db/perk/perkid_ability_spear_perforate][Fortifying Perforate]] (recommandés)
+
 * Concept :
 
 Le bot
@@ -22,6 +56,11 @@ des Gdoc à lire.
           "title": "Dis nous tout !",
           "color": 2003199,
           "description": "Tu es inscrit en invasion, mais tu n'as pas renseigné **les rôles** que tu peux jouer. Il n'est donc par conséquent pas possible de t'assigner un poste automatiquement. Allez, file remplir [ce document]("
+      },
+      "help": {
+          "title": "Manuel d'utilisation d'invabot",
+          "color": 2003199,
+          "fields": [{"name": "Blue Team", "value": "Something", "inline" : "True"}]
       }
   },
   "gdoc": {
@@ -69,13 +108,12 @@ depuis un objet /discord.User/ :
       return f'{user.name}#{user.discriminator}'
 #+end_src
 
-** Récupération du roster
+** TODO Récupération du roster
 
 #+begin_src python :tangle bot.py
   import pandas as pd
   def get_roster(config):
       url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
-      print(pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag'))
       return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
 #+end_src
 
@@ -124,13 +162,23 @@ Création du bot
       await bot.change_presence(status=discord.Status.online, activity=game)
 #+end_src
 
+#+begin_src python :tangle no
+  @bot.command()
+  async def help(ctx, arg):
+      embed = discord.Embed.from_dict(config["embeds"]["help"])
+      await ctx.channel.send(embed=embed)
+#+end_src
+
 Commande d'ajout du panneau d'inscription, sur lequel les joueurs dans
 le fort doivent se signaler sera `!inva nomVille`
 #+begin_src python :tangle bot.py
   @bot.command()
   async def inva(ctx, arg):
+      """ Génére un tableau d'inscription dans le channel
+      """
       embed = discord.Embed.from_dict(config["embeds"]["panneau"])
       embed.title += f' {arg}'
+      embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
 
       msg = await ctx.channel.send(embed=embed)
       await msg.add_reaction('☑')
@@ -148,6 +196,8 @@ réagi sur le panneau.
 #+begin_src python :tangle bot.py
   @bot.command()
   async def comp(ctx):
+      """ Génére une composition d'armée
+      """
       author_dtag = dtag(ctx.author)
       channel = ctx.channel
 
@@ -164,17 +214,21 @@ réagi sur le panneau.
       selected = await main_msg.reactions[0].users().flatten()
       selected_tags = [dtag(u) for u in selected][1:]
       selected_snow = {t: u.id for t, u in zip(selected_tags, selected)}
-      await channel.send(f'Joueurs séléctionés : {selected}')
 
       # Récupération des donénes du Gdoc roster
-      df = get_roster(config)
+      roster = get_roster(config)
 
       # Joueurs séléctionnés n'ayant pas rempli le Gdoc
-      not_registered = [u for u in selected_tags if u not in df.index]
+      not_registered = [u for u in selected_tags if u not in roster.index]
 
-      # Filtrage du gdoc avec les joueurs séléctionnés
-      df = df.filter(items=selected, axis=0)
-      print(selected, not_registered, df)
+      # Filtrage du roster avec les joueurs séléctionnés
+      roster = roster.filter(items=selected_tags, axis=0)
+
+      # Récupération de la strat
+      strat = get_strat(config)
+      print(roster)
+      print(strat)
+      await channel.send(roster)
 #+end_src
 
 
@@ -227,20 +281,15 @@ Identification des Rôles :
 
 ** Récupération des joueurs
 
-*** Récupération de tous les joueurs inscrits sur le gdoc
+*** Récupération du roster
 
-#+begin_src python :tangle gdoc.py
-  def get_players_data():
-      sheet_name = "Pref"
-      url = f"https://docs.google.com/spreadsheets/d/{data_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}"
-      df = pd.read_csv(url).iloc[1:, 0:5].dropna().set_index('Pseudo')
-      d = {t[0]: [p for p in t[1:] if p != 'Aucun'] for t in df.itertuples()}
-      sorted_tuples = sorted(d.items(), key=lambda item: len(item[1]))
-      sorted_dict = {k: v for k, v in sorted_tuples}
-      return sorted_dict
-
-  players = get_players_data()
-  print(players, len(players))
+#+begin_src python :tangle algo.py
+  import pandas as pd
+  def get_roster():
+      page= 'Roster2'
+      url = f"https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/gviz/tq?tqx=out:csv&sheet={page}"
+      return pd.read_csv(url).iloc[1:, 0:9].dropna().set_index('dtag')
+  print(get_roster())
 #+end_src
 
 #+RESULTS:
