@@ -13,8 +13,29 @@ d'évaluer leur pertinence pour chacun de ces rôles.
 
 Un joueur peut s'estimer :
 
-- Capable :: S'il répond à tous les critères /(obligatoire)/
-- Opti :: S'il répond a tous les critères /(obligatoire)/ *ET* /(recommandé)/
+- Capable :: S'il répond à tous les critères tagués /(obligatoire)/
+- Opti :: S'il répond a tous les critères tagués /(obligatoire)/ *ET* /(recommandé)/
+
+** Pustule boy
+- *Objectif* :: Tirer en *priorité sur les pustules* qui se forment
+  lors de l'impact d'un bison à l'intérieur du fort. Aider au centre.
+
+- *Arme principale* :: Arme distante /(obligatoire)/, les armes
+  Néant/Arc/Feu /(recommandé)/ sont plus efficaces dans ce rôle
+  (meilleure cadence de tir).
+- *Arme secondaire* ::  Arc/Mousquet /(recommandé)/
+
+** Réparateur
+- *Objectif* :: Gérer les ressources et *réparer les portes*. Certains
+  voient ce rôle comme ingrat mais la victoire est inenvisageable sans
+  eux.
+
+- *Arme principale* :: Hachette avec [[https://nwdb.info/db/ability/ult_passive_hatchet_immortalwhen0hp][Defy Death]] /(recommandé)/
+- *Arme secondaire* :: Arme avec mobilité /(recommandé)/
+
+PS: Si vous n'avez jamais joué Hachette, il suffit de débloquer 12
+points de compétence. C'est assez rapide et vous n'avez pas besoin
+d'une arme haut niveau/particulière.
 
 ** Artilleur
 
@@ -24,16 +45,45 @@ Un joueur peut s'estimer :
 - *Arme principale* :: Épée avec la compétence [[https://nwdb.info/db/ability/ultimate_sword_swordmaster][Leadership]] /(obligatoire)/
 - *Arme secondaire* :: Bâton de feu/vie /(recommandés)/
 
-#+caption: Placement des artilleurs
-[[file:fort.png]]
-
+PS: Si vous n'avez jamais joué l'épée, il suffit de débloquer 12
+points de compétence. C'est assez rapide et vous n'avez pas besoin
+d'une arme haut niveau/particulière.
 ** Lancier (DPS débuff)
 
 - *Objectif* :: Appliquer */rend/* et */weaken/* aux boss et les DPS
-- *Arme principale* :: Lance avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] (obligatoire) et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] ou [[https://nwdb.info/db/perk/perkid_weaponmelee_dmgback][Rogue]] (recommandés). [[https://nwdb.info/build?skills=6-nr5qo4-qtbfgg_10-l71p4w-tsmm2s][Build lance]] (obligatoire)
+- *Arme principale* :: Lance avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] (obligatoire) et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] ou [[https://nwdb.info/db/perk/perkid_weaponmelee_dmgback][Rogue]] (recommandés). [[https://nwdb.info/build?skills=10-l71p4w-tsmm2s][Build lance]] (obligatoire)
 - *Arme secondaire* :: Arc préféré, mais peut être une arme de CàC
-- *Armure* :: Légère avec perks [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] (obligatoire) [[https://nwdb.info/db/perk/perkid_ability_spear_skewer][Enfeebling Skewer]] (obligatoire) [[https://nwdb.info/db/perk/perkid_ability_spear_perforate][Fortifying Perforate]] (recommandés)
+- *Armure* :: Légère avec perks [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] (obligatoire)
+  [[https://nwdb.info/db/perk/perkid_ability_spear_skewer][Enfeebling Skewer]] (obligatoire) [[https://nwdb.info/db/perk/perkid_ability_spear_perforate][Fortifying Perforate]] (recommandés)
+  et pour de la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces (recommandé)
 
+** Anti-Trash
+L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et un *paladin*.
+
+*** GA
+- *Objectif* :: Empêcher les *trash-mobs* d'atteindre les autres joueurs et les portes.
+- *Arme principale* :: Hache double avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] /(obligatoire)/
+  [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] /(obligatoire)/ et [[https://nwdb.info/db/item/sapphirecutt4 [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] (recommandé).
+  [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] /(obligatoire)/
+- *Arme secondaire* :: Arme CàC, Marteau pour le contrôle ?
+- *Armure* :: Lourde avec perks [[https://nwdb.info/db/perk/perkid_ability_greataxe_gravitywell][Insatiable Gravity Well]] (obligatoire)
+  [[https://nwdb.info/db/perk/perkid_ability_greataxe_maelstrom][Enfeebling Maelstrom]] et [[https://nwdb.info/db/perk/perkid_ability_greataxe_whirlwind][Fortifying Whirlwind]] /(recommandé)/ et pour de
+  la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces /(recommandé)/
+
+*** Paladin
+- *Objectif* :: Maintenir l'équipe *Anti-trash* en vie en priorité
+  puis empêcher les *trash-mobs* d'atteindre les autres joueurs et les
+  portes.
+- *Arme principale* :: Bâton de vie /(obligatoire)/ avec [[https://nwdb.info/db/perk/perkid_weaponlife_healoutgoing][Blessed]]
+  /(recommandé)/
+- *Arme secondaire* :: Hache double avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] et [[https://nwdb.info/db/item/ambercutt4][Pristine Amber]] /(obligatoire)/
+- *Armure* :: Lourde avec ?
+
+
+** DPS
+
+*** Mousquet
+https://nwdb.info/build?skills=6-nm5xz8-qtbfi8_10-l71p4w-tsmm2s
 * Concept :
 
 Le bot
