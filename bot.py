@@ -1,3 +1,9 @@
+import pandas as pd
+from algo import build_comp
+
+import discord
+from discord.ext import commands
+
 # Chargement de la config du bot
 import json
 with open('config.json', 'r') as datafile:
@@ -13,14 +19,12 @@ def dtag(user):
 import pandas as pd
 def get_roster(config):
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
-    return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
+    #return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
+    return pd.read_csv(url).set_index('dtag')
 
 def get_strat(config):
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
     return pd.read_csv(url).iloc[0:5, 0:12]
-
-import discord
-from discord.ext import commands
 
 bot = commands.Bot(command_prefix="!")
 
@@ -77,13 +81,12 @@ async def comp(ctx):
     not_registered = [u for u in selected_tags if u not in roster.index]
 
     # Filtrage du roster avec les joueurs séléctionnés
-    roster = roster.filter(items=selected_tags, axis=0)
-
+    roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
+    print(roster)
     # Récupération de la strat
     strat = get_strat(config)
-    print(roster)
-    print(strat)
-    await channel.send(roster)
+    comp = build_comp(roster, strat)
+    await channel.send(comp)
 
 @bot.event
 async def on_reaction_add(reaction, user):

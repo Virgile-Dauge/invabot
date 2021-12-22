@@ -146,8 +146,8 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
        }
    },
    "gdoc": {
-       "url": "https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/",
-       "page_strat": "Strat",
+       "url": "https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/",
+       "page_strat": "Strat_principale",
        "page_roster": "Roster"
    }
    }
@@ -156,6 +156,15 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
 
 
 ** Utilitaires
+*** Dépendances
+#+begin_src python :tangle bot.py
+
+   import pandas as pd
+   from algo import build_comp
+
+   import discord
+   from discord.ext import commands
+#+end_src
 *** Chargement de la config
 
  Le chargement de cette config se fera pour l'instant une seule fois au
@@ -190,13 +199,14 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
        return f'{user.name}#{user.discriminator}'
  #+end_src
 
-*** TODO Récupération du roster
+*** Récupération du roster
 
  #+begin_src python :tangle bot.py
    import pandas as pd
    def get_roster(config):
        url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
-       return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
+       #return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
+       return pd.read_csv(url).set_index('dtag')
  #+end_src
 
  #+begin_example
@@ -229,8 +239,7 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
 
  Création du bot
  #+begin_src python :tangle bot.py
-   import discord
-   from discord.ext import commands
+
 
    bot = commands.Bot(command_prefix="!")
 
@@ -304,13 +313,12 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
        not_registered = [u for u in selected_tags if u not in roster.index]
 
        # Filtrage du roster avec les joueurs séléctionnés
-       roster = roster.filter(items=selected_tags, axis=0)
-
+       roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
+       print(roster)
        # Récupération de la strat
        strat = get_strat(config)
-       print(roster)
-       print(strat)
-       await channel.send(roster)
+       comp = build_comp(roster, strat)
+       await channel.send(comp)
  #+end_src
 
 
@@ -351,17 +359,20 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
  #+end_src
 
 * Algo
+Dépendances
+#+begin_src python :tangle algo.py
+import numpy as np
+import pandas as pd
+from scipy.optimize import linear_sum_assignment
+#+end_src
 
 Récupération du roster de test
  #+begin_src python :tangle algo.py
-   import pandas as pd
    def get_test_roster():
-       page= 'Roster2'
-       url = f"https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/gviz/tq?tqx=out:csv&sheet={page}"
-       return pd.read_csv(url).iloc[:, 0:16].dropna().set_index('dtag')
-   roster = get_test_roster().set_index('Pseudo IG')
-   roster.to_csv('roster.csv')
-   print(roster)
+       page= 'Roster'
+       url = f"https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/gviz/tq?tqx=out:csv&sheet={page}"
+       #return pd.read_csv(url).iloc[:, 0:16].dropna().set_index('dtag')
+       return pd.read_csv(url).set_index('dtag')
  #+end_src
 
 #+begin_src python :tangle algo.py
@@ -369,52 +380,50 @@ Récupération du roster de test
       page= 'Strat'
       url = f"https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/gviz/tq?tqx=out:csv&sheet={page}"
       return pd.read_csv(url).iloc[0:5, 0:12]
-
-    strat = get_test_strat()
-    strat.to_csv('strat.csv')
-    print(strat)
 #+end_src
 
  Identification des Rôles :
- #+begin_src python :tangle algo.py
-   roles = {}
-   for index, row in strat.iterrows():
-       for v in row:
-         if v in roles:
-           roles[v] += 1
-         else:
-           roles[v] = 1
+ #+begin_src python :tangle algo.py :noweb yes
 
-   max_roles = {k: v.max() for k,v in roster.iteritems()}
+   def build_comp(roster, strat):
+       roles = {}
+       for index, row in strat.iterrows():
+           for v in row:
+               if v in roles:
+                   roles[v] += 1
+               else:
+                   roles[v] = 1
+
+       max_roles = {k: v.max() for k,v in roster.iteritems()}
+       <<cout>>
+       <<res>>
+       <<comp>>
  #+end_src
 
-Création des colonnes avec les noms de rôles
- #+begin_src python :tangle algo.py
+Création des colonnes avec les noms de rôles, les lignes avec les noms
+de joueurs, et de la matrice de coûts.
+ #+name: cout
+ #+begin_src python
+
    cols = [k for k, v in roles.items() for _ in range(v)]
-   #print(cols, len(cols))
- #+end_src
-Création des lignes
- #+begin_src python :tangle algo.py
    rows = roster.index
-   #print(rows, len(rows))
- #+end_src
-Création de la matrice de coûts
- #+begin_src python :tangle algo.py
-   import numpy as np
-   m = np.zeros((len(rows), len(cols)), dtype=int)
+
+   C = np.zeros((len(rows), len(cols)), dtype=int)
 
    for i, r in enumerate(rows):
        for j, c in enumerate(cols):
-           m[i, j] = roster.at[r, c]
+           C[i, j] = roster.at[r, c]
  #+end_src
 
-Résolution
 
-#+begin_src python :tangle algo.py
-from scipy.optimize import linear_sum_assignment
-row_ind, col_ind = linear_sum_assignment(m, maximize=True)
-score = m[row_ind, col_ind].sum()
-assignent = {p: cols[t] for p, t in zip(rows, col_ind)}
+Résolution du problème d'affectation avec la maximisation suivante :
+$$max \sum_{i} \sum_{j} C_{i,j} X_{i,j}$$
+#+name: res
+#+begin_src python
+
+row_ind, X = linear_sum_assignment(C, maximize=True)
+score = C[row_ind, X].sum()
+assignent = {p: cols[t] for p, t in zip(rows, X)}
 
 #+end_src
 
@@ -426,7 +435,8 @@ Analyse des résultats
 #+end_src
 
 Remplissage du tableau
-#+begin_src python :tangle algo.py
+#+name: comp
+#+begin_src python
   filed_roles = {}
   for k, v in assignent.items():
       #print(k, v)
@@ -438,15 +448,28 @@ Remplissage du tableau
   comp = strat.copy()
   for i, row in comp.iterrows():
       for j, v in row.items():
-          if filed_roles[v]:
+          if v in filed_roles and filed_roles[v]:
               p = filed_roles[v].pop()
               score = roster.at[p, v]
               comp.at[i, j] = f'{p} {score} {score/ max_roles[v]}'
-  print(comp)
+  return comp
 #+end_src
 
+** Test algo
+
+#+begin_src python :tangle algo.py
+
+  if __name__ == '__main__':
+      roster = get_test_roster().set_index('Pseudo IG')
+      roster.to_csv('roster.csv')
+      print(roster)
+      strat = get_test_strat()
+      strat.to_csv('strat.csv')
+      print(strat)
+      print(build_comp(roster, strat))
+#+end_src
 **** Filtrage des joueurs
- #+begin_src python :tangle gdoc.py
+ #+begin_src python :tangle no
  keys_to_extract = []
  a_subset = {key: players[key] for key in keys_to_extract}
  #+end_src
