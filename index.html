@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-12-21 mar. 14:50 -->
+<!-- 2021-12-22 mer. 09:47 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Invabot</title>
@@ -257,6 +257,8 @@
  pre.src {background-color: #263238; color: #EEFFFF;}</style>
 <style type="text/css">
  pre.src {background-color: #263238; color: #EEFFFF;}</style>
+<style type="text/css">
+ pre.src {background-color: #263238; color: #EEFFFF;}</style>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -311,56 +313,55 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5e2bd23">1. Documentation des rôles</a>
+<li><a href="#org951e369">1. Documentation des rôles</a>
 <ul>
-<li><a href="#org3004fe7">1.1. Pustule boy</a></li>
-<li><a href="#orga33fe96">1.2. Réparateur</a></li>
-<li><a href="#orgd4caafd">1.3. Artilleur</a></li>
-<li><a href="#orgf4c7b3c">1.4. Lancier (DPS débuff)</a></li>
-<li><a href="#orgddd493b">1.5. Anti-Trash</a>
+<li><a href="#org027313d">1.1. Pustule boy</a></li>
+<li><a href="#org2b02830">1.2. Réparateur</a></li>
+<li><a href="#orgbabcfda">1.3. Artilleur</a></li>
+<li><a href="#org2089da3">1.4. Lancier (DPS débuff)</a></li>
+<li><a href="#orgb1126ba">1.5. Anti-Trash</a>
 <ul>
-<li><a href="#org67a9a24">1.5.1. GA</a></li>
-<li><a href="#org598d6a7">1.5.2. Paladin</a></li>
+<li><a href="#org728768c">1.5.1. GA</a></li>
+<li><a href="#org34445d9">1.5.2. Paladin</a></li>
 </ul>
 </li>
-<li><a href="#orgd27531d">1.6. DPS</a>
+<li><a href="#org8b63e2f">1.6. DPS</a>
 <ul>
-<li><a href="#org5b7a358">1.6.1. Arc</a></li>
-<li><a href="#orged4f4c6">1.6.2. Mousquet</a></li>
-<li><a href="#orgeb5cd3e">1.6.3. Lance-flamme</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orgabacddf">2. Concept :</a></li>
-<li><a href="#org9df2dbd">3. Configuration</a></li>
-<li><a href="#org54ea2e4">4. Utilitaires</a>
-<ul>
-<li><a href="#org118dbd6">4.1. Chargement de la config</a></li>
-<li><a href="#orgee9a8ca">4.2. Chargement du token</a></li>
-<li><a href="#org1f0f3e4">4.3. Identifiant</a></li>
-<li><a href="#orge83179a">4.4. <span class="todo TODO">TODO</span> Récupération du roster</a></li>
-<li><a href="#orgfcecb8b">4.5. Récupération de la strat</a></li>
-</ul>
-</li>
-<li><a href="#org4856c44">5. Bot avec discord.py</a>
-<ul>
-<li><a href="#orgc9445e2">5.1. DM des joueurs qui n'ont pas renseigné leurs rôles</a></li>
-<li><a href="#org1945c01">5.2. Run</a></li>
-<li><a href="#orgca8bec0">5.3. Récupération des joueurs</a>
-<ul>
-<li><a href="#org8dd67d5">5.3.1. Récupération du roster</a></li>
-<li><a href="#org6113f47">5.3.2. Filtrage des joueurs</a></li>
+<li><a href="#org80e0234">1.6.1. Arc</a></li>
+<li><a href="#org2ba10c2">1.6.2. Mousquet</a></li>
+<li><a href="#org232680b">1.6.3. Lance-flamme</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a href="#org4ccc62b">2. Bot Discord</a>
+<ul>
+<li><a href="#org7416c9b">2.1. Concept :</a></li>
+<li><a href="#org75cbb05">2.2. Configuration</a></li>
+<li><a href="#org218d0bb">2.3. Utilitaires</a>
+<ul>
+<li><a href="#org0fdfe0f">2.3.1. Chargement de la config</a></li>
+<li><a href="#org3018052">2.3.2. Chargement du token</a></li>
+<li><a href="#orgdc216af">2.3.3. Identifiant</a></li>
+<li><a href="#org0d710b2">2.3.4. <span class="todo TODO">TODO</span> Récupération du roster</a></li>
+<li><a href="#org3608967">2.3.5. Récupération de la strat</a></li>
+</ul>
+</li>
+<li><a href="#org8394f2c">2.4. Bot avec discord.py</a>
+<ul>
+<li><a href="#orgef5d9ba">2.4.1. DM des joueurs qui n'ont pas renseigné leurs rôles</a></li>
+<li><a href="#orgcd9e49a">2.4.2. Run</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org8d29792">3. Algo</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org5e2bd23" class="outline-2">
-<h2 id="org5e2bd23"><span class="section-number-2">1</span> Documentation des rôles</h2>
+<div id="outline-container-org951e369" class="outline-2">
+<h2 id="org951e369"><span class="section-number-2">1</span> Documentation des rôles</h2>
 <div class="outline-text-2" id="text-1">
 <script async src="https://nwdb.info/embed.js"></script>
 <p>
@@ -381,8 +382,8 @@ Un joueur peut s'estimer :
 </dl>
 </div>
 
-<div id="outline-container-org3004fe7" class="outline-3">
-<h3 id="org3004fe7"><span class="section-number-3">1.1</span> Pustule boy</h3>
+<div id="outline-container-org027313d" class="outline-3">
+<h3 id="org027313d"><span class="section-number-3">1.1</span> Pustule boy</h3>
 <div class="outline-text-3" id="text-1-1">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Tirer en <b>priorité sur les pustules</b> qui se forment
@@ -396,8 +397,8 @@ grâce à une meilleure cadence de tir.</dd>
 </div>
 </div>
 
-<div id="outline-container-orga33fe96" class="outline-3">
-<h3 id="orga33fe96"><span class="section-number-3">1.2</span> Réparateur</h3>
+<div id="outline-container-org2b02830" class="outline-3">
+<h3 id="org2b02830"><span class="section-number-3">1.2</span> Réparateur</h3>
 <div class="outline-text-3" id="text-1-2">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Gérer les ressources et <b>réparer les portes</b>. Certains
@@ -416,8 +417,8 @@ d'une arme haut niveau/particulière.
 </div>
 </div>
 
-<div id="outline-container-orgd4caafd" class="outline-3">
-<h3 id="orgd4caafd"><span class="section-number-3">1.3</span> Artilleur</h3>
+<div id="outline-container-orgbabcfda" class="outline-3">
+<h3 id="orgbabcfda"><span class="section-number-3">1.3</span> Artilleur</h3>
 <div class="outline-text-3" id="text-1-3">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Tuer les bombers, les tireurs, les artilleries
@@ -434,8 +435,8 @@ d'une arme haut niveau/particulière.
 </p>
 </div>
 </div>
-<div id="outline-container-orgf4c7b3c" class="outline-3">
-<h3 id="orgf4c7b3c"><span class="section-number-3">1.4</span> Lancier (DPS débuff)</h3>
+<div id="outline-container-org2089da3" class="outline-3">
+<h3 id="org2089da3"><span class="section-number-3">1.4</span> Lancier (DPS débuff)</h3>
 <div class="outline-text-3" id="text-1-4">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Appliquer <b><i>rend</i></b> et <b><i>weaken</i></b> aux boss et les DPS</dd>
@@ -450,16 +451,16 @@ et pour de la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_def
 </div>
 </div>
 
-<div id="outline-container-orgddd493b" class="outline-3">
-<h3 id="orgddd493b"><span class="section-number-3">1.5</span> Anti-Trash</h3>
+<div id="outline-container-orgb1126ba" class="outline-3">
+<h3 id="orgb1126ba"><span class="section-number-3">1.5</span> Anti-Trash</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 L'équipe anti-trash est composée de deux membres, un <b>DPS hache double</b> GA, et un <b>paladin</b>.
 </p>
 </div>
 
-<div id="outline-container-org67a9a24" class="outline-4">
-<h4 id="org67a9a24"><span class="section-number-4">1.5.1</span> GA</h4>
+<div id="outline-container-org728768c" class="outline-4">
+<h4 id="org728768c"><span class="section-number-4">1.5.1</span> GA</h4>
 <div class="outline-text-4" id="text-1-5-1">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Empêcher les <b>trash-mobs</b> d'atteindre les autres joueurs et les portes.</dd>
@@ -474,8 +475,8 @@ la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_defcorrupted">
 </div>
 </div>
 
-<div id="outline-container-org598d6a7" class="outline-4">
-<h4 id="org598d6a7"><span class="section-number-4">1.5.2</span> Paladin</h4>
+<div id="outline-container-org34445d9" class="outline-4">
+<h4 id="org34445d9"><span class="section-number-4">1.5.2</span> Paladin</h4>
 <div class="outline-text-4" id="text-1-5-2">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Maintenir l'équipe <b>Anti-trash</b> en vie en priorité
@@ -493,12 +494,12 @@ la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_defcorrupted">
 </div>
 
 
-<div id="outline-container-orgd27531d" class="outline-3">
-<h3 id="orgd27531d"><span class="section-number-3">1.6</span> DPS</h3>
+<div id="outline-container-org8b63e2f" class="outline-3">
+<h3 id="org8b63e2f"><span class="section-number-3">1.6</span> DPS</h3>
 <div class="outline-text-3" id="text-1-6">
 </div>
-<div id="outline-container-org5b7a358" class="outline-4">
-<h4 id="org5b7a358"><span class="section-number-4">1.6.1</span> Arc</h4>
+<div id="outline-container-org80e0234" class="outline-4">
+<h4 id="org80e0234"><span class="section-number-4">1.6.1</span> Arc</h4>
 <div class="outline-text-4" id="text-1-6-1">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>DPS les <b>têtes</b> et les <b>boss</b>, dans cet ordre de priorité.</dd>
@@ -513,8 +514,8 @@ Empowered</a> <b><i>(recommandé)</i></b>. <a href="https://nwdb.info/build?skil
 </div>
 </div>
 
-<div id="outline-container-orged4f4c6" class="outline-4">
-<h4 id="orged4f4c6"><span class="section-number-4">1.6.2</span> Mousquet</h4>
+<div id="outline-container-org2ba10c2" class="outline-4">
+<h4 id="org2ba10c2"><span class="section-number-4">1.6.2</span> Mousquet</h4>
 <div class="outline-text-4" id="text-1-6-2">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>DPS les <b>têtes</b> et les <b>boss</b>, dans cet ordre de priorité.</dd>
@@ -527,8 +528,8 @@ Stance</a> et <a href="https://nwdb.info/db/perk/perkid_ability_musket_powderbur
 </div>
 </div>
 
-<div id="outline-container-orgeb5cd3e" class="outline-4">
-<h4 id="orgeb5cd3e"><span class="section-number-4">1.6.3</span> Lance-flamme</h4>
+<div id="outline-container-org232680b" class="outline-4">
+<h4 id="org232680b"><span class="section-number-4">1.6.3</span> Lance-flamme</h4>
 <div class="outline-text-4" id="text-1-6-3">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>DPS les <b>boss</b> dans les phases de fin, quand ils
@@ -544,18 +545,24 @@ Flamethrower</a> <b><i>(recommandé)</i></b></dd>
 </div>
 </div>
 </div>
-<div id="outline-container-orgabacddf" class="outline-2">
-<h2 id="orgabacddf"><span class="section-number-2">2</span> Concept :</h2>
+
+<div id="outline-container-org4ccc62b" class="outline-2">
+<h2 id="org4ccc62b"><span class="section-number-2">2</span> Bot Discord</h2>
 <div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org7416c9b" class="outline-3">
+<h3 id="org7416c9b"><span class="section-number-3">2.1</span> Concept :</h3>
+<div class="outline-text-3" id="text-2-1">
 <p>
-Le bot
+Le bot à pour objectif de générer une composition d'armée à partir des
+50 joueurs sélectionnés aléatoirement par le jeu.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org9df2dbd" class="outline-2">
-<h2 id="org9df2dbd"><span class="section-number-2">3</span> Configuration</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org75cbb05" class="outline-3">
+<h3 id="org75cbb05"><span class="section-number-3">2.2</span> Configuration</h3>
+<div class="outline-text-3" id="text-2-2">
 <p>
 La configuration du bot passera par un fichier json unique, contenant
 le corps des différents messages à transmettre ainsi que les adresses
@@ -594,13 +601,13 @@ des Gdoc à lire.
 
 
 
-<div id="outline-container-org54ea2e4" class="outline-2">
-<h2 id="org54ea2e4"><span class="section-number-2">4</span> Utilitaires</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org218d0bb" class="outline-3">
+<h3 id="org218d0bb"><span class="section-number-3">2.3</span> Utilitaires</h3>
+<div class="outline-text-3" id="text-2-3">
 </div>
-<div id="outline-container-org118dbd6" class="outline-3">
-<h3 id="org118dbd6"><span class="section-number-3">4.1</span> Chargement de la config</h3>
-<div class="outline-text-3" id="text-4-1">
+<div id="outline-container-org0fdfe0f" class="outline-4">
+<h4 id="org0fdfe0f"><span class="section-number-4">2.3.1</span> Chargement de la config</h4>
+<div class="outline-text-4" id="text-2-3-1">
 <p>
 Le chargement de cette config se fera pour l'instant une seule fois au
 démarrage du bot.
@@ -616,9 +623,9 @@ démarrage du bot.
 </div>
 </div>
 
-<div id="outline-container-orgee9a8ca" class="outline-3">
-<h3 id="orgee9a8ca"><span class="section-number-3">4.2</span> Chargement du token</h3>
-<div class="outline-text-3" id="text-4-2">
+<div id="outline-container-org3018052" class="outline-4">
+<h4 id="org3018052"><span class="section-number-4">2.3.2</span> Chargement du token</h4>
+<div class="outline-text-4" id="text-2-3-2">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement du token</span>
 <span style="color: #89DDFF;">with</span> <span style="color: #82aaff;">open</span><span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'bot.token'</span>, <span style="color: #c3e88d;">'r'</span><span style="color: #c792ea;">)</span> <span style="color: #89DDFF;">as</span> datafile:
@@ -627,9 +634,9 @@ démarrage du bot.
 </div>
 </div>
 </div>
-<div id="outline-container-org1f0f3e4" class="outline-3">
-<h3 id="org1f0f3e4"><span class="section-number-3">4.3</span> Identifiant</h3>
-<div class="outline-text-3" id="text-4-3">
+<div id="outline-container-orgdc216af" class="outline-4">
+<h4 id="orgdc216af"><span class="section-number-4">2.3.3</span> Identifiant</h4>
+<div class="outline-text-4" id="text-2-3-3">
 <p>
 Il est nécessaire d'avoir un identifiant unique entre discord et le
 gdoc pour faire le lien. Discord gère les identifiants sous forme d'un
@@ -651,9 +658,9 @@ depuis un objet <i>discord.User</i> :
 </div>
 </div>
 
-<div id="outline-container-orge83179a" class="outline-3">
-<h3 id="orge83179a"><span class="section-number-3">4.4</span> <span class="todo TODO">TODO</span> Récupération du roster</h3>
-<div class="outline-text-3" id="text-4-4">
+<div id="outline-container-org0d710b2" class="outline-4">
+<h4 id="org0d710b2"><span class="section-number-4">2.3.4</span> <span class="todo TODO">TODO</span> Récupération du roster</h4>
+<div class="outline-text-4" id="text-2-3-4">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #89DDFF;">import</span> pandas <span style="color: #89DDFF;">as</span> pd
 <span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_roster</span><span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>:
@@ -672,9 +679,9 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 </pre>
 </div>
 </div>
-<div id="outline-container-orgfcecb8b" class="outline-3">
-<h3 id="orgfcecb8b"><span class="section-number-3">4.5</span> Récupération de la strat</h3>
-<div class="outline-text-3" id="text-4-5">
+<div id="outline-container-org3608967" class="outline-4">
+<h4 id="org3608967"><span class="section-number-4">2.3.5</span> Récupération de la strat</h4>
+<div class="outline-text-4" id="text-2-3-5">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_strat</span><span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>:
     <span style="color: #ffcb6b;">url</span> = f<span style="color: #c3e88d;">"{config['gdoc']['url']}gviz/tq?tqx=out:csv&amp;sheet={config['gdoc']['page_strat']}"</span>
@@ -694,9 +701,9 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 </div>
 </div>
 
-<div id="outline-container-org4856c44" class="outline-2">
-<h2 id="org4856c44"><span class="section-number-2">5</span> Bot avec discord.py</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org8394f2c" class="outline-3">
+<h3 id="org8394f2c"><span class="section-number-3">2.4</span> Bot avec discord.py</h3>
+<div class="outline-text-3" id="text-2-4">
 <p>
 <a href="https://discordpy.readthedocs.io/en/stable/">https://discordpy.readthedocs.io/en/stable/</a>
 </p>
@@ -800,9 +807,9 @@ réagi sur le panneau.
 
 
 
-<div id="outline-container-orgc9445e2" class="outline-3">
-<h3 id="orgc9445e2"><span class="section-number-3">5.1</span> DM des joueurs qui n'ont pas renseigné leurs rôles</h3>
-<div class="outline-text-3" id="text-5-1">
+<div id="outline-container-orgef5d9ba" class="outline-4">
+<h4 id="orgef5d9ba"><span class="section-number-4">2.4.1</span> DM des joueurs qui n'ont pas renseigné leurs rôles</h4>
+<div class="outline-text-4" id="text-2-4-1">
 <p>
 Cette phase n'est pas absolument nécessaire, mais elle permet de
 notifier directement en message privé les utilisateurs qui se
@@ -835,13 +842,48 @@ le lead demande le calcul de la composition du groupement de défense.
 </div>
 </div>
 </div>
-<div id="outline-container-org1945c01" class="outline-3">
-<h3 id="org1945c01"><span class="section-number-3">5.2</span> Run</h3>
-<div class="outline-text-3" id="text-5-2">
+<div id="outline-container-orgcd9e49a" class="outline-4">
+<h4 id="orgcd9e49a"><span class="section-number-4">2.4.2</span> Run</h4>
+<div class="outline-text-4" id="text-2-4-2">
 <div class="org-src-container">
 <pre class="src src-python">bot.run<span style="color: #c792ea;">(</span>token<span style="color: #c792ea;">)</span>
 </pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8d29792" class="outline-2">
+<h2 id="org8d29792"><span class="section-number-2">3</span> Algo</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Récupération du roster de test
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #89DDFF;">import</span> pandas <span style="color: #89DDFF;">as</span> pd
+<span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_test_roster</span><span style="color: #c792ea;">()</span>:
+    <span style="color: #ffcb6b;">page</span>= <span style="color: #c3e88d;">'Roster2'</span>
+    <span style="color: #ffcb6b;">url</span> = f<span style="color: #c3e88d;">"https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/gviz/tq?tqx=out:csv&amp;sheet={page}"</span>
+    <span style="color: #89DDFF;">return</span> pd.read_csv<span style="color: #c792ea;">(</span>url<span style="color: #c792ea;">)</span>.iloc<span style="color: #c792ea;">[</span>:, 0:16<span style="color: #c792ea;">]</span>.dropna<span style="color: #c792ea;">()</span>.set_index<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'dtag'</span><span style="color: #c792ea;">)</span>
+<span style="color: #ffcb6b;">roster</span> = get_test_roster<span style="color: #c792ea;">()</span>.set_index<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'Pseudo IG'</span><span style="color: #c792ea;">)</span>
+roster.to_csv<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'roster.csv'</span><span style="color: #c792ea;">)</span>
+<span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>roster<span style="color: #c792ea;">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_test_strat</span><span style="color: #c792ea;">()</span>:
+  <span style="color: #ffcb6b;">page</span>= <span style="color: #c3e88d;">'Strat'</span>
+  <span style="color: #ffcb6b;">url</span> = f<span style="color: #c3e88d;">"https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/gviz/tq?tqx=out:csv&amp;sheet={page}"</span>
+  <span style="color: #89DDFF;">return</span> pd.read_csv<span style="color: #c792ea;">(</span>url<span style="color: #c792ea;">)</span>.iloc<span style="color: #c792ea;">[</span>0:5, 0:12<span style="color: #c792ea;">]</span>
+
+<span style="color: #ffcb6b;">strat</span> = get_test_strat<span style="color: #c792ea;">()</span>
+strat.to_csv<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'strat.csv'</span><span style="color: #c792ea;">)</span>
+<span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>strat<span style="color: #c792ea;">)</span>
+</pre>
+</div>
+
 <p>
 Identification des Rôles :
 </p>
@@ -853,47 +895,103 @@ Identification des Rôles :
         <span style="color: #ffcb6b;">roles</span><span style="color: #c792ea;">[</span>v<span style="color: #c792ea;">]</span> += 1
       <span style="color: #89DDFF;">else</span>:
         <span style="color: #ffcb6b;">roles</span><span style="color: #c792ea;">[</span>v<span style="color: #c792ea;">]</span> = 1
-<span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>roles<span style="color: #c792ea;">)</span>
+
+<span style="color: #ffcb6b;">max_roles</span> = <span style="color: #c792ea;">{</span>k: v.<span style="color: #82aaff;">max</span><span style="color: #f78c6c;">()</span> <span style="color: #89DDFF;">for</span> k,v <span style="color: #89DDFF;">in</span> roster.iteritems<span style="color: #f78c6c;">()</span><span style="color: #c792ea;">}</span>
 </pre>
 </div>
-</div>
-</div>
 
-<div id="outline-container-orgca8bec0" class="outline-3">
-<h3 id="orgca8bec0"><span class="section-number-3">5.3</span> Récupération des joueurs</h3>
-<div class="outline-text-3" id="text-5-3">
-</div>
-<div id="outline-container-org8dd67d5" class="outline-4">
-<h4 id="org8dd67d5"><span class="section-number-4">5.3.1</span> Récupération du roster</h4>
-<div class="outline-text-4" id="text-5-3-1">
+<p>
+Création des colonnes avec les noms de rôles
+</p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #89DDFF;">import</span> pandas <span style="color: #89DDFF;">as</span> pd
-<span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_roster</span><span style="color: #c792ea;">()</span>:
-    <span style="color: #ffcb6b;">page</span>= <span style="color: #c3e88d;">'Roster2'</span>
-    <span style="color: #ffcb6b;">url</span> = f<span style="color: #c3e88d;">"https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/gviz/tq?tqx=out:csv&amp;sheet={page}"</span>
-    <span style="color: #89DDFF;">return</span> pd.read_csv<span style="color: #c792ea;">(</span>url<span style="color: #c792ea;">)</span>.iloc<span style="color: #c792ea;">[</span>1:, 0:9<span style="color: #c792ea;">]</span>.dropna<span style="color: #c792ea;">()</span>.set_index<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'dtag'</span><span style="color: #c792ea;">)</span>
-<span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>get_roster<span style="color: #f78c6c;">()</span><span style="color: #c792ea;">)</span>
+<pre class="src src-python"><span style="color: #ffcb6b;">cols</span> = <span style="color: #c792ea;">[</span>k <span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> roles.items<span style="color: #f78c6c;">()</span> <span style="color: #89DDFF;">for</span> _ <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">range</span><span style="color: #f78c6c;">(</span>v<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">]</span>
+<span style="color: #556369;">#</span><span style="color: #556369;">print(cols, len(cols))</span>
+</pre>
+</div>
+<p>
+Création des lignes
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #ffcb6b;">rows</span> = roster.index
+<span style="color: #556369;">#</span><span style="color: #556369;">print(rows, len(rows))</span>
+</pre>
+</div>
+<p>
+Création de la matrice de coûts
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #89DDFF;">import</span> numpy <span style="color: #89DDFF;">as</span> np
+<span style="color: #ffcb6b;">m</span> = np.zeros<span style="color: #c792ea;">(</span><span style="color: #f78c6c;">(</span><span style="color: #82aaff;">len</span><span style="color: #c3e88d;">(</span>rows<span style="color: #c3e88d;">)</span>, <span style="color: #82aaff;">len</span><span style="color: #c3e88d;">(</span>cols<span style="color: #c3e88d;">)</span><span style="color: #f78c6c;">)</span>, dtype=<span style="color: #82aaff;">int</span><span style="color: #c792ea;">)</span>
+
+<span style="color: #89DDFF;">for</span> i, r <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">enumerate</span><span style="color: #c792ea;">(</span>rows<span style="color: #c792ea;">)</span>:
+    <span style="color: #89DDFF;">for</span> j, c <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">enumerate</span><span style="color: #c792ea;">(</span>cols<span style="color: #c792ea;">)</span>:
+        <span style="color: #ffcb6b;">m</span><span style="color: #c792ea;">[</span>i, j<span style="color: #c792ea;">]</span> = roster.at<span style="color: #c792ea;">[</span>r, c<span style="color: #c792ea;">]</span>
+</pre>
+</div>
+
+<p>
+Résolution
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #89DDFF;">from</span> scipy.optimize <span style="color: #89DDFF;">import</span> linear_sum_assignment
+<span style="color: #ffcb6b;">row_ind</span>, <span style="color: #ffcb6b;">col_ind</span> = linear_sum_assignment<span style="color: #c792ea;">(</span>m, maximize=<span style="color: #f78c6c;">True</span><span style="color: #c792ea;">)</span>
+<span style="color: #ffcb6b;">score</span> = m<span style="color: #c792ea;">[</span>row_ind, col_ind<span style="color: #c792ea;">]</span>.<span style="color: #82aaff;">sum</span><span style="color: #c792ea;">()</span>
+<span style="color: #ffcb6b;">assignent</span> = <span style="color: #c792ea;">{</span>p: cols<span style="color: #f78c6c;">[</span>t<span style="color: #f78c6c;">]</span> <span style="color: #89DDFF;">for</span> p, t <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">zip</span><span style="color: #f78c6c;">(</span>rows, col_ind<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">}</span>
+
+</pre>
+</div>
+
+<p>
+Analyse des résultats
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> assignent.items<span style="color: #c792ea;">()</span>:
+    <span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>k, v, roster.at<span style="color: #f78c6c;">[</span>k, v<span style="color: #f78c6c;">]</span><span style="color: #c792ea;">)</span>
+
+</pre>
+</div>
+
+<p>
+Remplissage du tableau
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #ffcb6b;">filed_roles</span> = <span style="color: #c792ea;">{}</span>
+<span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> assignent.items<span style="color: #c792ea;">()</span>:
+    <span style="color: #556369;">#</span><span style="color: #556369;">print(k, v)</span>
+    <span style="color: #89DDFF;">if</span> v <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> filed_roles:
+        <span style="color: #ffcb6b;">filed_roles</span><span style="color: #c792ea;">[</span>v<span style="color: #c792ea;">]</span> = <span style="color: #c792ea;">[</span>k<span style="color: #c792ea;">]</span>
+    <span style="color: #89DDFF;">else</span>:
+        <span style="color: #ffcb6b;">filed_roles</span><span style="color: #c792ea;">[</span>v<span style="color: #c792ea;">]</span> += <span style="color: #c792ea;">[</span>k<span style="color: #c792ea;">]</span>
+
+<span style="color: #ffcb6b;">comp</span> = strat.copy<span style="color: #c792ea;">()</span>
+<span style="color: #89DDFF;">for</span> i, row <span style="color: #89DDFF;">in</span> comp.iterrows<span style="color: #c792ea;">()</span>:
+    <span style="color: #89DDFF;">for</span> j, v <span style="color: #89DDFF;">in</span> row.items<span style="color: #c792ea;">()</span>:
+        <span style="color: #89DDFF;">if</span> filed_roles<span style="color: #c792ea;">[</span>v<span style="color: #c792ea;">]</span>:
+            <span style="color: #ffcb6b;">p</span> = filed_roles<span style="color: #c792ea;">[</span>v<span style="color: #c792ea;">]</span>.pop<span style="color: #c792ea;">()</span>
+            <span style="color: #ffcb6b;">score</span> = roster.at<span style="color: #c792ea;">[</span>p, v<span style="color: #c792ea;">]</span>
+            <span style="color: #ffcb6b;">comp.at</span><span style="color: #c792ea;">[</span>i, j<span style="color: #c792ea;">]</span> = f<span style="color: #c3e88d;">'{p} {score} {score/ max_roles[v]}'</span>
+<span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>comp<span style="color: #c792ea;">)</span>
 </pre>
 </div>
 </div>
-</div>
 
-<div id="outline-container-org6113f47" class="outline-4">
-<h4 id="org6113f47"><span class="section-number-4">5.3.2</span> Filtrage des joueurs</h4>
-<div class="outline-text-4" id="text-5-3-2">
+<ol class="org-ol">
+<li><a id="org85c2078"></a>Filtrage des joueurs<br />
+<div class="outline-text-5" id="text-3-0-0-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #ffcb6b;">keys_to_extract</span> = <span style="color: #c792ea;">[]</span>
 <span style="color: #ffcb6b;">a_subset</span> = <span style="color: #c792ea;">{</span>key: players<span style="color: #f78c6c;">[</span>key<span style="color: #f78c6c;">]</span> <span style="color: #89DDFF;">for</span> key <span style="color: #89DDFF;">in</span> keys_to_extract<span style="color: #c792ea;">}</span>
 </pre>
 </div>
 </div>
-</div>
-</div>
+</li>
+</ol>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Virgile Daugé</p>
-<p class="date">Created: 2021-12-21 mar. 14:50</p>
+<p class="date">Created: 2021-12-22 mer. 09:47</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
