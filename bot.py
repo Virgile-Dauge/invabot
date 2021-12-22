@@ -86,7 +86,17 @@ async def comp(ctx):
     # Récupération de la strat
     strat = get_strat(config)
     comp = build_comp(roster, strat)
-    await channel.send(comp)
+    def gen_embed(comp):
+       e = discord.Embed(title="Composition d'armée")
+       for k, v in comp.iteritems():
+           f = ''
+           for p in v.to_list():
+               f += p + '\n'
+           e.add_field(name=k, value=f, inline=True)
+       return e
+    
+    
+    await channel.send(embed=gen_embed(comp))
 
 @bot.event
 async def on_reaction_add(reaction, user):

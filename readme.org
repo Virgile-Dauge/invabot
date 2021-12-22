@@ -284,7 +284,7 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
  fonction associée doit récupérer le message /panneau/ à partir de
  l'identité de l'appelant. Puis, récupérer la liste des joueurs qui ont
  réagi sur le panneau.
- #+begin_src python :tangle bot.py
+ #+begin_src python :tangle bot.py :noweb yes
    @bot.command()
    async def comp(ctx):
        """ Génére une composition d'armée
@@ -318,9 +318,23 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
        # Récupération de la strat
        strat = get_strat(config)
        comp = build_comp(roster, strat)
-       await channel.send(comp)
+       <<gen_embed>>
+       await channel.send(embed=gen_embed(comp))
  #+end_src
 
+#+name: gen_embed
+#+begin_src python
+  def gen_embed(comp):
+     e = discord.Embed(title="Composition d'armée")
+     for k, v in comp.iteritems():
+         f = ''
+         for p in v.to_list():
+             f += p + '\n'
+         e.add_field(name=k, value=f, inline=True)
+     return e
+
+
+#+end_src
 
 
 *** DM des joueurs qui n'ont pas renseigné leurs rôles
@@ -450,8 +464,7 @@ Remplissage du tableau
       for j, v in row.items():
           if v in filed_roles and filed_roles[v]:
               p = filed_roles[v].pop()
-              score = roster.at[p, v]
-              comp.at[i, j] = f'{p} {score} {score/ max_roles[v]}'
+              comp.at[i, j] = f'{p} {roster.at[p, v] / max_roles[v]}'
   return comp
 #+end_src
 
