@@ -117,7 +117,7 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
 * Bot Discord
 ** Concept :
 
- Le bot à pour objectif de générer une composition d'armée à partir des
+ Le bot a pour objectif de générer une composition d'armée à partir des
  50 joueurs sélectionnés aléatoirement par le jeu.
 
 ** Configuration
@@ -130,7 +130,7 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
 
    "embeds": {
        "panneau": {
-           "title": "Confirme ta séléction à l'invasion de",
+           "title": "Confirme ta sélection à l'invasion de",
            "color": 2003199,
            "description": "Réagis avec :ballot_box_with_check: à ce message **uniquement si tu es déjà dans le fort**. Attention, retourne vite en jeu, l'auto-AFK kick est rapide (2min). \n\n Si tu as réagi par erreur, merci de décocher ta réaction. :wink: \n\n*(Et si vous aussi vous pensez que bakhu est la meilleure guilde)*"
        },
@@ -265,7 +265,7 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
  #+begin_src python :tangle bot.py
    @bot.command()
    async def inva(ctx, arg):
-       """ Génére un tableau d'inscription dans le channel
+       """ Génère un tableau d'inscription dans le channel
        """
        embed = discord.Embed.from_dict(config["embeds"]["panneau"])
        embed.title += f' {arg}'
@@ -287,7 +287,7 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
  #+begin_src python :tangle bot.py :noweb yes
    @bot.command()
    async def comp(ctx):
-       """ Génére une composition d'armée
+       """ Génère une composition d'armée
        """
        author_dtag = dtag(ctx.author)
        channel = ctx.channel
