@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-01-01 sam. 12:55 -->
+<!-- 2022-01-01 sam. 22:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Invabot</title>
@@ -201,6 +201,10 @@
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
 <style type="text/css">
  pre.src {background-color: #263238; color: #EEFFFF;}</style>
+<style type="text/css">
+ pre.src {background-color: #263238; color: #EEFFFF;}</style>
+<style type="text/css">
+ pre.src {background-color: #263238; color: #EEFFFF;}</style>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -277,60 +281,52 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgb058efe">1. Documentation des rôles</a>
+<li><a href="#orgba73c4e">1. Documentation des rôles</a>
 <ul>
-<li><a href="#orgf3a3889">1.1. Pustule boy</a></li>
-<li><a href="#orgc1b8fcc">1.2. Réparateur</a></li>
-<li><a href="#orge77c06d">1.3. Artilleur</a></li>
-<li><a href="#org3e8d6c6">1.4. Lancier (DPS débuff)</a></li>
-<li><a href="#org31f9a7f">1.5. Anti-Trash</a>
-<ul>
-<li><a href="#org2b30784">1.5.1. GA</a></li>
-<li><a href="#org0f520e7">1.5.2. Paladin</a></li>
+<li><a href="#orgdcc266b">1.1. Arc</a></li>
+<li><a href="#org89539ad">1.2. Mousquet</a></li>
+<li><a href="#org7ebea7a">1.3. Anti-Trash</a></li>
+<li><a href="#orgbb2f177">1.4. DPS debuff</a></li>
+<li><a href="#org4489f35">1.5. Pustule boy</a></li>
+<li><a href="#org8616c5b">1.6. Réparateur</a></li>
+<li><a href="#orgd880207">1.7. Artilleur</a></li>
+<li><a href="#org2abcb1c">1.8. Heal</a></li>
+<li><a href="#org16d4534">1.9. Mage AOE</a></li>
 </ul>
 </li>
-<li><a href="#org28af570">1.6. DPS</a>
+<li><a href="#orgb78b19f">2. Bot Discord</a>
 <ul>
-<li><a href="#org7c290c2">1.6.1. Arc</a></li>
-<li><a href="#org335d2c4">1.6.2. Mousquet</a></li>
-<li><a href="#orgedea55f">1.6.3. Lance-flamme</a></li>
+<li><a href="#orgd3880fc">2.1. Concept :</a></li>
+<li><a href="#org6728fcc">2.2. Configuration</a></li>
+<li><a href="#orgc66398c">2.3. Utilitaires</a>
+<ul>
+<li><a href="#org5fc774b">2.3.1. Dépendances</a></li>
+<li><a href="#org8453fb0">2.3.2. Chargement de la config</a></li>
+<li><a href="#orgc07e8b3">2.3.3. Chargement du token</a></li>
+<li><a href="#orgc94e592">2.3.4. Identifiant</a></li>
+<li><a href="#orgdba57b8">2.3.5. Récupération du roster</a></li>
+<li><a href="#org6865fca">2.3.6. Récupération de la strat</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="#org25ca14b">2. Bot Discord</a>
+<li><a href="#orgc5bca8d">2.4. Bot avec discord.py</a>
 <ul>
-<li><a href="#orgb5d5b85">2.1. Concept :</a></li>
-<li><a href="#orgc70bd3b">2.2. Configuration</a></li>
-<li><a href="#org800cdaf">2.3. Utilitaires</a>
-<ul>
-<li><a href="#org5378bed">2.3.1. Dépendances</a></li>
-<li><a href="#org9fe881e">2.3.2. Chargement de la config</a></li>
-<li><a href="#org42a6e6b">2.3.3. Chargement du token</a></li>
-<li><a href="#orga9c63a5">2.3.4. Identifiant</a></li>
-<li><a href="#org277073f">2.3.5. Récupération du roster</a></li>
-<li><a href="#orgf0b8a74">2.3.6. Récupération de la strat</a></li>
-</ul>
-</li>
-<li><a href="#orga3bef7b">2.4. Bot avec discord.py</a>
-<ul>
-<li><a href="#org7e3569c">2.4.1. DM des joueurs qui n'ont pas renseigné leurs rôles</a></li>
-<li><a href="#orgc74aaa1">2.4.2. Run</a></li>
+<li><a href="#org720de05">2.4.1. DM des joueurs qui n'ont pas renseigné leurs rôles</a></li>
+<li><a href="#org3394e54">2.4.2. Run</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orga0da8f4">3. Algo</a>
+<li><a href="#org9042124">3. Algo</a>
 <ul>
-<li><a href="#orgb2f1976">3.1. Test algo</a></li>
+<li><a href="#org3d76fef">3.1. Test algo</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgb058efe" class="outline-2">
-<h2 id="orgb058efe"><span class="section-number-2">1</span> Documentation des rôles</h2>
+<div id="outline-container-orgba73c4e" class="outline-2">
+<h2 id="orgba73c4e"><span class="section-number-2">1</span> Documentation des rôles</h2>
 <div class="outline-text-2" id="text-1">
 <script async src="https://nwdb.info/embed.js"></script>
 <p>
@@ -351,9 +347,70 @@ Un joueur peut s'estimer :
 </dl>
 </div>
 
-<div id="outline-container-orgf3a3889" class="outline-3">
-<h3 id="orgf3a3889"><span class="section-number-3">1.1</span> Pustule boy</h3>
+<div id="outline-container-orgdcc266b" class="outline-3">
+<h3 id="orgdcc266b"><span class="section-number-3">1.1</span> Arc</h3>
 <div class="outline-text-3" id="text-1-1">
+<dl class="org-dl">
+<dt><b>Objectif</b></dt><dd>DPS les <b>têtes</b> et les <b>boss</b>, dans cet ordre de priorité.</dd>
+<dt><b>Arme principale</b></dt><dd>Arc <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> <b><i>(obligatoire)</i></b> et <a href="https://nwdb.info/db/perk/perkid_weapon_empoweroncrit">Keenly
+Empowered</a> <b><i>(recommandé)</i></b>. <a href="https://nwdb.info/build?skills=4-iw75uo-ngewxw">Build arc</a> <b><i>(recommandé)</i></b></dd>
+<dt><b>Arme secondaire</b></dt><dd>Arme débuff distance comme la hachette ou la lance avec <a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">Sundering Javelin</a> sur pièce d'armure <b><i>(recommandé)</i></b></dd>
+<dt><b>Armure</b></dt><dd>Légère avec perks pour l'arc<a href="https://nwdb.info/db/perk/perkid_ability_bow_poisonshot"> Enfeebling Poison Shot</a> et <a href="https://nwdb.info/db/perk/perkid_ability_bow_rapidshot">Penetrating Rapid Shot</a> <b><i>(recommandé)</i></b></dd>
+</dl>
+<p>
+<a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">      Sundering Javelin</a> <b><i>(recommandé)</i></b>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org89539ad" class="outline-3">
+<h3 id="org89539ad"><span class="section-number-3">1.2</span> Mousquet</h3>
+<div class="outline-text-3" id="text-1-2">
+<dl class="org-dl">
+<dt><b>Objectif</b></dt><dd>DPS les <b>têtes</b> et les <b>boss</b>, dans cet ordre de priorité.</dd>
+<dt><b>Arme principale</b></dt><dd>Mousquet <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> <b><i>(obligatoire)</i></b> et
+<a href="https://nwdb.info/db/perk/perkid_weapon_dmgbasic">Enchanted</a> <b><i>(recommandé)</i></b>  <a href="https://nwdb.info/build?skills=6-nm5y04-qtbfgg">Build Mousquet</a> <b><i>(recommandé)</i></b></dd>
+<dt><b>Arme secondaire</b></dt><dd>Arme débuff distance comme la hachette ou la lance avec <a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">Sundering Javelin</a> sur pièce d'armure <b><i>(recommandé)</i></b></dd>
+<dt><b>Armure</b></dt><dd>Légère avec perks pour le mousquet <a href="https://nwdb.info/db/perk/perkid_ability_musket_shootersstance">Empowering Shooter's
+Stance</a> et <a href="https://nwdb.info/db/perk/perkid_ability_musket_powderburn">Crippling Powder Burn</a> <b><i>(recommandé)</i></b>. Perk <a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">Sundering Javelin</a> <b><i>(recommandé)</i></b></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-org7ebea7a" class="outline-3">
+<h3 id="org7ebea7a"><span class="section-number-3">1.3</span> Anti-Trash</h3>
+<div class="outline-text-3" id="text-1-3">
+<dl class="org-dl">
+<dt><b>Objectif</b></dt><dd>Empêcher les <b>trash-mobs</b> d'atteindre les autres joueurs et les portes.</dd>
+<dt><b>Arme principale</b></dt><dd>Hache double avec <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> <b><i>(obligatoire)</i></b>
+<a href="https://nwdb.info/db/item/sapphirecutt4">Pristine Sapphire</a> <b><i>(obligatoire)</i></b> et <a href="https://nwdb.info/db/item/sapphirecutt4%20%5B%5Bhttps://nwdb.info/db/perk/perkid_weapon_empoweroncrit">Keenly Empowered</a> (recommandé).
+<a href="https://nwdb.info/build?skills=8-j1mxog-kc3hhg">Build Hache double</a> <b><i>(obligatoire)</i></b></dd>
+<dt><b>Arme secondaire</b></dt><dd>Arme CàC, Marteau pour le contrôle ?</dd>
+<dt><b>Armure</b></dt><dd>Lourde avec perks <a href="https://nwdb.info/db/perk/perkid_ability_greataxe_gravitywell">Insatiable Gravity Well</a> (obligatoire)
+<a href="https://nwdb.info/db/perk/perkid_ability_greataxe_maelstrom">Enfeebling Maelstrom</a> et <a href="https://nwdb.info/db/perk/perkid_ability_greataxe_whirlwind">Fortifying Whirlwind</a> <b><i>(recommandé)</i></b> et pour de
+la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_defcorrupted">Corrupted Ward</a> sur quelques pièces <b><i>(recommandé)</i></b></dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-orgbb2f177" class="outline-3">
+<h3 id="orgbb2f177"><span class="section-number-3">1.4</span> DPS debuff</h3>
+<div class="outline-text-3" id="text-1-4">
+<dl class="org-dl">
+<dt><b>Objectif</b></dt><dd>Appliquer <b><i>rend</i></b> et <b><i>weaken</i></b> aux boss et les DPS</dd>
+<dt><b>Arme principale</b></dt><dd>Lance avec <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> <b><i>(obligatoire)</i></b> et
+<a href="https://nwdb.info/db/perk/perkid_weapon_empoweroncrit">Keenly Empowered</a> ou <a href="https://nwdb.info/db/perk/perkid_weaponmelee_dmgback">Rogue</a> <b><i>(recommandé)</i></b>. <a href="https://nwdb.info/build?skills=10-l71p4w-tsmm2s">Build lance</a>
+<b><i>(obligatoire)</i></b></dd>
+<dt><b>Arme secondaire</b></dt><dd>Arc préféré, mais peut être une arme de CàC</dd>
+<dt><b>Armure</b></dt><dd>Légère avec perks <a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">Sundering Javelin</a> <b><i>(obligatoire)</i></b>
+<a href="https://nwdb.info/db/perk/perkid_ability_spear_skewer">Enfeebling Skewer</a> <b><i>(obligatoire)</i></b> <a href="https://nwdb.info/db/perk/perkid_ability_spear_perforate">Fortifying Perforate</a> <b><i>(recommandé)</i></b>
+et pour de la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_defcorrupted">Corrupted Ward</a> sur quelques pièces <b><i>(recommandé)</i></b></dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org4489f35" class="outline-3">
+<h3 id="org4489f35"><span class="section-number-3">1.5</span> Pustule boy</h3>
+<div class="outline-text-3" id="text-1-5">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Tirer en <b>priorité sur les pustules</b> qui se forment
 lors de l'impact d'un bison à l'intérieur du fort. Aider au centre.</dd>
@@ -366,9 +423,9 @@ grâce à une meilleure cadence de tir.</dd>
 </div>
 </div>
 
-<div id="outline-container-orgc1b8fcc" class="outline-3">
-<h3 id="orgc1b8fcc"><span class="section-number-3">1.2</span> Réparateur</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-org8616c5b" class="outline-3">
+<h3 id="org8616c5b"><span class="section-number-3">1.6</span> Réparateur</h3>
+<div class="outline-text-3" id="text-1-6">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Gérer les ressources et <b>réparer les portes</b>. Certains
 voient ce rôle comme ingrat mais la victoire est inenvisageable sans
@@ -386,9 +443,9 @@ d'une arme haut niveau/particulière.
 </div>
 </div>
 
-<div id="outline-container-orge77c06d" class="outline-3">
-<h3 id="orge77c06d"><span class="section-number-3">1.3</span> Artilleur</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-orgd880207" class="outline-3">
+<h3 id="orgd880207"><span class="section-number-3">1.7</span> Artilleur</h3>
+<div class="outline-text-3" id="text-1-7">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Tuer les bombers, les tireurs, les artilleries
 ennemies et les trash mob, en respectant cet ordre de priorité.</dd>
@@ -404,49 +461,9 @@ d'une arme haut niveau/particulière.
 </p>
 </div>
 </div>
-<div id="outline-container-org3e8d6c6" class="outline-3">
-<h3 id="org3e8d6c6"><span class="section-number-3">1.4</span> Lancier (DPS débuff)</h3>
-<div class="outline-text-3" id="text-1-4">
-<dl class="org-dl">
-<dt><b>Objectif</b></dt><dd>Appliquer <b><i>rend</i></b> et <b><i>weaken</i></b> aux boss et les DPS</dd>
-<dt><b>Arme principale</b></dt><dd>Lance avec <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> <b><i>(obligatoire)</i></b> et
-<a href="https://nwdb.info/db/perk/perkid_weapon_empoweroncrit">Keenly Empowered</a> ou <a href="https://nwdb.info/db/perk/perkid_weaponmelee_dmgback">Rogue</a> <b><i>(recommandé)</i></b>. <a href="https://nwdb.info/build?skills=10-l71p4w-tsmm2s">Build lance</a>
-<b><i>(obligatoire)</i></b></dd>
-<dt><b>Arme secondaire</b></dt><dd>Arc préféré, mais peut être une arme de CàC</dd>
-<dt><b>Armure</b></dt><dd>Légère avec perks <a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">Sundering Javelin</a> <b><i>(obligatoire)</i></b>
-<a href="https://nwdb.info/db/perk/perkid_ability_spear_skewer">Enfeebling Skewer</a> <b><i>(obligatoire)</i></b> <a href="https://nwdb.info/db/perk/perkid_ability_spear_perforate">Fortifying Perforate</a> <b><i>(recommandé)</i></b>
-et pour de la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_defcorrupted">Corrupted Ward</a> sur quelques pièces <b><i>(recommandé)</i></b></dd>
-</dl>
-</div>
-</div>
-
-<div id="outline-container-org31f9a7f" class="outline-3">
-<h3 id="org31f9a7f"><span class="section-number-3">1.5</span> Anti-Trash</h3>
-<div class="outline-text-3" id="text-1-5">
-<p>
-L'équipe anti-trash est composée de deux membres, un <b>DPS hache double</b> GA, et un <b>paladin</b>.
-</p>
-</div>
-
-<div id="outline-container-org2b30784" class="outline-4">
-<h4 id="org2b30784"><span class="section-number-4">1.5.1</span> GA</h4>
-<div class="outline-text-4" id="text-1-5-1">
-<dl class="org-dl">
-<dt><b>Objectif</b></dt><dd>Empêcher les <b>trash-mobs</b> d'atteindre les autres joueurs et les portes.</dd>
-<dt><b>Arme principale</b></dt><dd>Hache double avec <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> <b><i>(obligatoire)</i></b>
-<a href="https://nwdb.info/db/item/sapphirecutt4">Pristine Sapphire</a> <b><i>(obligatoire)</i></b> et <a href="https://nwdb.info/db/item/sapphirecutt4%20%5B%5Bhttps://nwdb.info/db/perk/perkid_weapon_empoweroncrit">Keenly Empowered</a> (recommandé).
-<a href="https://nwdb.info/build?skills=8-j1mxog-kc3hhg">Build Hache double</a> <b><i>(obligatoire)</i></b></dd>
-<dt><b>Arme secondaire</b></dt><dd>Arme CàC, Marteau pour le contrôle ?</dd>
-<dt><b>Armure</b></dt><dd>Lourde avec perks <a href="https://nwdb.info/db/perk/perkid_ability_greataxe_gravitywell">Insatiable Gravity Well</a> (obligatoire)
-<a href="https://nwdb.info/db/perk/perkid_ability_greataxe_maelstrom">Enfeebling Maelstrom</a> et <a href="https://nwdb.info/db/perk/perkid_ability_greataxe_whirlwind">Fortifying Whirlwind</a> <b><i>(recommandé)</i></b> et pour de
-la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_defcorrupted">Corrupted Ward</a> sur quelques pièces <b><i>(recommandé)</i></b></dd>
-</dl>
-</div>
-</div>
-
-<div id="outline-container-org0f520e7" class="outline-4">
-<h4 id="org0f520e7"><span class="section-number-4">1.5.2</span> Paladin</h4>
-<div class="outline-text-4" id="text-1-5-2">
+<div id="outline-container-org2abcb1c" class="outline-3">
+<h3 id="org2abcb1c"><span class="section-number-3">1.8</span> Heal</h3>
+<div class="outline-text-3" id="text-1-8">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Maintenir l'équipe <b>Anti-trash</b> en vie en priorité
 puis empêcher les <b>trash-mobs</b> d'atteindre les autres joueurs et les
@@ -454,52 +471,16 @@ portes.</dd>
 <dt><b>Arme principale</b></dt><dd>Bâton de vie <b><i>(obligatoire)</i></b> avec <a href="https://nwdb.info/db/perk/perkid_weaponlife_healoutgoing">Blessed</a>
 <b><i>(recommandé)</i></b></dd>
 <dt><b>Arme secondaire</b></dt><dd>Hache double avec <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> et <a href="https://nwdb.info/db/item/ambercutt4">Pristine
-Amber</a> <b><i>(obligatoire)</i></b> <a href="https://nwdb.info/build?skills=8-j1mxog-kc3hhg">Build Hache double</a> <b><i>(obligatoire)</i></b></dd>
-<dt><b>Armure</b></dt><dd>Lourde <b><i>(recommandé)</i></b> avec <b>?</b> et pour de
-la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_defcorrupted">Corrupted Ward</a> sur quelques pièces <b><i>(recommandé)</i></b></dd>
-</dl>
-</div>
-</div>
-</div>
-
-
-<div id="outline-container-org28af570" class="outline-3">
-<h3 id="org28af570"><span class="section-number-3">1.6</span> DPS</h3>
-<div class="outline-text-3" id="text-1-6">
-</div>
-<div id="outline-container-org7c290c2" class="outline-4">
-<h4 id="org7c290c2"><span class="section-number-4">1.6.1</span> Arc</h4>
-<div class="outline-text-4" id="text-1-6-1">
-<dl class="org-dl">
-<dt><b>Objectif</b></dt><dd>DPS les <b>têtes</b> et les <b>boss</b>, dans cet ordre de priorité.</dd>
-<dt><b>Arme principale</b></dt><dd>Arc <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> <b><i>(obligatoire)</i></b> et <a href="https://nwdb.info/db/perk/perkid_weapon_empoweroncrit">Keenly
-Empowered</a> <b><i>(recommandé)</i></b>. <a href="https://nwdb.info/build?skills=4-iw75uo-ngewxw">Build arc</a> <b><i>(recommandé)</i></b></dd>
-<dt><b>Arme secondaire</b></dt><dd>Arme débuff distance comme la hachette ou la lance avec <a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">Sundering Javelin</a> sur pièce d'armure <b><i>(recommandé)</i></b></dd>
-<dt><b>Armure</b></dt><dd>Légère avec perks pour l'arc<a href="https://nwdb.info/db/perk/perkid_ability_bow_poisonshot"> Enfeebling Poison Shot</a> et <a href="https://nwdb.info/db/perk/perkid_ability_bow_rapidshot">Penetrating Rapid Shot</a> <b><i>(recommandé)</i></b></dd>
-</dl>
-<p>
-<a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">      Sundering Javelin</a> <b><i>(recommandé)</i></b>
-</p>
-</div>
-</div>
-
-<div id="outline-container-org335d2c4" class="outline-4">
-<h4 id="org335d2c4"><span class="section-number-4">1.6.2</span> Mousquet</h4>
-<div class="outline-text-4" id="text-1-6-2">
-<dl class="org-dl">
-<dt><b>Objectif</b></dt><dd>DPS les <b>têtes</b> et les <b>boss</b>, dans cet ordre de priorité.</dd>
-<dt><b>Arme principale</b></dt><dd>Mousquet <a href="https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted">Corrupted Bane</a> <b><i>(obligatoire)</i></b> et
-<a href="https://nwdb.info/db/perk/perkid_weapon_dmgbasic">Enchanted</a> <b><i>(recommandé)</i></b>  <a href="https://nwdb.info/build?skills=6-nm5y04-qtbfgg">Build Mousquet</a> <b><i>(recommandé)</i></b></dd>
-<dt><b>Arme secondaire</b></dt><dd>Arme débuff distance comme la hachette ou la lance avec <a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">Sundering Javelin</a> sur pièce d'armure <b><i>(recommandé)</i></b></dd>
-<dt><b>Armure</b></dt><dd>Légère avec perks pour le mousquet <a href="https://nwdb.info/db/perk/perkid_ability_musket_shootersstance">Empowering Shooter's
-Stance</a> et <a href="https://nwdb.info/db/perk/perkid_ability_musket_powderburn">Crippling Powder Burn</a> <b><i>(recommandé)</i></b>. Perk <a href="https://nwdb.info/db/perk/perkid_ability_spear_javelin">Sundering Javelin</a> <b><i>(recommandé)</i></b></dd>
+Amber</a> <b><i>(recommandé)</i></b> <a href="https://nwdb.info/build?skills=8-j1mxog-kc3hhg">Build Hache double</a> <b><i>(recommandé)</i></b></dd>
+<dt><b>Armure</b></dt><dd><a href="https://nwdb.info/db/perk/perkid_armor_defcorrupted">Corrupted Ward</a> sur quelques pièces <b><i>(recommandé)</i></b></dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-orgedea55f" class="outline-4">
-<h4 id="orgedea55f"><span class="section-number-4">1.6.3</span> Lance-flamme</h4>
-<div class="outline-text-4" id="text-1-6-3">
+
+<div id="outline-container-org16d4534" class="outline-3">
+<h3 id="org16d4534"><span class="section-number-3">1.9</span> Mage AOE</h3>
+<div class="outline-text-3" id="text-1-9">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>DPS les <b>boss</b> dans les phases de fin, quand ils
 s'accumulent sur les portes.</dd>
@@ -513,14 +494,13 @@ Flamethrower</a> <b><i>(recommandé)</i></b></dd>
 </div>
 </div>
 </div>
-</div>
 
-<div id="outline-container-org25ca14b" class="outline-2">
-<h2 id="org25ca14b"><span class="section-number-2">2</span> Bot Discord</h2>
+<div id="outline-container-orgb78b19f" class="outline-2">
+<h2 id="orgb78b19f"><span class="section-number-2">2</span> Bot Discord</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgb5d5b85" class="outline-3">
-<h3 id="orgb5d5b85"><span class="section-number-3">2.1</span> Concept :</h3>
+<div id="outline-container-orgd3880fc" class="outline-3">
+<h3 id="orgd3880fc"><span class="section-number-3">2.1</span> Concept :</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Le bot à pour objectif de générer une composition d'armée à partir des
@@ -529,8 +509,8 @@ Le bot à pour objectif de générer une composition d'armée à partir des
 </div>
 </div>
 
-<div id="outline-container-orgc70bd3b" class="outline-3">
-<h3 id="orgc70bd3b"><span class="section-number-3">2.2</span> Configuration</h3>
+<div id="outline-container-org6728fcc" class="outline-3">
+<h3 id="org6728fcc"><span class="section-number-3">2.2</span> Configuration</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 La configuration du bot passera par un fichier json unique, contenant
@@ -560,7 +540,8 @@ des Gdoc à lire.
 <span style="color: #89DDFF;">"gdoc"</span>: <span style="color: #f78c6c;">{</span>
     <span style="color: #89DDFF;">"url"</span>: <span style="color: #c3e88d;">"https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/"</span>,
     <span style="color: #89DDFF;">"page_strat"</span>: <span style="color: #c3e88d;">"Strat_principale"</span>,
-    <span style="color: #89DDFF;">"page_roster"</span>: <span style="color: #c3e88d;">"Roster"</span>
+    <span style="color: #89DDFF;">"page_roster"</span>: <span style="color: #c3e88d;">"Roster"</span>,
+    <span style="color: #89DDFF;">"form"</span>: <span style="color: #c3e88d;">"https://forms.gle/G9LizybajjVxCw6JA"</span>
 <span style="color: #f78c6c;">}</span>
 <span style="color: #c792ea;">}</span>
 </pre>
@@ -570,12 +551,12 @@ des Gdoc à lire.
 
 
 
-<div id="outline-container-org800cdaf" class="outline-3">
-<h3 id="org800cdaf"><span class="section-number-3">2.3</span> Utilitaires</h3>
+<div id="outline-container-orgc66398c" class="outline-3">
+<h3 id="orgc66398c"><span class="section-number-3">2.3</span> Utilitaires</h3>
 <div class="outline-text-3" id="text-2-3">
 </div>
-<div id="outline-container-org5378bed" class="outline-4">
-<h4 id="org5378bed"><span class="section-number-4">2.3.1</span> Dépendances</h4>
+<div id="outline-container-org5fc774b" class="outline-4">
+<h4 id="org5fc774b"><span class="section-number-4">2.3.1</span> Dépendances</h4>
 <div class="outline-text-4" id="text-2-3-1">
 <div class="org-src-container">
 <pre class="src src-python">
@@ -588,8 +569,8 @@ des Gdoc à lire.
 </div>
 </div>
 </div>
-<div id="outline-container-org9fe881e" class="outline-4">
-<h4 id="org9fe881e"><span class="section-number-4">2.3.2</span> Chargement de la config</h4>
+<div id="outline-container-org8453fb0" class="outline-4">
+<h4 id="org8453fb0"><span class="section-number-4">2.3.2</span> Chargement de la config</h4>
 <div class="outline-text-4" id="text-2-3-2">
 <p>
 Le chargement de cette config se fera pour l'instant une seule fois au
@@ -606,8 +587,8 @@ démarrage du bot.
 </div>
 </div>
 
-<div id="outline-container-org42a6e6b" class="outline-4">
-<h4 id="org42a6e6b"><span class="section-number-4">2.3.3</span> Chargement du token</h4>
+<div id="outline-container-orgc07e8b3" class="outline-4">
+<h4 id="orgc07e8b3"><span class="section-number-4">2.3.3</span> Chargement du token</h4>
 <div class="outline-text-4" id="text-2-3-3">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement du token</span>
@@ -617,8 +598,8 @@ démarrage du bot.
 </div>
 </div>
 </div>
-<div id="outline-container-orga9c63a5" class="outline-4">
-<h4 id="orga9c63a5"><span class="section-number-4">2.3.4</span> Identifiant</h4>
+<div id="outline-container-orgc94e592" class="outline-4">
+<h4 id="orgc94e592"><span class="section-number-4">2.3.4</span> Identifiant</h4>
 <div class="outline-text-4" id="text-2-3-4">
 <p>
 Il est nécessaire d'avoir un identifiant unique entre discord et le
@@ -641,8 +622,8 @@ depuis un objet <i>discord.User</i> :
 </div>
 </div>
 
-<div id="outline-container-org277073f" class="outline-4">
-<h4 id="org277073f"><span class="section-number-4">2.3.5</span> Récupération du roster</h4>
+<div id="outline-container-orgdba57b8" class="outline-4">
+<h4 id="orgdba57b8"><span class="section-number-4">2.3.5</span> Récupération du roster</h4>
 <div class="outline-text-4" id="text-2-3-5">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #89DDFF;">import</span> pandas <span style="color: #89DDFF;">as</span> pd
@@ -663,8 +644,8 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 </pre>
 </div>
 </div>
-<div id="outline-container-orgf0b8a74" class="outline-4">
-<h4 id="orgf0b8a74"><span class="section-number-4">2.3.6</span> Récupération de la strat</h4>
+<div id="outline-container-org6865fca" class="outline-4">
+<h4 id="org6865fca"><span class="section-number-4">2.3.6</span> Récupération de la strat</h4>
 <div class="outline-text-4" id="text-2-3-6">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_strat</span><span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>:
@@ -685,8 +666,8 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 </div>
 </div>
 
-<div id="outline-container-orga3bef7b" class="outline-3">
-<h3 id="orga3bef7b"><span class="section-number-3">2.4</span> Bot avec discord.py</h3>
+<div id="outline-container-orgc5bca8d" class="outline-3">
+<h3 id="orgc5bca8d"><span class="section-number-3">2.4</span> Bot avec discord.py</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 <a href="https://discordpy.readthedocs.io/en/stable/">https://discordpy.readthedocs.io/en/stable/</a>
@@ -797,7 +778,7 @@ réagi sur le panneau.
 </div>
 
 <div class="org-src-container">
-<pre class="src src-python" id="org09fbf31"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">gen_embed</span><span style="color: #c792ea;">(</span>comp<span style="color: #c792ea;">)</span>:
+<pre class="src src-python" id="org39a3615"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">gen_embed</span><span style="color: #c792ea;">(</span>comp<span style="color: #c792ea;">)</span>:
    <span style="color: #ffcb6b;">e</span> = discord.Embed<span style="color: #c792ea;">(</span>title=<span style="color: #c3e88d;">"Composition d'arm&#233;e"</span><span style="color: #c792ea;">)</span>
    <span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> comp.iteritems<span style="color: #c792ea;">()</span>:
        <span style="color: #ffcb6b;">f</span> = <span style="color: #c3e88d;">''</span>
@@ -812,8 +793,8 @@ réagi sur le panneau.
 </div>
 
 
-<div id="outline-container-org7e3569c" class="outline-4">
-<h4 id="org7e3569c"><span class="section-number-4">2.4.1</span> DM des joueurs qui n'ont pas renseigné leurs rôles</h4>
+<div id="outline-container-org720de05" class="outline-4">
+<h4 id="org720de05"><span class="section-number-4">2.4.1</span> DM des joueurs qui n'ont pas renseigné leurs rôles</h4>
 <div class="outline-text-4" id="text-2-4-1">
 <p>
 Cette phase n'est pas absolument nécessaire, mais elle permet de
@@ -835,7 +816,7 @@ le lead demande le calcul de la composition du groupement de défense.
      <span style="color: #ffcb6b;">df</span> = get_roster<span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>
      <span style="color: #89DDFF;">if</span> dtag<span style="color: #c792ea;">(</span>user<span style="color: #c792ea;">)</span> <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> df.index:
          <span style="color: #ffcb6b;">embed</span> = discord.Embed.from_dict<span style="color: #c792ea;">(</span>config<span style="color: #f78c6c;">[</span><span style="color: #c3e88d;">"embeds"</span><span style="color: #f78c6c;">][</span><span style="color: #c3e88d;">"dm"</span><span style="color: #f78c6c;">]</span><span style="color: #c792ea;">)</span>
-         <span style="color: #ffcb6b;">embed.description</span> += f<span style="color: #c3e88d;">'{config["gdoc"]["url"]}) ***!***'</span>
+         <span style="color: #ffcb6b;">embed.description</span> += f<span style="color: #c3e88d;">'{config["gdoc"]["form"]}) ***!***'</span>
          <span style="color: #89DDFF;">try</span>:
              <span style="color: #89DDFF;">await</span> user.send<span style="color: #c792ea;">(</span>embed=embed<span style="color: #c792ea;">)</span>
          <span style="color: #89DDFF;">except</span> discord.errors.HTTPException <span style="color: #89DDFF;">as</span> e:
@@ -847,8 +828,8 @@ le lead demande le calcul de la composition du groupement de défense.
 </div>
 </div>
 </div>
-<div id="outline-container-orgc74aaa1" class="outline-4">
-<h4 id="orgc74aaa1"><span class="section-number-4">2.4.2</span> Run</h4>
+<div id="outline-container-org3394e54" class="outline-4">
+<h4 id="org3394e54"><span class="section-number-4">2.4.2</span> Run</h4>
 <div class="outline-text-4" id="text-2-4-2">
 <div class="org-src-container">
 <pre class="src src-python">bot.run<span style="color: #c792ea;">(</span>token<span style="color: #c792ea;">)</span>
@@ -859,8 +840,8 @@ le lead demande le calcul de la composition du groupement de défense.
 </div>
 </div>
 
-<div id="outline-container-orga0da8f4" class="outline-2">
-<h2 id="orga0da8f4"><span class="section-number-2">3</span> Algo</h2>
+<div id="outline-container-org9042124" class="outline-2">
+<h2 id="org9042124"><span class="section-number-2">3</span> Algo</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Dépendances
@@ -944,7 +925,7 @@ Création des colonnes avec les noms de rôles, les lignes avec les noms
 de joueurs, et de la matrice de coûts.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org0ff81b1">
+<pre class="src src-python" id="org0826f2a">
 <span style="color: #ffcb6b;">cols</span> = <span style="color: #c792ea;">[</span>k <span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> roles.items<span style="color: #f78c6c;">()</span> <span style="color: #89DDFF;">for</span> _ <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">range</span><span style="color: #f78c6c;">(</span>v<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">]</span>
 <span style="color: #ffcb6b;">rows</span> = roster.index
 
@@ -962,7 +943,7 @@ Résolution du problème d'affectation avec la maximisation suivante :
 \[max \sum_{i} \sum_{j} C_{i,j} X_{i,j}\]
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org07e68df">
+<pre class="src src-python" id="org94a24ca">
 <span style="color: #ffcb6b;">row_ind</span>, <span style="color: #ffcb6b;">X</span> = linear_sum_assignment<span style="color: #c792ea;">(</span>C, maximize=<span style="color: #f78c6c;">True</span><span style="color: #c792ea;">)</span>
 <span style="color: #ffcb6b;">score</span> = C<span style="color: #c792ea;">[</span>row_ind, X<span style="color: #c792ea;">]</span>.<span style="color: #82aaff;">sum</span><span style="color: #c792ea;">()</span>
 <span style="color: #ffcb6b;">assignent</span> = <span style="color: #c792ea;">{</span>p: cols<span style="color: #f78c6c;">[</span>t<span style="color: #f78c6c;">]</span> <span style="color: #89DDFF;">for</span> p, t <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">zip</span><span style="color: #f78c6c;">(</span>rows, X<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">}</span>
@@ -984,7 +965,7 @@ Analyse des résultats
 Remplissage du tableau
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="orgf77a49d"><span style="color: #ffcb6b;">filed_roles</span> = <span style="color: #c792ea;">{}</span>
+<pre class="src src-python" id="org429e1ab"><span style="color: #ffcb6b;">filed_roles</span> = <span style="color: #c792ea;">{}</span>
 <span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> assignent.items<span style="color: #c792ea;">()</span>:
     <span style="color: #556369;">#</span><span style="color: #556369;">print(k, v)</span>
     <span style="color: #89DDFF;">if</span> v <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> filed_roles:
@@ -1003,8 +984,8 @@ Remplissage du tableau
 </div>
 </div>
 
-<div id="outline-container-orgb2f1976" class="outline-3">
-<h3 id="orgb2f1976"><span class="section-number-3">3.1</span> Test algo</h3>
+<div id="outline-container-org3d76fef" class="outline-3">
+<h3 id="org3d76fef"><span class="section-number-3">3.1</span> Test algo</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 <pre class="src src-python">
@@ -1020,7 +1001,7 @@ Remplissage du tableau
 </div>
 </div>
 <ol class="org-ol">
-<li><a id="orga7a6a96"></a>Filtrage des joueurs<br />
+<li><a id="orgb6b329d"></a>Filtrage des joueurs<br />
 <div class="outline-text-5" id="text-3-1-0-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #ffcb6b;">keys_to_extract</span> = <span style="color: #c792ea;">[]</span>
@@ -1035,7 +1016,7 @@ Remplissage du tableau
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Virgile Daugé</p>
-<p class="date">Created: 2022-01-01 sam. 12:55</p>
+<p class="date">Created: 2022-01-01 sam. 22:07</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
