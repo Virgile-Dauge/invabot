@@ -121,7 +121,9 @@ d'une arme haut niveau/particulière.
  des Gdoc à lire.
  #+begin_src json :tangle config.json
    {
-
+   "ids": {
+       "role": 917546013248606238
+   },
    "embeds": {
        "panneau": {
            "title": "Confirme ta séléction à l'invasion de",
@@ -235,8 +237,10 @@ d'une arme haut niveau/particulière.
  Création du bot
  #+begin_src python :tangle bot.py
 
-
-   bot = commands.Bot(command_prefix="!")
+   intents = discord.Intents.default()
+   intents.reactions = True
+   intents.members = True
+   bot = commands.Bot(command_prefix="!", intents=intents)
 
    msgs = {}
    msgs_ids = []
@@ -250,7 +254,7 @@ d'une arme haut niveau/particulière.
 
  #+begin_src python :tangle no
    @bot.command()
-   async def help(ctx, arg):
+   async def help(ctx):
        embed = discord.Embed.from_dict(config["embeds"]["help"])
        await ctx.channel.send(embed=embed)
  #+end_src
@@ -259,7 +263,7 @@ d'une arme haut niveau/particulière.
  le fort doivent se signaler sera `!inva nomVille`
  #+begin_src python :tangle bot.py
    @bot.command()
-   async def inva(ctx, arg):
+   async def inva(ctx, arg="NomVille"):
        """ Génére un tableau d'inscription dans le channel
        """
        embed = discord.Embed.from_dict(config["embeds"]["panneau"])
@@ -358,8 +362,18 @@ d'une arme haut niveau/particulière.
             except discord.errors.HTTPException as e:
                 pass
         else:
-            # Plus tard, ajouter l'utilisateur aux tryhard s'il n'y est pas déjà
-            pass
+            guild = reaction.message.guild
+            role = guild.get_role(config["ids"]["role"])
+            if role is None:
+                # Make sure the role still exists and is valid.
+                return
+
+            try:
+                # Finally, add the role.
+                await user.add_roles(role)
+            except discord.HTTPException:
+                # If we want to do something in case of errors we'd do it here.
+                pass
  #+end_src
 *** Run
 
@@ -459,7 +473,7 @@ Remplissage du tableau
       for j, v in row.items():
           if v in filed_roles and filed_roles[v]:
               p = filed_roles[v].pop()
-              comp.at[i, j] = f'{p} {roster.at[p, v] / max_roles[v]}'
+              comp.at[i, j] = f'{p} {roster.at[p, v] / max_roles[v]:.1f}'
   return comp
 #+end_src
 

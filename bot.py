@@ -26,7 +26,10 @@ def get_strat(config):
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
     return pd.read_csv(url).iloc[0:5, 0:12]
 
-bot = commands.Bot(command_prefix="!")
+intents = discord.Intents.default()
+intents.reactions = True
+intents.members = True
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 msgs = {}
 msgs_ids = []
@@ -38,7 +41,7 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=game)
 
 @bot.command()
-async def inva(ctx, arg):
+async def inva(ctx, arg="NomVille"):
     """ Génére un tableau d'inscription dans le channel
     """
     embed = discord.Embed.from_dict(config["embeds"]["panneau"])
@@ -110,13 +113,23 @@ async def on_reaction_add(reaction, user):
      df = get_roster(config)
      if dtag(user) not in df.index:
          embed = discord.Embed.from_dict(config["embeds"]["dm"])
-         embed.description += f'{config["gdoc"]["url"]}) ***!***'
+         embed.description += f'{config["gdoc"]["form"]}) ***!***'
          try:
              await user.send(embed=embed)
          except discord.errors.HTTPException as e:
              pass
      else:
-         # Plus tard, ajouter l'utilisateur aux tryhard s'il n'y est pas déjà
-         pass
+         guild = reaction.message.guild
+         role = guild.get_role(config["ids"]["role"])
+         if role is None:
+             # Make sure the role still exists and is valid.
+             return
+
+         try:
+             # Finally, add the role.
+             await user.add_roles(role)
+         except discord.HTTPException:
+             # If we want to do something in case of errors we'd do it here.
+             pass
 
 bot.run(token)
