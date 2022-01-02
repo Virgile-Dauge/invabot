@@ -16,6 +16,44 @@ Un joueur peut s'estimer :
 - Capable :: S'il répond à tous les critères tagués */(obligatoire)/*
 - Opti :: S'il répond a tous les critères tagués */(obligatoire)/* *ET* */(recommandé)/*.
 
+** Arc
+- *Objectif* :: DPS les *têtes* et les *boss*, dans cet ordre de priorité.
+- *Arme principale* :: Arc [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly
+  Empowered]] */(recommandé)/*. [[https://nwdb.info/build?skills=4-iw75uo-ngewxw][Build arc]] */(recommandé)/*
+- *Arme secondaire* :: Arme débuff distance comme la hachette ou la lance avec [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] sur pièce d'armure */(recommandé)/*
+- *Armure* :: Légère avec perks pour l'arc[[https://nwdb.info/db/perk/perkid_ability_bow_poisonshot][ Enfeebling Poison Shot]] et [[https://nwdb.info/db/perk/perkid_ability_bow_rapidshot][Penetrating Rapid Shot]] */(recommandé)/*
+[[https://nwdb.info/db/perk/perkid_ability_spear_javelin][      Sundering Javelin]] */(recommandé)/*
+
+** Mousquet
+
+- *Objectif* :: DPS les *têtes* et les *boss*, dans cet ordre de priorité.
+- *Arme principale* :: Mousquet [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
+  [[https://nwdb.info/db/perk/perkid_weapon_dmgbasic][Enchanted]] */(recommandé)/*  [[https://nwdb.info/build?skills=6-nm5y04-qtbfgg][Build Mousquet]] */(recommandé)/*
+- *Arme secondaire* :: Arme débuff distance comme la hachette ou la lance avec [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] sur pièce d'armure */(recommandé)/*
+- *Armure* :: Légère avec perks pour le mousquet [[https://nwdb.info/db/perk/perkid_ability_musket_shootersstance][Empowering Shooter's
+  Stance]] et [[https://nwdb.info/db/perk/perkid_ability_musket_powderburn][Crippling Powder Burn]] */(recommandé)/*. Perk [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] */(recommandé)/*
+** Anti-Trash
+
+- *Objectif* :: Empêcher les *trash-mobs* d'atteindre les autres joueurs et les portes.
+- *Arme principale* :: Hache double avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/*
+  [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(obligatoire)/* et [[https://nwdb.info/db/item/sapphirecutt4 [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] (recommandé).
+  [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] */(obligatoire)/*
+- *Arme secondaire* :: Arme CàC, Marteau pour le contrôle ?
+- *Armure* :: Lourde avec perks [[https://nwdb.info/db/perk/perkid_ability_greataxe_gravitywell][Insatiable Gravity Well]] (obligatoire)
+  [[https://nwdb.info/db/perk/perkid_ability_greataxe_maelstrom][Enfeebling Maelstrom]] et [[https://nwdb.info/db/perk/perkid_ability_greataxe_whirlwind][Fortifying Whirlwind]] */(recommandé)/* et pour de
+  la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
+
+** DPS debuff
+
+- *Objectif* :: Appliquer */rend/* et */weaken/* aux boss et les DPS
+- *Arme principale* :: Lance avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
+  [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] ou [[https://nwdb.info/db/perk/perkid_weaponmelee_dmgback][Rogue]] */(recommandé)/*. [[https://nwdb.info/build?skills=10-l71p4w-tsmm2s][Build lance]]
+  */(obligatoire)/*
+- *Arme secondaire* :: Arc préféré, mais peut être une arme de CàC
+- *Armure* :: Légère avec perks [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] */(obligatoire)/*
+  [[https://nwdb.info/db/perk/perkid_ability_spear_skewer][Enfeebling Skewer]] */(obligatoire)/* [[https://nwdb.info/db/perk/perkid_ability_spear_perforate][Fortifying Perforate]] */(recommandé)/*
+  et pour de la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
+
 ** Pustule boy
 - *Objectif* :: Tirer en *priorité sur les pustules* qui se forment
   lors de l'impact d'un bison à l'intérieur du fort. Aider au centre.
@@ -48,62 +86,18 @@ d'une arme haut niveau/particulière.
 PS: Si vous n'avez jamais joué l'épée, il suffit de débloquer 12
 points de compétence. C'est assez rapide et vous n'avez pas besoin
 d'une arme haut niveau/particulière.
-** Lancier (DPS débuff)
-
-- *Objectif* :: Appliquer */rend/* et */weaken/* aux boss et les DPS
-- *Arme principale* :: Lance avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
-  [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] ou [[https://nwdb.info/db/perk/perkid_weaponmelee_dmgback][Rogue]] */(recommandé)/*. [[https://nwdb.info/build?skills=10-l71p4w-tsmm2s][Build lance]]
-  */(obligatoire)/*
-- *Arme secondaire* :: Arc préféré, mais peut être une arme de CàC
-- *Armure* :: Légère avec perks [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] */(obligatoire)/*
-  [[https://nwdb.info/db/perk/perkid_ability_spear_skewer][Enfeebling Skewer]] */(obligatoire)/* [[https://nwdb.info/db/perk/perkid_ability_spear_perforate][Fortifying Perforate]] */(recommandé)/*
-  et pour de la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
-
-** Anti-Trash
-L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et un *paladin*.
-
-*** GA
-- *Objectif* :: Empêcher les *trash-mobs* d'atteindre les autres joueurs et les portes.
-- *Arme principale* :: Hache double avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/*
-  [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(obligatoire)/* et [[https://nwdb.info/db/item/sapphirecutt4 [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] (recommandé).
-  [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] */(obligatoire)/*
-- *Arme secondaire* :: Arme CàC, Marteau pour le contrôle ?
-- *Armure* :: Lourde avec perks [[https://nwdb.info/db/perk/perkid_ability_greataxe_gravitywell][Insatiable Gravity Well]] (obligatoire)
-  [[https://nwdb.info/db/perk/perkid_ability_greataxe_maelstrom][Enfeebling Maelstrom]] et [[https://nwdb.info/db/perk/perkid_ability_greataxe_whirlwind][Fortifying Whirlwind]] */(recommandé)/* et pour de
-  la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
-
-*** Paladin
+** Heal
 - *Objectif* :: Maintenir l'équipe *Anti-trash* en vie en priorité
   puis empêcher les *trash-mobs* d'atteindre les autres joueurs et les
   portes.
 - *Arme principale* :: Bâton de vie */(obligatoire)/* avec [[https://nwdb.info/db/perk/perkid_weaponlife_healoutgoing][Blessed]]
   */(recommandé)/*
 - *Arme secondaire* :: Hache double avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] et [[https://nwdb.info/db/item/ambercutt4][Pristine
-  Amber]] */(obligatoire)/* [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] */(obligatoire)/*
-- *Armure* :: Lourde */(recommandé)/* avec *?* et pour de
-  la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
+  Amber]] */(recommandé)/* [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] */(recommandé)/*
+- *Armure* :: [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
 
 
-** DPS
-
-*** Arc
-- *Objectif* :: DPS les *têtes* et les *boss*, dans cet ordre de priorité.
-- *Arme principale* :: Arc [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly
-  Empowered]] */(recommandé)/*. [[https://nwdb.info/build?skills=4-iw75uo-ngewxw][Build arc]] */(recommandé)/*
-- *Arme secondaire* :: Arme débuff distance comme la hachette ou la lance avec [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] sur pièce d'armure */(recommandé)/*
-- *Armure* :: Légère avec perks pour l'arc[[https://nwdb.info/db/perk/perkid_ability_bow_poisonshot][ Enfeebling Poison Shot]] et [[https://nwdb.info/db/perk/perkid_ability_bow_rapidshot][Penetrating Rapid Shot]] */(recommandé)/*
-[[https://nwdb.info/db/perk/perkid_ability_spear_javelin][      Sundering Javelin]] */(recommandé)/*
-
-*** Mousquet
-
-- *Objectif* :: DPS les *têtes* et les *boss*, dans cet ordre de priorité.
-- *Arme principale* :: Mousquet [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
-  [[https://nwdb.info/db/perk/perkid_weapon_dmgbasic][Enchanted]] */(recommandé)/*  [[https://nwdb.info/build?skills=6-nm5y04-qtbfgg][Build Mousquet]] */(recommandé)/*
-- *Arme secondaire* :: Arme débuff distance comme la hachette ou la lance avec [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] sur pièce d'armure */(recommandé)/*
-- *Armure* :: Légère avec perks pour le mousquet [[https://nwdb.info/db/perk/perkid_ability_musket_shootersstance][Empowering Shooter's
-  Stance]] et [[https://nwdb.info/db/perk/perkid_ability_musket_powderburn][Crippling Powder Burn]] */(recommandé)/*. Perk [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] */(recommandé)/*
-
-*** Lance-flamme
+** Mage AOE
 
 - *Objectif* :: DPS les *boss* dans les phases de fin, quand ils
   s'accumulent sur les portes.
@@ -127,7 +121,9 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
  des Gdoc à lire.
  #+begin_src json :tangle config.json
    {
-
+   "ids": {
+       "role": 917546013248606238
+   },
    "embeds": {
        "panneau": {
            "title": "Confirme ta sélection à l'invasion de",
@@ -148,7 +144,8 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
    "gdoc": {
        "url": "https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/",
        "page_strat": "Strat_principale",
-       "page_roster": "Roster"
+       "page_roster": "Roster",
+       "form": "https://forms.gle/G9LizybajjVxCw6JA"
    }
    }
  #+end_src
@@ -240,8 +237,10 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
  Création du bot
  #+begin_src python :tangle bot.py
 
-
-   bot = commands.Bot(command_prefix="!")
+   intents = discord.Intents.default()
+   intents.reactions = True
+   intents.members = True
+   bot = commands.Bot(command_prefix="!", intents=intents)
 
    msgs = {}
    msgs_ids = []
@@ -255,7 +254,7 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
 
  #+begin_src python :tangle no
    @bot.command()
-   async def help(ctx, arg):
+   async def help(ctx):
        embed = discord.Embed.from_dict(config["embeds"]["help"])
        await ctx.channel.send(embed=embed)
  #+end_src
@@ -357,14 +356,24 @@ L'équipe anti-trash est composée de deux membres, un *DPS hache double* GA, et
         df = get_roster(config)
         if dtag(user) not in df.index:
             embed = discord.Embed.from_dict(config["embeds"]["dm"])
-            embed.description += f'{config["gdoc"]["url"]}) ***!***'
+            embed.description += f'{config["gdoc"]["form"]}) ***!***'
             try:
                 await user.send(embed=embed)
             except discord.errors.HTTPException as e:
                 pass
         else:
-            # Plus tard, ajouter l'utilisateur aux tryhard s'il n'y est pas déjà
-            pass
+            guild = reaction.message.guild
+            role = guild.get_role(config["ids"]["role"])
+            if role is None:
+                # Make sure the role still exists and is valid.
+                return
+
+            try:
+                # Finally, add the role.
+                await user.add_roles(role)
+            except discord.HTTPException:
+                # If we want to do something in case of errors we'd do it here.
+                pass
  #+end_src
 *** Run
 
@@ -464,7 +473,7 @@ Remplissage du tableau
       for j, v in row.items():
           if v in filed_roles and filed_roles[v]:
               p = filed_roles[v].pop()
-              comp.at[i, j] = f'{p} {roster.at[p, v] / max_roles[v]}'
+              comp.at[i, j] = f'{p} {roster.at[p, v] / max_roles[v]:.1f}'
   return comp
 #+end_src
 

@@ -1,5 +1,7 @@
 {
-
+"ids": {
+    "role": 917546013248606238
+},
 "embeds": {
     "panneau": {
         "title": "Confirme ta sélection à l'invasion de",
@@ -20,6 +22,7 @@
 "gdoc": {
     "url": "https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/",
     "page_strat": "Strat_principale",
-    "page_roster": "Roster"
+    "page_roster": "Roster",
+    "form": "https://forms.gle/G9LizybajjVxCw6JA"
 }
 }
