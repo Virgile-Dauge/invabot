@@ -132,4 +132,82 @@ async def on_reaction_add(reaction, user):
              # If we want to do something in case of errors we'd do it here.
              pass
 
+@bot.command()
+async def verif(ctx):
+    """ Attribue les rôles
+    """
+    print(f'!verif command invoked by {dtag(ctx.author)}')
+
+    guild = ctx.guild
+    lead_role = guild.get_role(config["ids"]["leads"])
+
+    if ctx.author not in lead_role.members:
+        embed = discord.Embed(title='Droits insuffisants')
+        embed.color = 16748319
+        embed.description = f'Rôle ***{lead_role}*** requis'
+        await ctx.channel.send(embed=embed)
+        return
+    # Récupération des donénes du Gdoc roster
+    roster = get_roster(config)
+    roster = list(roster.index)
+
+
+    members = {dtag(m): m for m in guild.members}
+
+    role = guild.get_role(config["ids"]["role"])
+    verified = [dtag(m) for m in role.members]
+
+    added = []
+    wrong = []
+    for u in roster:
+       if u not in members:
+           wrong += [u]
+       elif u not in verified:
+           if role is None:
+               # Make sure the role still exists and is valid.
+               return
+
+           try:
+               # Finally, add the role.
+               await members[u].add_roles(role)
+               added += [u]
+           except discord.HTTPException:
+               # If we want to do something in case of errors we'd do it here.
+               pass
+
+    removed = []
+    for u in verified:
+        if u not in roster:
+            try:
+                # Finally, remove the role.
+                await members[u].remove_roles(role)
+                removed += [u]
+
+                # Send DM to user
+                embed = discord.Embed.from_dict(config["embeds"]["change"])
+                embed.description += f'{config["gdoc"]["form"]}) ***!***'
+                await members[u].send(embed=embed)
+            except discord.HTTPException:
+                # If we want to do something in case of errors we'd do it here.
+                pass
+
+    def list_to_field(l):
+        f = 'aucun'
+        if l:
+            f = ''
+            for u in l:
+                f += u + '\n'
+        return f
+
+    embed = discord.Embed()
+    embed.title = f'Vérification du gdoc'
+    embed.color = 2003199
+    embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+
+    embed.add_field(name="Joueurs Vérifiés", value=list_to_field(added), inline=False)
+    embed.add_field(name="Mauvais Discord tag rentrés", value=list_to_field(wrong), inline=False)
+    embed.add_field(name="Joueurs ayant changé de Discord tag (rôle supprimé)", value=list_to_field(removed), inline=False)
+    await ctx.channel.send(embed=embed)
+    #print(added, wrong)
+
 bot.run(token)
