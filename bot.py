@@ -65,7 +65,10 @@ async def comp(ctx):
 
     # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
     if author_dtag not in msgs:
-        await channel.send(f"Pas de messages trouvés pour {author_dtag}. Commencez par utiliser la commande :\n $inva nomVille")
+        embed = discord.Embed(title='Pas de tableau correspondant...')
+        embed.color = 16748319
+        embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
+        await ctx.channel.send(embed=embed)
         return
 
     # Récupération du message avec les réacs
@@ -100,6 +103,43 @@ async def comp(ctx):
     
     
     await channel.send(embed=gen_embed(comp))
+
+@bot.command()
+async def cb(ctx):
+    """ Génére une composition d'armée
+    """
+    author_dtag = dtag(ctx.author)
+    channel = ctx.channel
+
+    # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
+    if author_dtag not in msgs:
+        embed = discord.Embed(title='Pas de tableau correspondant...')
+        embed.color = 16748319
+        embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
+        await ctx.channel.send(embed=embed)
+        return
+
+    # Récupération du message avec les réacs
+    msg_id = msgs[author_dtag]
+    main_msg = await channel.fetch_message(msg_id)
+
+    # Récupération de la liste des users
+    selected = await main_msg.reactions[0].users().flatten()
+    selected_tags = [dtag(u) for u in selected][1:]
+
+    # Récupération des donénes du Gdoc roster
+    roster = get_roster(config)
+
+    # Joueurs séléctionnés n'ayant pas rempli le Gdoc
+    not_registered = [u for u in selected_tags if u not in roster.index]
+
+    # Filtrage du roster avec les joueurs séléctionnés
+    roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
+
+    embed = discord.Embed(title=f'Total de **{len(roster)}** enregistrés')
+    embed.color = 2003199
+    embed.description = f"S'il y a tout le monde, utilisez la commande :\n\n `!comp`"
+    await ctx.channel.send(embed=embed)
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -202,11 +242,11 @@ async def verif(ctx):
     embed = discord.Embed()
     embed.title = f'Vérification du gdoc'
     embed.color = 2003199
-    embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+    #embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
 
-    embed.add_field(name="Joueurs Vérifiés", value=list_to_field(added), inline=False)
-    embed.add_field(name="Mauvais Discord tag rentrés", value=list_to_field(wrong), inline=False)
-    embed.add_field(name="Joueurs ayant changé de Discord tag (rôle supprimé)", value=list_to_field(removed), inline=False)
+    embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
+    embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
+    embed.add_field(name=f"Joueurs ayant changé de Discord tag (rôle {role} supprimé)", value=list_to_field(removed), inline=False)
     await ctx.channel.send(embed=embed)
     #print(added, wrong)
 
