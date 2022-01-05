@@ -322,12 +322,16 @@ d'une arme haut niveau/particulière.
 
        # Filtrage du roster avec les joueurs séléctionnés
        roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
-       print(roster)
+       #print(roster)
        # Récupération de la strat
        strat = get_strat(config)
        comp = build_comp(roster, strat)
        <<gen_embed>>
-       await channel.send(embed=gen_embed(comp))
+       embed = gen_embed(comp)
+       embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, composition :"
+       embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+       embed.color = 2003199
+       await channel.send(embed=embed)
  #+end_src
 
 #+name: gen_embed
@@ -365,7 +369,7 @@ d'une arme haut niveau/particulière.
        # Récupération du message avec les réacs
        msg_id = msgs[author_dtag]
        main_msg = await channel.fetch_message(msg_id)
-
+       #print(main_msg.embeds[0].title.split(' ')[-1])
        # Récupération de la liste des users
        selected = await main_msg.reactions[0].users().flatten()
        selected_tags = [dtag(u) for u in selected][1:]
@@ -379,9 +383,10 @@ d'une arme haut niveau/particulière.
        # Filtrage du roster avec les joueurs séléctionnés
        roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
 
-       embed = discord.Embed(title=f'Total de **{len(roster)}** enregistrés')
+       embed = discord.Embed(title=f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, **{len(roster)}** enregistrés.")
        embed.color = 2003199
-       embed.description = f"S'il y a tout le monde, utilisez la commande :\n\n `!comp`"
+       embed.description = f"S'il y a tout le monde, le lead peut utiliser :\n\n `!comp`"
+       embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
        await ctx.channel.send(embed=embed)
  #+end_src
 *** DM des joueurs qui n'ont pas renseigné leurs rôles
