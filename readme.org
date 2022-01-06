@@ -17,39 +17,41 @@ Un joueur peut s'estimer :
 - Opti :: S'il répond a tous les critères tagués */(obligatoire)/* *ET* */(recommandé)/*.
 
 ** Arc
-- *Objectif* :: DPS les *têtes* et les *boss*, dans cet ordre de priorité.
-- *Arme principale* :: Arc [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly
+- *Objectif* :: DPS les *têtes*, les *boss*, les engins de sièges et
+  AoE les trashs, dans cet ordre de priorité.
+- *Arme principale* :: Arc 580 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly
   Empowered]] */(recommandé)/*. [[https://nwdb.info/build?skills=4-iw75uo-ngewxw][Build arc]] */(recommandé)/*
 - *Arme secondaire* :: Arme débuff distance comme la hachette ou la lance avec [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] sur pièce d'armure */(recommandé)/*
-- *Armure* :: Légère avec perks pour l'arc[[https://nwdb.info/db/perk/perkid_ability_bow_poisonshot][ Enfeebling Poison Shot]] et [[https://nwdb.info/db/perk/perkid_ability_bow_rapidshot][Penetrating Rapid Shot]] */(recommandé)/*
-[[https://nwdb.info/db/perk/perkid_ability_spear_javelin][      Sundering Javelin]] */(recommandé)/*
+- *Armure et perks* :: Légère avec perks pour l'arc[[https://nwdb.info/db/perk/perkid_ability_bow_poisonshot][ Enfeebling Poison Shot]] et [[https://nwdb.info/db/perk/perkid_ability_bow_rapidshot][Penetrating Rapid Shot]] */(recommandé)/*
+[[https://nwdb.info/db/perk/perkid_ability_spear_javelin][      Sundering Javelin]] */(recommandé si lance en secondaire)/*
 
 ** Mousquet
 
 - *Objectif* :: DPS les *têtes* et les *boss*, dans cet ordre de priorité.
-- *Arme principale* :: Mousquet [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
+- *Arme principale* :: Mousquet 570 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
   [[https://nwdb.info/db/perk/perkid_weapon_dmgbasic][Enchanted]] */(recommandé)/*  [[https://nwdb.info/build?skills=6-nm5y04-qtbfgg][Build Mousquet]] */(recommandé)/*
-- *Arme secondaire* :: Arme débuff distance comme la hachette ou la lance avec [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] sur pièce d'armure */(recommandé)/*
-- *Armure* :: Légère avec perks pour le mousquet [[https://nwdb.info/db/perk/perkid_ability_musket_shootersstance][Empowering Shooter's
-  Stance]] et [[https://nwdb.info/db/perk/perkid_ability_musket_powderburn][Crippling Powder Burn]] */(recommandé)/*. Perk [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] */(recommandé)/*
+- *Armure et perks* :: Légère avec perks pour le mousquet [[https://nwdb.info/db/perk/perkid_ability_musket_shootersstance][Empowering Shooter's
+  Stance]] */(recommandé)/*.
+
 ** Anti-Trash
 
 - *Objectif* :: Empêcher les *trash-mobs* d'atteindre les autres joueurs et les portes.
-- *Arme principale* :: Hache double avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/*
+- *Arme principale* :: Hache double 580 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/*
   [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(obligatoire)/* et [[https://nwdb.info/db/item/sapphirecutt4 [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] (recommandé).
   [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] */(obligatoire)/*
 - *Arme secondaire* :: Arme CàC, Marteau pour le contrôle ?
-- *Armure* :: Lourde avec perks [[https://nwdb.info/db/perk/perkid_ability_greataxe_gravitywell][Insatiable Gravity Well]] (obligatoire)
-  [[https://nwdb.info/db/perk/perkid_ability_greataxe_maelstrom][Enfeebling Maelstrom]] et [[https://nwdb.info/db/perk/perkid_ability_greataxe_whirlwind][Fortifying Whirlwind]] */(recommandé)/* et pour de
-  la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
+- *Armure et perks* :: Lourde */(recommandé)/* [[https://nwdb.info/db/perk/perkid_ability_greataxe_gravitywell][Insatiable Gravity Well]]
+  */(obligatoire)*/ [[https://nwdb.info/db/perk/perkid_ability_greataxe_maelstrom][Enfeebling Maelstrom]] et [[https://nwdb.info/db/perk/perkid_ability_greataxe_whirlwind][Fortifying Whirlwind]]
+  */(recommandé)/* et pour de la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur
+  quelques pièces */(recommandé)/*
 
 ** DPS debuff
 
 - *Objectif* :: Appliquer */rend/* et */weaken/* aux boss et les DPS
-- *Arme principale* :: Lance avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
+- *Arme principale* :: Lance 580 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
   [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] ou [[https://nwdb.info/db/perk/perkid_weaponmelee_dmgback][Rogue]] */(recommandé)/*. [[https://nwdb.info/build?skills=10-l71p4w-tsmm2s][Build lance]]
   */(obligatoire)/*
-- *Arme secondaire* :: Arc préféré, mais peut être une arme de CàC
+- *Arme secondaire* :: Arc préféré, mais peut être une arme de CàC.
 - *Armure* :: Légère avec perks [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] */(obligatoire)/*
   [[https://nwdb.info/db/perk/perkid_ability_spear_skewer][Enfeebling Skewer]] */(obligatoire)/* [[https://nwdb.info/db/perk/perkid_ability_spear_perforate][Fortifying Perforate]] */(recommandé)/*
   et pour de la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
@@ -64,10 +66,7 @@ Un joueur peut s'estimer :
 - *Arme secondaire* ::  Arc/Mousquet */(recommandé)/*
 
 ** Réparateur
-- *Objectif* :: Gérer les ressources et *réparer les portes*. Certains
-  voient ce rôle comme ingrat mais la victoire est inenvisageable sans
-  eux.
-
+- *Objectif* :: Gérer les ressources et *réparer les portes*.
 - *Arme principale* :: Hachette avec [[https://nwdb.info/db/ability/ult_passive_hatchet_immortalwhen0hp][Defy Death]] */(recommandé)/*
 - *Arme secondaire* :: Arme avec mobilité */(recommandé)/*
 
@@ -81,7 +80,7 @@ d'une arme haut niveau/particulière.
   ennemies et les trash mob, en respectant cet ordre de priorité.
 
 - *Arme principale* :: Épée avec la compétence [[https://nwdb.info/db/ability/ultimate_sword_swordmaster][Leadership]] */(obligatoire)/*
-- *Arme secondaire* :: Bâton de feu/vie */(recommandé)/*
+- *Arme secondaire* :: Bâton de feu/vie/hachette */(recommandé)/*
 
 PS: Si vous n'avez jamais joué l'épée, il suffit de débloquer 12
 points de compétence. C'est assez rapide et vous n'avez pas besoin
@@ -90,10 +89,15 @@ d'une arme haut niveau/particulière.
 - *Objectif* :: Maintenir l'équipe *Anti-trash* en vie en priorité
   puis empêcher les *trash-mobs* d'atteindre les autres joueurs et les
   portes.
-- *Arme principale* :: Bâton de vie */(obligatoire)/* avec [[https://nwdb.info/db/perk/perkid_weaponlife_healoutgoing][Blessed]]
+- *Arme principale* :: Bâton de vie 580 GS min */(obligatoire)/* avec [[https://nwdb.info/db/perk/perkid_weaponlife_healoutgoing][Blessed]]
   */(recommandé)/*
 - *Arme secondaire* :: Hache double avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] et [[https://nwdb.info/db/item/ambercutt4][Pristine
   Amber]] */(recommandé)/* [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] */(recommandé)/*
+
+  OU
+
+  Gantelet du néant
+
 - *Armure* :: [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
 
 
@@ -101,12 +105,13 @@ d'une arme haut niveau/particulière.
 
 - *Objectif* :: DPS les *boss* dans les phases de fin, quand ils
   s'accumulent sur les portes.
-- *Arme principale* :: Bâton de feu [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] avec [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(obligatoire)/*
+- *Arme principale* :: Bâton de feu 580 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] avec [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(obligatoire)/*
   et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] */(recommandé)/*.
-- *Arme secondaire* :: Mousquet [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] et [[https://nwdb.info/db/perk/perkid_weapon_dmgbasic][Enchanted]] avec
+- *Arme secondaire possible* :: Mousquet [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] et [[https://nwdb.info/db/perk/perkid_weapon_dmgbasic][Enchanted]] avec
   [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(recommandé)/*
-- *Armure* :: Légère avec perks pour le lance flamme [[https://nwdb.info/db/perk/perkid_ability_firestaff_flamethrower][Accelerating
-  Flamethrower]] */(recommandé)/*
+  OU
+  Gantelet de glace pour bloquer les boss
+- *Armure* :: Légère
 
 * Bot Discord
 ** Concept :
