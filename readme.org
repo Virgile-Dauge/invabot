@@ -246,7 +246,7 @@ d'une arme haut niveau/particulière.
  https://discordpy.readthedocs.io/en/stable/
 
  Création du bot
- #+begin_src python :tangle bot.py
+ #+begin_src python :tangle bot.py :noweb yes
 
    intents = discord.Intents.default()
    intents.reactions = True
@@ -261,13 +261,29 @@ d'une arme haut niveau/particulière.
        print('We have logged in as {0.user}'.format(bot))
        game = discord.Game("Venez chez Bakhu")
        await bot.change_presence(status=discord.Status.online, activity=game)
+
+   <<rm_cmd>>
+ #+end_src
+#+name: rm_cmd
+#+begin_src python :tangle no
+    async def rm_cmd(ctx):
+      try:
+          await ctx.message.delete()
+      except Exception as e:
+          print(e)
  #+end_src
 
  #+begin_src python :tangle no
-   @bot.command()
-   async def help(ctx):
-       embed = discord.Embed.from_dict(config["embeds"]["help"])
-       await ctx.channel.send(embed=embed)
+    @bot.command()
+    async def help(ctx):
+
+        # Suppression du message d'invocation
+        await ctx.message.delete()
+
+        embed = discord.Embed.from_dict(config["embeds"]["help"])
+        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+        await ctx.channel.send(embed=embed)
+
  #+end_src
 
  Commande d'ajout du panneau d'inscription, sur lequel les joueurs dans
@@ -277,6 +293,9 @@ d'une arme haut niveau/particulière.
    async def inva(ctx, arg="NomVille"):
        """ Génére un tableau d'inscription dans le channel
        """
+       # Suppression du message d'invocation
+       await rm_cmd(ctx)
+
        embed = discord.Embed.from_dict(config["embeds"]["panneau"])
        embed.title += f' {arg}'
        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
@@ -288,6 +307,7 @@ d'une arme haut niveau/particulière.
        msgs[author_id] = msg.id
        global msgs_ids
        msgs_ids += [msg.id]
+
  #+end_src
 
  La commande de demande de *composition* sera la suivante `!comp`. La
@@ -299,6 +319,9 @@ d'une arme haut niveau/particulière.
    async def comp(ctx):
        """ Génére une composition d'armée
        """
+       # Suppression du message d'invocation
+       await rm_cmd(ctx)
+
        author_dtag = dtag(ctx.author)
        channel = ctx.channel
 
@@ -360,6 +383,9 @@ d'une arme haut niveau/particulière.
    async def cb(ctx):
        """ Génére une composition d'armée
        """
+       # Suppression du message d'invocation
+       await rm_cmd(ctx)
+
        author_dtag = dtag(ctx.author)
        channel = ctx.channel
 
@@ -442,6 +468,8 @@ d'une arme haut niveau/particulière.
        """ Attribue les rôles
        """
        print(f'!verif command invoked by {dtag(ctx.author)}')
+       # Suppression du message d'invocation
+       await rm_cmd(ctx)
 
        guild = ctx.guild
        lead_role = guild.get_role(config["ids"]["leads"])
@@ -507,13 +535,14 @@ d'une arme haut niveau/particulière.
        embed = discord.Embed()
        embed.title = f'Vérification du gdoc'
        embed.color = 2003199
-       #embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+       embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
 
        embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
        embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
        embed.add_field(name=f"Joueurs ayant changé de Discord tag (rôle {role} supprimé)", value=list_to_field(removed), inline=False)
        await ctx.channel.send(embed=embed)
        #print(added, wrong)
+
 
  #+end_src
 *** Run

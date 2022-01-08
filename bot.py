@@ -40,10 +40,19 @@ async def on_ready():
     game = discord.Game("Venez chez Bakhu")
     await bot.change_presence(status=discord.Status.online, activity=game)
 
+async def rm_cmd(ctx):
+  try:
+      await ctx.message.delete()
+  except Exception as e:
+      print(e)
+
 @bot.command()
 async def inva(ctx, arg="NomVille"):
     """ Génére un tableau d'inscription dans le channel
     """
+    # Suppression du message d'invocation
+    await rm_cmd(ctx)
+
     embed = discord.Embed.from_dict(config["embeds"]["panneau"])
     embed.title += f' {arg}'
     embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
@@ -60,6 +69,9 @@ async def inva(ctx, arg="NomVille"):
 async def comp(ctx):
     """ Génére une composition d'armée
     """
+    # Suppression du message d'invocation
+    await rm_cmd(ctx)
+
     author_dtag = dtag(ctx.author)
     channel = ctx.channel
 
@@ -112,6 +124,9 @@ async def comp(ctx):
 async def cb(ctx):
     """ Génére une composition d'armée
     """
+    # Suppression du message d'invocation
+    await rm_cmd(ctx)
+
     author_dtag = dtag(ctx.author)
     channel = ctx.channel
 
@@ -182,6 +197,8 @@ async def verif(ctx):
     """ Attribue les rôles
     """
     print(f'!verif command invoked by {dtag(ctx.author)}')
+    # Suppression du message d'invocation
+    await rm_cmd(ctx)
 
     guild = ctx.guild
     lead_role = guild.get_role(config["ids"]["leads"])
@@ -247,7 +264,7 @@ async def verif(ctx):
     embed = discord.Embed()
     embed.title = f'Vérification du gdoc'
     embed.color = 2003199
-    #embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+    embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
 
     embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
     embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
