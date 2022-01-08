@@ -47,6 +47,31 @@ async def rm_cmd(ctx):
       print(e)
 
 @bot.command()
+async def clear(ctx, opt='me'):
+    #global hist
+    #await rm_cmd(ctx)
+    if opt == 'me':
+        deleted = await ctx.channel.purge(check=lambda msg: msg.author == ctx.author)
+        await ctx.channel.send('Deleted {} message(s)'.format(len(deleted)), delete_after=2)
+        #print(hist[ctx.author])
+    elif opt == 'all':
+        guild = ctx.guild
+        lead_role = guild.get_role(config["ids"]["leads"])
+
+        if ctx.author not in lead_role.members:
+            embed = discord.Embed(title='Droits insuffisants')
+            embed.color = 16748319
+            embed.description = f'Rôle ***{lead_role}*** requis'
+            await ctx.channel.send(embed=embed, delete_after=10)
+            return
+
+        await ctx.channel.purge()
+        global msgs
+        msgs = {}
+        global msgs_ids
+        msgs_ids = []
+
+@bot.command()
 async def inva(ctx, arg="NomVille"):
     """ Génére un tableau d'inscription dans le channel
     """
@@ -57,13 +82,16 @@ async def inva(ctx, arg="NomVille"):
     embed.title += f' {arg}'
     embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
 
-    msg = await ctx.channel.send(embed=embed)
+    msg = await ctx.channel.send(embed=embed, delete_after=60*20)
     await msg.add_reaction('☑')
+
+    #add_to_hist(ctx.author, msg.id)
 
     author_id = dtag(ctx.author)
     msgs[author_id] = msg.id
     global msgs_ids
     msgs_ids += [msg.id]
+    #add_to_hist(ctx.author, msg.id)
 
 @bot.command()
 async def comp(ctx):
@@ -80,7 +108,7 @@ async def comp(ctx):
         embed = discord.Embed(title='Pas de tableau correspondant...')
         embed.color = 16748319
         embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
-        await ctx.channel.send(embed=embed)
+        await ctx.channel.send(embed=embed, delete_after=10)
         return
 
     # Récupération du message avec les réacs
@@ -118,7 +146,8 @@ async def comp(ctx):
     embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, composition :"
     embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
     embed.color = 2003199
-    await channel.send(embed=embed)
+    await channel.send(embed=embed, delete_after=60*25)
+    #add_to_hist(ctx.author, msg.id)
 
 @bot.command()
 async def cb(ctx):
@@ -135,7 +164,7 @@ async def cb(ctx):
         embed = discord.Embed(title='Pas de tableau correspondant...')
         embed.color = 16748319
         embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
-        await ctx.channel.send(embed=embed)
+        await ctx.channel.send(embed=embed, delete_after=2)
         return
 
     # Récupération du message avec les réacs
@@ -159,7 +188,7 @@ async def cb(ctx):
     embed.color = 2003199
     embed.description = f"S'il y a tout le monde, le lead peut utiliser :\n\n `!comp`"
     embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
-    await ctx.channel.send(embed=embed)
+    await ctx.channel.send(embed=embed, delete_after=2)
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -207,7 +236,7 @@ async def verif(ctx):
         embed = discord.Embed(title='Droits insuffisants')
         embed.color = 16748319
         embed.description = f'Rôle ***{lead_role}*** requis'
-        await ctx.channel.send(embed=embed)
+        await ctx.channel.send(embed=embed, delete_after=2)
         return
     # Récupération des donénes du Gdoc roster
     roster = get_roster(config)
@@ -269,7 +298,7 @@ async def verif(ctx):
     embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
     embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
     embed.add_field(name=f"Joueurs ayant changé de Discord tag (rôle {role} supprimé)", value=list_to_field(removed), inline=False)
-    await ctx.channel.send(embed=embed)
+    await ctx.channel.send(embed=embed, delete_after=30)
     #print(added, wrong)
 
 bot.run(token)

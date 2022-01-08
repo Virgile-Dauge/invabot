@@ -242,7 +242,7 @@ d'une arme haut niveau/particulière.
  4        Arti     Arti        Arti     Arti        Arti        Arti        Arti        Arti     Répa  Lance-flamme
  #+end_example
 
-** Bot avec discord.py
+** TODO Bot avec discord.py
  https://discordpy.readthedocs.io/en/stable/
 
  Création du bot
@@ -264,6 +264,35 @@ d'une arme haut niveau/particulière.
 
    <<rm_cmd>>
  #+end_src
+
+#+name: clear
+#+begin_src python :tangle bot.py
+   @bot.command()
+   async def clear(ctx, opt='me'):
+       #global hist
+       #await rm_cmd(ctx)
+       if opt == 'me':
+           deleted = await ctx.channel.purge(check=lambda msg: msg.author == ctx.author)
+           await ctx.channel.send('Deleted {} message(s)'.format(len(deleted)), delete_after=2)
+           #print(hist[ctx.author])
+       elif opt == 'all':
+           guild = ctx.guild
+           lead_role = guild.get_role(config["ids"]["leads"])
+
+           if ctx.author not in lead_role.members:
+               embed = discord.Embed(title='Droits insuffisants')
+               embed.color = 16748319
+               embed.description = f'Rôle ***{lead_role}*** requis'
+               await ctx.channel.send(embed=embed, delete_after=10)
+               return
+
+           await ctx.channel.purge()
+           global msgs
+           msgs = {}
+           global msgs_ids
+           msgs_ids = []
+ #+end_src
+
 #+name: rm_cmd
 #+begin_src python :tangle no
     async def rm_cmd(ctx):
@@ -273,17 +302,14 @@ d'une arme haut niveau/particulière.
           print(e)
  #+end_src
 
- #+begin_src python :tangle no
-    @bot.command()
-    async def help(ctx):
-
-        # Suppression du message d'invocation
-        await ctx.message.delete()
-
-        embed = discord.Embed.from_dict(config["embeds"]["help"])
-        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
-        await ctx.channel.send(embed=embed)
-
+#+name: add_to_hist
+#+begin_src python :tangle no
+  def add_to_hist(author, mid):
+    global hist
+    if author in hist and hist[author]:
+       hist[author] += [mid]
+    else:
+       hist[author] = [mid]
  #+end_src
 
  Commande d'ajout du panneau d'inscription, sur lequel les joueurs dans
@@ -300,13 +326,18 @@ d'une arme haut niveau/particulière.
        embed.title += f' {arg}'
        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
 
-       msg = await ctx.channel.send(embed=embed)
+       msg = await ctx.channel.send(embed=embed, delete_after=60*20)
        await msg.add_reaction('☑')
+
+       #add_to_hist(ctx.author, msg.id)
 
        author_id = dtag(ctx.author)
        msgs[author_id] = msg.id
        global msgs_ids
        msgs_ids += [msg.id]
+       #add_to_hist(ctx.author, msg.id)
+
+ #+end_src
 
  #+end_src
 
@@ -330,7 +361,7 @@ d'une arme haut niveau/particulière.
            embed = discord.Embed(title='Pas de tableau correspondant...')
            embed.color = 16748319
            embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
-           await ctx.channel.send(embed=embed)
+           await ctx.channel.send(embed=embed, delete_after=10)
            return
 
        # Récupération du message avec les réacs
@@ -359,7 +390,9 @@ d'une arme haut niveau/particulière.
        embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, composition :"
        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
        embed.color = 2003199
-       await channel.send(embed=embed)
+       await channel.send(embed=embed, delete_after=60*25)
+       #add_to_hist(ctx.author, msg.id)
+
  #+end_src
 
 #+name: gen_embed
@@ -394,7 +427,7 @@ d'une arme haut niveau/particulière.
            embed = discord.Embed(title='Pas de tableau correspondant...')
            embed.color = 16748319
            embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
-           await ctx.channel.send(embed=embed)
+           await ctx.channel.send(embed=embed, delete_after=2)
            return
 
        # Récupération du message avec les réacs
@@ -418,7 +451,7 @@ d'une arme haut niveau/particulière.
        embed.color = 2003199
        embed.description = f"S'il y a tout le monde, le lead peut utiliser :\n\n `!comp`"
        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
-       await ctx.channel.send(embed=embed)
+       await ctx.channel.send(embed=embed, delete_after=2)
  #+end_src
 *** DM des joueurs qui n'ont pas renseigné leurs rôles
 
@@ -478,7 +511,7 @@ d'une arme haut niveau/particulière.
            embed = discord.Embed(title='Droits insuffisants')
            embed.color = 16748319
            embed.description = f'Rôle ***{lead_role}*** requis'
-           await ctx.channel.send(embed=embed)
+           await ctx.channel.send(embed=embed, delete_after=2)
            return
        # Récupération des donénes du Gdoc roster
        roster = get_roster(config)
@@ -540,7 +573,7 @@ d'une arme haut niveau/particulière.
        embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
        embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
        embed.add_field(name=f"Joueurs ayant changé de Discord tag (rôle {role} supprimé)", value=list_to_field(removed), inline=False)
-       await ctx.channel.send(embed=embed)
+       await ctx.channel.send(embed=embed, delete_after=30)
        #print(added, wrong)
 
 
