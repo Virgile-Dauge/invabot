@@ -242,7 +242,7 @@ d'une arme haut niveau/particulière.
  4        Arti     Arti        Arti     Arti        Arti        Arti        Arti        Arti     Répa  Lance-flamme
  #+end_example
 
-** TODO Bot avec discord.py
+** Bot avec discord.py
  https://discordpy.readthedocs.io/en/stable/
 
  Création du bot
@@ -264,7 +264,7 @@ d'une arme haut niveau/particulière.
 
    <<rm_cmd>>
  #+end_src
-
+*** Clear
 #+name: clear
 #+begin_src python :tangle bot.py
    @bot.command()
@@ -312,6 +312,7 @@ d'une arme haut niveau/particulière.
        hist[author] = [mid]
  #+end_src
 
+*** Inva
  Commande d'ajout du panneau d'inscription, sur lequel les joueurs dans
  le fort doivent se signaler sera `!inva nomVille`
  #+begin_src python :tangle bot.py
@@ -338,8 +339,7 @@ d'une arme haut niveau/particulière.
        #add_to_hist(ctx.author, msg.id)
 
  #+end_src
-
- #+end_src
+*** Composition d'armée
 
  La commande de demande de *composition* sera la suivante `!comp`. La
  fonction associée doit récupérer le message /panneau/ à partir de
@@ -414,7 +414,7 @@ d'une arme haut niveau/particulière.
  #+begin_src python :tangle bot.py :noweb yes
    @bot.command()
    async def cb(ctx):
-       """ Génére une composition d'armée
+       """ Compte les inscrits enregistrés
        """
        # Suppression du message d'invocation
        await rm_cmd(ctx)
@@ -514,8 +514,8 @@ d'une arme haut niveau/particulière.
            await ctx.channel.send(embed=embed, delete_after=2)
            return
        # Récupération des donénes du Gdoc roster
-       roster = get_roster(config)
-       roster = list(roster.index)
+       roster_df = get_roster(config)
+       roster = list(roster_df.index)
 
 
        members = {dtag(m): m for m in guild.members}
@@ -563,8 +563,14 @@ d'une arme haut niveau/particulière.
                f = ''
                for u in l:
                    f += u + '\n'
+           if len(f)>1023:
+               return f[:1000]+'\n...'
            return f
 
+       def add_IG(l, roster_df):
+           return [f"{i} | {roster_df.loc[i]['Pseudo IG']}" for i in l]
+       wrong = add_IG(wrong, roster_df)
+       added = add_IG(added, roster_df)
        embed = discord.Embed()
        embed.title = f'Vérification du gdoc'
        embed.color = 2003199
@@ -573,7 +579,7 @@ d'une arme haut niveau/particulière.
        embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
        embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
        embed.add_field(name=f"Joueurs ayant changé de Discord tag (rôle {role} supprimé)", value=list_to_field(removed), inline=False)
-       await ctx.channel.send(embed=embed, delete_after=30)
+       await ctx.channel.send(embed=embed, delete_after=20*60)
        #print(added, wrong)
 
 

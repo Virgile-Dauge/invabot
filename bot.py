@@ -151,7 +151,7 @@ async def comp(ctx):
 
 @bot.command()
 async def cb(ctx):
-    """ Génére une composition d'armée
+    """ Compte les inscrits enregistrés
     """
     # Suppression du message d'invocation
     await rm_cmd(ctx)
@@ -239,8 +239,8 @@ async def verif(ctx):
         await ctx.channel.send(embed=embed, delete_after=2)
         return
     # Récupération des donénes du Gdoc roster
-    roster = get_roster(config)
-    roster = list(roster.index)
+    roster_df = get_roster(config)
+    roster = list(roster_df.index)
 
 
     members = {dtag(m): m for m in guild.members}
@@ -288,8 +288,14 @@ async def verif(ctx):
             f = ''
             for u in l:
                 f += u + '\n'
+        if len(f)>1023:
+            return f[:1000]+'\n...'
         return f
 
+    def add_IG(l, roster_df):
+        return [f"{i} | {roster_df.loc[i]['Pseudo IG']}" for i in l]
+    wrong = add_IG(wrong, roster_df)
+    added = add_IG(added, roster_df)
     embed = discord.Embed()
     embed.title = f'Vérification du gdoc'
     embed.color = 2003199
@@ -298,7 +304,7 @@ async def verif(ctx):
     embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
     embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
     embed.add_field(name=f"Joueurs ayant changé de Discord tag (rôle {role} supprimé)", value=list_to_field(removed), inline=False)
-    await ctx.channel.send(embed=embed, delete_after=30)
+    await ctx.channel.send(embed=embed, delete_after=20*60)
     #print(added, wrong)
 
 bot.run(token)
