@@ -131,7 +131,7 @@ async def comp(ctx):
     #print(roster)
     # Récupération de la strat
     strat = get_strat(config)
-    comp = build_comp(roster, strat)
+    comp = build_comp(roster, strat, config)
     def gen_embed(comp):
        e = discord.Embed(title="Composition d'armée")
        for k, v in comp.iteritems():
@@ -146,6 +146,7 @@ async def comp(ctx):
     embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, composition :"
     embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
     embed.color = 2003199
+    embed.set_thumbnail(url=config['imgs']['layout'])
     await channel.send(embed=embed, delete_after=60*25)
     #add_to_hist(ctx.author, msg.id)
 
@@ -289,7 +290,7 @@ async def verif(ctx):
             for u in l:
                 f += u + '\n'
         if len(f)>1023:
-            return f[:1000]+'\n...'
+            return f[:1000]+'...'
         return f
 
     def add_IG(l, roster_df):

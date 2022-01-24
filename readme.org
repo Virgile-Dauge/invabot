@@ -113,6 +113,10 @@ d'une arme haut niveau/particulière.
   Gantelet de glace pour bloquer les boss
 - *Armure* :: Légère
 
+
+* Damage formula
+
+
 * Bot Discord
 ** Concept :
 
@@ -129,6 +133,20 @@ d'une arme haut niveau/particulière.
    "ids": {
        "role": 917546013248606238,
        "leads": 928316217297612810
+   },
+   "doc":{
+       "Arc": "https://virgile-dauge.github.io/invabot/#org8c491a8",
+       "Mousquet": "https://virgile-dauge.github.io/invabot/#orgb231e28",
+       "Anti-Trash": "https://virgile-dauge.github.io/invabot/#org225c284",
+       "DPS-Debuff": "https://virgile-dauge.github.io/invabot/#org278d923",
+       "Pustule Boy": "https://virgile-dauge.github.io/invabot/#orgc63d37d",
+       "Réparateur": "https://virgile-dauge.github.io/invabot/#org070ef35",
+       "Artilleur": "https://virgile-dauge.github.io/invabot/#orgea113af",
+       "Heal": "https://virgile-dauge.github.io/invabot/#org76b2a6b",
+       "Mage AOE": "https://virgile-dauge.github.io/invabot/#orgc3f8667"
+   },
+   "imgs": {
+       "layout": "https://cdn.discordapp.com/attachments/917547596640296990/922901028519706674/layout.png"
    },
    "embeds": {
        "panneau": {
@@ -384,12 +402,13 @@ d'une arme haut niveau/particulière.
        #print(roster)
        # Récupération de la strat
        strat = get_strat(config)
-       comp = build_comp(roster, strat)
+       comp = build_comp(roster, strat, config)
        <<gen_embed>>
        embed = gen_embed(comp)
        embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, composition :"
        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
        embed.color = 2003199
+       embed.set_thumbnail(url=config['imgs']['layout'])
        await channel.send(embed=embed, delete_after=60*25)
        #add_to_hist(ctx.author, msg.id)
 
@@ -564,7 +583,7 @@ d'une arme haut niveau/particulière.
                for u in l:
                    f += u + '\n'
            if len(f)>1023:
-               return f[:1000]+'\n...'
+               return f[:1000]+'...'
            return f
 
        def add_IG(l, roster_df):
@@ -617,7 +636,7 @@ Récupération du roster de test
  Identification des Rôles :
  #+begin_src python :tangle algo.py :noweb yes
 
-   def build_comp(roster, strat):
+   def build_comp(roster, strat, config):
        roles = {}
        for index, row in strat.iterrows():
            for v in row:
@@ -682,7 +701,10 @@ Remplissage du tableau
       for j, v in row.items():
           if v in filed_roles and filed_roles[v]:
               p = filed_roles[v].pop()
-              comp.at[i, j] = f'**{p}** *{comp.at[i, j]}* {roster.at[p, v] / max_roles[v]:.1f}'
+              role_txt = comp.at[i, j]
+              if role_txt in config['doc']:
+                  role_txt = f"[{role_txt}]({config['doc'][role_txt]})"
+              comp.at[i, j] = f'**{p}** *{role_txt}* {roster.at[p, v] / max_roles[v]:.1f}'
   return comp
 #+end_src
 
