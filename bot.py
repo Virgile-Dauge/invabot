@@ -148,8 +148,12 @@ async def comp(ctx, strat='Strat_principale'):
     # Récupération de la strat
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={strat}"
     try:
-        strat_df = pd.read_csv(url).iloc[0:5, 0:12]
-    except Exeption as e:
+        page = pd.read_csv(url)
+        strat_df = page.iloc[0:5, 0:10]
+        img_url = page.iat[5, 1]
+        #strat_df = pd.read_csv(url)
+        #print(page, img_url)
+    except Exception as e:
         await send_error_message(ctx,
                                  title='Erreur accès gdoc',
                                  desc=f"Le document en ligne n'est pas accessible.")
@@ -160,7 +164,7 @@ async def comp(ctx, strat='Strat_principale'):
        for k, v in comp.iteritems():
            f = ''
            for p in v.to_list():
-               f += p + '\n'
+               f += str(p) + '\n'
            e.add_field(name=k, value=f, inline=True)
        return e
     
@@ -169,7 +173,7 @@ async def comp(ctx, strat='Strat_principale'):
     embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, {strat} :"
     embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
     embed.color = 2003199
-    embed.set_thumbnail(url=config['imgs']['layout'])
+    embed.set_thumbnail(url=img_url)
     await channel.send(embed=embed, delete_after=60*25)
     #add_to_hist(ctx.author, msg.id)
 
