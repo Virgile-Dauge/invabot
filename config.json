@@ -41,7 +41,7 @@
 },
 "gdoc": {
     "url": "https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/",
-    "page_strat": "Strat_principale",
+    "strats": ["Strat_principale","Strat_secours"],
     "page_roster": "Roster",
     "form": "https://forms.gle/G9LizybajjVxCw6JA"
 }

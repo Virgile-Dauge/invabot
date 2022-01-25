@@ -22,8 +22,11 @@ def get_roster(config):
     #return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
     return pd.read_csv(url).set_index('dtag')
 
-def get_strat(config):
-    url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
+def get_strat(config, strat=None):
+    if strat is None:
+        url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
+    else:
+        url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
     return pd.read_csv(url).iloc[0:5, 0:12]
 
 intents = discord.Intents.default()
@@ -45,6 +48,14 @@ async def rm_cmd(ctx):
       await ctx.message.delete()
   except Exception as e:
       print(e)
+
+async def send_error_message(ctx, title='Erreur', desc=''):
+    """ Génére un embed orange avec le titre et la description fournie et l'envoie sur le ctx donné"""
+    embed = discord.Embed(title=title)
+    embed.color = 16748319
+    embed.description = desc
+    await ctx.channel.send(embed=embed, delete_after=10)
+    return
 
 @bot.command()
 async def clear(ctx, opt='me'):
@@ -94,7 +105,7 @@ async def inva(ctx, arg="NomVille"):
     #add_to_hist(ctx.author, msg.id)
 
 @bot.command()
-async def comp(ctx):
+async def comp(ctx, strat='Strat_principale'):
     """ Génére une composition d'armée
     """
     # Suppression du message d'invocation
@@ -105,10 +116,9 @@ async def comp(ctx):
 
     # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
     if author_dtag not in msgs:
-        embed = discord.Embed(title='Pas de tableau correspondant...')
-        embed.color = 16748319
-        embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
-        await ctx.channel.send(embed=embed, delete_after=10)
+        await send_error_message(ctx=ctx,
+                           title='Pas de tableau correspondant...',
+                           desc=f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`')
         return
 
     # Récupération du message avec les réacs
@@ -129,9 +139,22 @@ async def comp(ctx):
     # Filtrage du roster avec les joueurs séléctionnés
     roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
     #print(roster)
+
+    if strat not in config['gdoc']['strats']:
+        await send_error_message(ctx,
+                                 title='Stratégie non trouvée',
+                                 desc=f"Le document en ligne ne contient pas de page ***{strat}***")
+        return
     # Récupération de la strat
-    strat = get_strat(config)
-    comp = build_comp(roster, strat, config)
+    url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={strat}"
+    try:
+        strat_df = pd.read_csv(url).iloc[0:5, 0:12]
+    except Exeption as e:
+        await send_error_message(ctx,
+                                 title='Erreur accès gdoc',
+                                 desc=f"Le document en ligne n'est pas accessible.")
+        return
+    comp = build_comp(roster, strat_df, config)
     def gen_embed(comp):
        e = discord.Embed(title="Composition d'armée")
        for k, v in comp.iteritems():
@@ -143,7 +166,7 @@ async def comp(ctx):
     
     
     embed = gen_embed(comp)
-    embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, composition :"
+    embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, {strat} :"
     embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
     embed.color = 2003199
     embed.set_thumbnail(url=config['imgs']['layout'])
@@ -162,10 +185,9 @@ async def cb(ctx):
 
     # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
     if author_dtag not in msgs:
-        embed = discord.Embed(title='Pas de tableau correspondant...')
-        embed.color = 16748319
-        embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
-        await ctx.channel.send(embed=embed, delete_after=2)
+        await send_error_message(ctx=ctx,
+                              title='Pas de tableau correspondant...',
+                              desc=f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`')
         return
 
     # Récupération du message avec les réacs
@@ -234,10 +256,9 @@ async def verif(ctx):
     lead_role = guild.get_role(config["ids"]["leads"])
 
     if ctx.author not in lead_role.members:
-        embed = discord.Embed(title='Droits insuffisants')
-        embed.color = 16748319
-        embed.description = f'Rôle ***{lead_role}*** requis'
-        await ctx.channel.send(embed=embed, delete_after=2)
+        await send_error_message(ctx=ctx,
+                              title='Droits insuffisants',
+                              desc=f'Rôle ***{lead_role}*** requis')
         return
     # Récupération des donénes du Gdoc roster
     roster_df = get_roster(config)

@@ -172,7 +172,7 @@ d'une arme haut niveau/particulière.
    },
    "gdoc": {
        "url": "https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/",
-       "page_strat": "Strat_principale",
+       "strats": ["Strat_principale","Strat_secours"],
        "page_roster": "Roster",
        "form": "https://forms.gle/G9LizybajjVxCw6JA"
    }
@@ -246,8 +246,11 @@ d'une arme haut niveau/particulière.
 *** Récupération de la strat
 
  #+begin_src python :tangle bot.py
-   def get_strat(config):
-       url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
+   def get_strat(config, strat=None):
+       if strat is None:
+           url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
+       else:
+           url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
        return pd.read_csv(url).iloc[0:5, 0:12]
  #+end_src
 
@@ -281,6 +284,17 @@ d'une arme haut niveau/particulière.
        await bot.change_presence(status=discord.Status.online, activity=game)
 
    <<rm_cmd>>
+ #+end_src
+
+*** Embed d'erreur
+ #+begin_src python :tangle bot.py
+   async def send_error_message(ctx, title='Erreur', desc=''):
+       """ Génére un embed orange avec le titre et la description fournie et l'envoie sur le ctx donné"""
+       embed = discord.Embed(title=title)
+       embed.color = 16748319
+       embed.description = desc
+       await ctx.channel.send(embed=embed, delete_after=10)
+       return
  #+end_src
 *** Clear
 #+name: clear
@@ -365,7 +379,7 @@ d'une arme haut niveau/particulière.
  réagi sur le panneau.
  #+begin_src python :tangle bot.py :noweb yes
    @bot.command()
-   async def comp(ctx):
+   async def comp(ctx, strat='Strat_principale'):
        """ Génére une composition d'armée
        """
        # Suppression du message d'invocation
@@ -376,10 +390,9 @@ d'une arme haut niveau/particulière.
 
        # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
        if author_dtag not in msgs:
-           embed = discord.Embed(title='Pas de tableau correspondant...')
-           embed.color = 16748319
-           embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
-           await ctx.channel.send(embed=embed, delete_after=10)
+           await send_error_message(ctx=ctx,
+                              title='Pas de tableau correspondant...',
+                              desc=f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`')
            return
 
        # Récupération du message avec les réacs
@@ -400,12 +413,25 @@ d'une arme haut niveau/particulière.
        # Filtrage du roster avec les joueurs séléctionnés
        roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
        #print(roster)
+
+       if strat not in config['gdoc']['strats']:
+           await send_error_message(ctx,
+                                    title='Stratégie non trouvée',
+                                    desc=f"Le document en ligne ne contient pas de page ***{strat}***")
+           return
        # Récupération de la strat
-       strat = get_strat(config)
-       comp = build_comp(roster, strat, config)
+       url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={strat}"
+       try:
+           strat_df = pd.read_csv(url).iloc[0:5, 0:12]
+       except Exeption as e:
+           await send_error_message(ctx,
+                                    title='Erreur accès gdoc',
+                                    desc=f"Le document en ligne n'est pas accessible.")
+           return
+       comp = build_comp(roster, strat_df, config)
        <<gen_embed>>
        embed = gen_embed(comp)
-       embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, composition :"
+       embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, {strat} :"
        embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
        embed.color = 2003199
        embed.set_thumbnail(url=config['imgs']['layout'])
@@ -443,10 +469,9 @@ d'une arme haut niveau/particulière.
 
        # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
        if author_dtag not in msgs:
-           embed = discord.Embed(title='Pas de tableau correspondant...')
-           embed.color = 16748319
-           embed.description = f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`'
-           await ctx.channel.send(embed=embed, delete_after=2)
+           await send_error_message(ctx=ctx,
+                                 title='Pas de tableau correspondant...',
+                                 desc=f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`')
            return
 
        # Récupération du message avec les réacs
@@ -527,10 +552,9 @@ d'une arme haut niveau/particulière.
        lead_role = guild.get_role(config["ids"]["leads"])
 
        if ctx.author not in lead_role.members:
-           embed = discord.Embed(title='Droits insuffisants')
-           embed.color = 16748319
-           embed.description = f'Rôle ***{lead_role}*** requis'
-           await ctx.channel.send(embed=embed, delete_after=2)
+           await send_error_message(ctx=ctx,
+                                 title='Droits insuffisants',
+                                 desc=f'Rôle ***{lead_role}*** requis')
            return
        # Récupération des donénes du Gdoc roster
        roster_df = get_roster(config)
