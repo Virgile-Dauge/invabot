@@ -18,7 +18,7 @@ with open('config.json', 'r') as datafile:
     config = json.load(datafile)
 
 bot = commands.Bot(
-    command_prefix='!',
+    intents=disnake.Intents().all(),
     test_guilds=[906630964703289434], # Optional
     sync_commands_debug=True
 )
@@ -125,6 +125,8 @@ async def on_reaction_add(reaction, user):
      else:
          guild = reaction.message.guild
          role = guild.get_role(config["ids"]["role"])
+
+         await user.edit(nick=df.at[dtag(user), "Pseudo IG"])
          if role is None:
              # Make sure the role still exists and is valid.
              return
