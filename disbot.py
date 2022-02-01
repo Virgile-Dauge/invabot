@@ -30,7 +30,27 @@ villes = ["Bief de Nérécaille", "Boisclair", "Eaux Fétides", "Gré du vent",
 async def autocomp_villes(inter: disnake.ApplicationCommandInteraction, user_input: str):
     return [ville for ville in villes if user_input.lower() in ville]
 
+async def tags_from_id(ctx, msg_id):
+    msg = await ctx.channel.fetch_message(msg_id)
+    selected = await msg.reactions[0].users().flatten()
+    return [dtag(u) for u in selected][1:]
+
 class CompTrigger(disnake.ui.View):
+    def __init__(self, origin, **kwargs):
+        super().__init__(**kwargs)
+        self.origin = origin
+    @disnake.ui.button(label='CB', style=disnake.ButtonStyle.secondary)
+    async def cb(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
+        #msg = await inter.original_message()
+        #print(inter.message.id, inter.response.is_done(), msg)
+        selected = await tags_from_id(inter, self.origin)
+        print(inter.response.is_done())
+        #await interaction.edit_original_message(content=f'{len(selected)} Joueurs enregistrés')
+        if not inter.response.is_done():
+            await inter.response.send_message(content=f'{len(selected)} Joueurs enregistrés')
+            print(inter.response.is_done())
+        else:
+            await inter.edit_original_message(content=f'{len(selected)} Joueurs enregistrés')
     @disnake.ui.button(label='Composition', style=disnake.ButtonStyle.blurple)
     async def trigger(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         #await interaction.delete_original_message()
@@ -59,7 +79,7 @@ async def invasion(
     await msg.add_reaction('☑')
 
     # Envoi d'un message caché à l'invocateur
-    trigger = CompTrigger()
+    trigger = CompTrigger(msg.id, timeout=10*60)
     await ctx.send("Calcul", view=trigger, ephemeral=True)
 
     # Attente du déclanchement pas l'invocateur
