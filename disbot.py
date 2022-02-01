@@ -23,10 +23,6 @@ bot = commands.Bot(
     sync_commands_debug=True
 )
 
-@bot.slash_command()
-async def ping(inter):
-    await inter.response.send_message("Pong!")
-
 villes = ["Bief de Nérécaille", "Boisclair", "Eaux Fétides", "Gré du vent",
           "Ile des Lames", "Levant", "Haute-Chute", "Marais des Trames",
           "Rive tourmentée", "Val des Larmes", "Falaise du roy"]
@@ -111,4 +107,33 @@ async def invasion(
     embed.color = 2003199
     embed.set_thumbnail(url=img_url)
     await ctx.send(embed=embed, delete_after=60*25)
+
+@bot.event
+async def on_reaction_add(reaction, user):
+     if user == bot.user:
+         return
+     print(user)
+     # Récupération des donénes du Gdoc roster
+     df = get_roster(config)
+     if dtag(user) not in df.index:
+         embed = Embed.from_dict(config["embeds"]["dm"])
+         embed.description += f'{config["gdoc"]["form"]}) ***!***'
+         try:
+             await user.send(embed=embed)
+         except disnake.errors.HTTPException as e:
+             pass
+     else:
+         guild = reaction.message.guild
+         role = guild.get_role(config["ids"]["role"])
+         if role is None:
+             # Make sure the role still exists and is valid.
+             return
+
+         try:
+             # Finally, add the role.
+             await user.add_roles(role)
+         except disnake.HTTPException:
+             # If we want to do something in case of errors we'd do it here.
+             pass
+
 bot.run(token=open("bot.token").read()[:-1])
