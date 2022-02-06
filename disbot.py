@@ -100,7 +100,6 @@ async def invasion(
 
     # Filtrage du roster avec les joueurs séléctionnés
     roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
-    print(roster)
 
     strat='Strat_principale'
     # Récupération de la strat
@@ -127,6 +126,86 @@ async def invasion(
     embed.color = 2003199
     embed.set_thumbnail(url=img_url)
     await ctx.send(embed=embed, delete_after=60*25)
+
+@bot.slash_command(
+    description="Vérification du Gdoc et mise à jour des rôles",
+    scope=906630964703289434,
+)
+async def verif(ctx):
+    """ Attribue les rôles
+    """
+
+    guild = ctx.guild
+    lead_role = guild.get_role(config["ids"]["leads"])
+
+    # Récupération des donénes du Gdoc roster
+    roster_df = get_roster(config)
+    roster = list(roster_df.index)
+
+    members = {dtag(m): m for m in guild.members}
+
+    role = guild.get_role(config["ids"]["role"])
+    verified = [dtag(m) for m in role.members]
+
+    added = []
+    wrong = []
+    for u in roster:
+       if u not in members:
+           wrong += [u]
+       elif u not in verified:
+           if role is None:
+               # Make sure the role still exists and is valid.
+               return
+
+           try:
+               # Finally, add the role.
+               await members[u].add_roles(role)
+               added += [u]
+           except discord.HTTPException:
+               # If we want to do something in case of errors we'd do it here.
+               pass
+
+    removed = []
+    for u in verified:
+        if u not in roster:
+            try:
+                # Finally, remove the role.
+                await members[u].remove_roles(role)
+                removed += [u]
+
+                # Send DM to user
+                embed = Embed.from_dict(config["embeds"]["change"])
+                embed.description += f'{config["gdoc"]["form"]}) ***!***'
+                await members[u].send(embed=embed)
+            except discord.HTTPException:
+                # If we want to do something in case of errors we'd do it here.
+                pass
+
+    def list_to_field(l):
+        f = 'aucun'
+        if l:
+            f = ''
+            for u in l:
+                f += u + '\n'
+        if len(f)>1023:
+            return f[:1000]+'...'
+        return f
+
+    def add_IG(l, roster_df):
+        return [f"{i} | {roster_df.loc[i]['Pseudo IG']}" for i in l]
+    wrong = add_IG(wrong, roster_df)
+    added = add_IG(added, roster_df)
+    embed = Embed()
+    embed.title = f'Vérification du gdoc'
+    embed.color = 2003199
+    #embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+
+    embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
+    embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
+    embed.add_field(name=f"Joueurs ayant changé de Discord tag (rôle {role} supprimé)", value=list_to_field(removed), inline=False)
+    await ctx.channel.send(embed=embed, delete_after=20*60)
+    #print(added, wrong)
+
 
 @bot.event
 async def on_reaction_add(reaction, user):
