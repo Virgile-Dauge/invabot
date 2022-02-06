@@ -169,7 +169,10 @@ d'une arme haut niveau/particulière.
    },
    "gdoc": {
        "url": "https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/",
-       "strats": ["Strat_principale","Strat_secours"],
+       "strats": {
+           "Principale": "Strat_principale",
+           "Secours": "Strat_secours"
+       },
        "page_roster": "Roster",
        "form": "https://forms.gle/G9LizybajjVxCw6JA"
    }
@@ -756,16 +759,20 @@ https://discord-interactions.readthedocs.io/en/latest/index.html
   <<get_roster>>
   <<config>>
 
-  bot = commands.Bot(
-      intents=disnake.Intents().all(),
-      test_guilds=[906630964703289434], # Optional
-      sync_commands_debug=True
-  )
+  def main():
+      bot = commands.Bot(
+          intents=disnake.Intents().all(),
+          test_guilds=[906630964703289434], # Optional
+          sync_commands_debug=True
+      )
+      <<dis_inva_cmd>>
+      <<dis_verif>>
+      <<on_reaction>>
+      bot.run(token=open("bot.token").read()[:-1])
 
-  <<dis_inva_cmd>>
-  <<dis_verif>>
-  <<on_reaction>>
-  bot.run(token=open("bot.token").read()[:-1])
+  if __name__ == "__main__":
+      main()
+
 #+end_src
 
 ** Commande inva
@@ -784,9 +791,18 @@ https://discord-interactions.readthedocs.io/en/latest/index.html
       return [dtag(u) for u in selected][1:]
 
   class CompTrigger(disnake.ui.View):
+      options = [disnake.SelectOption(label=k, value=v) for k, v in config['gdoc']['strats'].items()]
+      options[0].default = True
       def __init__(self, origin, **kwargs):
           super().__init__(**kwargs)
           self.origin = origin
+          self.strat = config['gdoc']['strats']['Principale']
+
+      @disnake.ui.select(options=options)
+      async def compo(self, select: disnake.ui.Select, inter: disnake.MessageInteraction):
+          self.strat=select.values[0]
+          await inter.response.defer()
+
       @disnake.ui.button(label='CB', style=disnake.ButtonStyle.secondary)
       async def cb(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
           #msg = await inter.original_message()
@@ -799,10 +815,13 @@ https://discord-interactions.readthedocs.io/en/latest/index.html
               print(inter.response.is_done())
           else:
               await inter.edit_original_message(content=f'{len(selected)} Joueurs enregistrés')
+
       @disnake.ui.button(label='Composition', style=disnake.ButtonStyle.blurple)
-      async def trigger(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+      async def trigger(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
           #await interaction.delete_original_message()
+          await inter.response.defer()
           self.stop()
+
 
   @bot.slash_command(
       description="Création du panneau d'inscription",
@@ -849,7 +868,8 @@ https://discord-interactions.readthedocs.io/en/latest/index.html
       # Filtrage du roster avec les joueurs séléctionnés
       roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
 
-      strat='Strat_principale'
+      strat=trigger.strat
+
       # Récupération de la strat
       url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={strat}"
 
