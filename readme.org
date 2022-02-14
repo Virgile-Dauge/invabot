@@ -201,6 +201,36 @@ d'une arme haut niveau/particulière.
        config = json.load(datafile)
  #+end_src
 
+ #+begin_src python :tangle bot.py
+   # Chargement de la config du bot
+   import json
+   with open('config.json', 'r') as datafile:
+       config = json.load(datafile)
+ #+end_src
+
+*** Persistance
+
+ Le chargement des données
+#+name: data
+ #+begin_src python
+  # Chargement de la config du bot
+  def load_data(path='data.json'):
+      with open(path, 'r') as datafile:
+          return json.load(datafile)
+  def save_data(data, path='data.json'):
+      with open(path, 'w') as datafile:
+          json.dump(data, datafile, sort_keys=True, indent=4)
+  def add_participation(participants):
+      #print(participants)
+      data = load_data()
+      for p in participants:
+          if p in data:
+              data[p] +=1
+          else:
+              data[p] = 1
+      #print(data)
+      save_data(data)
+ #+end_src
 *** Chargement du token
 #+Name: token
  #+begin_src python :tangle bot.py
@@ -766,13 +796,13 @@ https://discord-interactions.readthedocs.io/en/latest/index.html
           sync_commands_debug=True
       )
       <<dis_inva_cmd>>
+      <<data>>
       <<dis_verif>>
       <<on_reaction>>
       bot.run(token=open("bot.token").read()[:-1])
 
   if __name__ == "__main__":
       main()
-
 #+end_src
 
 ** Commande inva
@@ -867,6 +897,8 @@ https://discord-interactions.readthedocs.io/en/latest/index.html
 
       # Filtrage du roster avec les joueurs séléctionnés
       roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
+
+      add_participation(roster.index)
 
       strat=trigger.strat
 

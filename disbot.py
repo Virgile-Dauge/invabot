@@ -113,6 +113,8 @@ def main():
         # Filtrage du roster avec les joueurs séléctionnés
         roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
     
+        add_participation(roster.index)
+    
         strat=trigger.strat
     
         # Récupération de la strat
@@ -140,6 +142,23 @@ def main():
         embed.set_thumbnail(url=img_url)
         await ctx.send(embed=embed, delete_after=60*25)
     
+    # Chargement de la config du bot
+    def load_data(path='data.json'):
+        with open(path, 'r') as datafile:
+            return json.load(datafile)
+    def save_data(data, path='data.json'):
+        with open(path, 'w') as datafile:
+            json.dump(data, datafile, sort_keys=True, indent=4)
+    def add_participation(participants):
+        #print(participants)
+        data = load_data()
+        for p in participants:
+            if p in data:
+                data[p] +=1
+            else:
+                data[p] = 1
+        #print(data)
+        save_data(data)
     @bot.slash_command(
         description="Vérification du Gdoc et mise à jour des rôles",
         scope=906630964703289434,
