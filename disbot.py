@@ -23,12 +23,55 @@ def main():
         test_guilds=[906630964703289434], # Optional
         sync_commands_debug=True
     )
+    # Chargement de la config du bot
+    def load_data(path='data.json'):
+        with open(path, 'r') as datafile:
+            return json.load(datafile)
+    def save_data(data, path='data.json'):
+        with open(path, 'w') as datafile:
+            json.dump(data, datafile, sort_keys=True, indent=4)
+    def add_participation(participants):
+        #print(participants)
+        data = load_data()
+        for p in participants:
+            if p in data:
+                data[p] +=1
+            else:
+                data[p] = 1
+        #print(data)
+        save_data(data)
+    
+    async def autocomp_sources(ctx: disnake.ApplicationCommandInteraction, user_input: str):
+        voices = [v for v in ctx.guild.voice_channels if v.members]
+        return [v.name for v in voices if v.name.lower().startswith(user_input.lower())]
+    
+    async def autocomp_destinations(ctx: disnake.ApplicationCommandInteraction, user_input: str):
+        voices = ctx.guild.voice_channels
+        return [v.name for v in voices if v.name.lower().startswith(user_input.lower())]
+        #return [ville for ville in villes if user_input.lower() in ville]
+    @bot.slash_command()
+    async def transfert(ctx: disnake.ApplicationCommandInteraction,
+                        source: str=commands.Param(autocomplete=autocomp_sources),
+                        destination: str=commands.Param(autocomplete=autocomp_destinations)):
+        """Déplace les joueurs d'un salon vocal source à un salon destinatoin
+    
+            Parameters
+            ----------
+            source: La ville où se déroule l'invasion
+            destination: La ville où se déroule l'invasion
+        """
+        voices = {v.name: v for v in ctx.guild.voice_channels}
+        dest = voices[destination]
+        users = voices[source].members
+        [await u.move_to(dest) for u in users]
+        await ctx.send(content=f'{len(users)} Utilisateurs déplacés dans le salon ***{destination}***', ephemeral=True)
+    
     villes = ["Bief de Nérécaille", "Boisclair", "Eaux Fétides", "Gré du vent",
               "Ile des Lames", "Levant", "Haute-Chute", "Marais des Trames",
               "Rive tourmentée", "Val des Larmes", "Falaise du roy"]
     
     async def autocomp_villes(inter: disnake.ApplicationCommandInteraction, user_input: str):
-        return [ville for ville in villes if user_input.lower() in ville]
+        return [ville for ville in villes if ville.lower().startswith(user_input.lower())]
     
     async def tags_from_id(ctx, msg_id):
         msg = await ctx.channel.fetch_message(msg_id)
@@ -69,13 +112,16 @@ def main():
     
     
     @bot.slash_command(
-        description="Création du panneau d'inscription",
         scope=906630964703289434,
     )
     async def invasion(
             ctx: disnake.ApplicationCommandInteraction,
             ville: str=commands.Param(autocomplete=autocomp_villes)):
-        """ Génére un tableau d'inscription dans le channel
+        """ Génére un tableau d'inscription dans le channel actuel
+    
+            Parameters
+            ----------
+            ville: La ville où se déroule l'invasion
         """
     
         embed = Embed(
@@ -142,23 +188,6 @@ def main():
         embed.set_thumbnail(url=img_url)
         await ctx.send(embed=embed, delete_after=60*25)
     
-    # Chargement de la config du bot
-    def load_data(path='data.json'):
-        with open(path, 'r') as datafile:
-            return json.load(datafile)
-    def save_data(data, path='data.json'):
-        with open(path, 'w') as datafile:
-            json.dump(data, datafile, sort_keys=True, indent=4)
-    def add_participation(participants):
-        #print(participants)
-        data = load_data()
-        for p in participants:
-            if p in data:
-                data[p] +=1
-            else:
-                data[p] = 1
-        #print(data)
-        save_data(data)
     @bot.slash_command(
         description="Vérification du Gdoc et mise à jour des rôles",
         scope=906630964703289434,
