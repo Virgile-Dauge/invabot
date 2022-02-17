@@ -46,13 +46,18 @@ def build_comp(roster, strat, config):
             filed_roles[v] += [k]
     
     comp = strat.copy()
+    num_arti = 1
     for i, row in comp.iterrows():
         for j, v in row.items():
             if v in filed_roles and filed_roles[v]:
                 p = filed_roles[v].pop()
                 role_txt = comp.at[i, j]
                 if role_txt in config['doc']:
-                    role_txt = f"[{role_txt}]({config['doc'][role_txt]})"
+                    if role_txt == 'Artilleur':
+                        role_txt = f"[Artilleur A{num_arti} ]({config['doc'][role_txt]})"
+                        num_arti += 1
+                    else:
+                        role_txt = f"[role_txt]({config['doc'][role_txt]})"
                 comp.at[i, j] = f'{p} *{role_txt}* {roster.at[p, v] / max_roles[v]:.1f}'
     return comp
 
