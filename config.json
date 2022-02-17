@@ -4,15 +4,7 @@
     "leads": 928316217297612810
 },
 "doc":{
-    "Arc": "https://virgile-dauge.github.io/invabot/#org8c491a8",
-    "Mousquet": "https://virgile-dauge.github.io/invabot/#orgb231e28",
-    "Anti-Trash": "https://virgile-dauge.github.io/invabot/#org225c284",
-    "DPS-Debuff": "https://virgile-dauge.github.io/invabot/#org278d923",
-    "Pustule Boy": "https://virgile-dauge.github.io/invabot/#orgc63d37d",
-    "Réparateur": "https://virgile-dauge.github.io/invabot/#org070ef35",
-    "Artilleur": "https://virgile-dauge.github.io/invabot/#orgea113af",
-    "Heal": "https://virgile-dauge.github.io/invabot/#org76b2a6b",
-    "Mage AOE": "https://virgile-dauge.github.io/invabot/#orgc3f8667"
+    "url": "https://virgile-dauge.github.io/invabot/"
 },
 "imgs": {
     "layout": "https://cdn.discordapp.com/attachments/917547596640296990/922901028519706674/layout.png"
