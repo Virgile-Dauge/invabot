@@ -113,6 +113,7 @@ d'une arme haut niveau/particulière.
   Gantelet de glace pour bloquer les boss
 - *Armure* :: Légère
 
+
 * Bot
 ** Concept :
 
@@ -308,6 +309,9 @@ Récupération du roster de test
       url = f"https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/gviz/tq?tqx=out:csv&sheet={page}"
       return pd.read_csv(url).iloc[0:5, 0:12]
 #+end_src
+
+#+RESULTS:
+: None
 
  Identification des Rôles :
  #+begin_src python :tangle algo.py :noweb yes
