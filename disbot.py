@@ -148,7 +148,8 @@ def main():
     
         selected = await msg.reactions[0].users().flatten()
     
-        selected_tags = [dtag(u) for u in selected][1:]
+        selected_tags = [dtag(u) for u in selected if dtag(u) != 'Invasion#5489']
+        #selected_tags = [dtag(u) for u in selected][1:]
     
         # Récupération des donénes du Gdoc roster
         roster = get_roster(config)
