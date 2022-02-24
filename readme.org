@@ -436,6 +436,14 @@ Remplissage du tableau
           if len(f)>1023:
               return f[:1000]+'...'
           return f
+
+  def unique(l):
+      u = []
+      for r in l:
+          if r not in u:
+              u +=[r]
+      return u
+
   def main():
       bot = commands.Bot(
           intents=disnake.Intents().all(),
@@ -710,12 +718,9 @@ Remplissage du tableau
       # Envoi du message et ajout de la réaction
       await ctx.send(embed=embed)
       msg = await ctx.original_message()
-      unique = []
-      for r in roles:
-          if r not in unique:
-              unique +=[r]
 
-      for r in unique:
+
+      for r in unique(roles):
           await msg.add_reaction(r)
       await msg.add_reaction('✅')
       await msg.add_reaction('❌')
@@ -750,13 +755,13 @@ l'embed du message.
         if not reaction.message.embeds:
             print('pas pour moi')
             return
-        msg_type = reaction.message.embeds[0].footer.text
+        msg_type = reaction.message.embeds[-1].footer.text
 
-        print(user, reaction.message.embeds[0].footer.text)
-        if reaction.message.embeds[0].footer.text == 'Invasion':
+        print(user, reaction.message.embeds[-1].footer.text)
+        if msg_type == 'Invasion':
             await check_user_role(reaction, user)
             return
-        if reaction.message.embeds[0].footer.text == 'Instance':
+        if msg_type == 'Instance':
             await update_instance(reaction, user)
             return
 
@@ -795,6 +800,44 @@ l'embed du message.
 #+begin_src python
   async def update_instance(reaction, user):
       print('instance', reaction, user)
+
+      if reaction.emoji == '✅':
+          #Create vocal and swap users, then
+          await reaction.message.delete()
+          return
+      if reaction.emoji == '❌':
+          await reaction.message.delete()
+          return
+      fields = {e.name: e.value.split('\n') for e in reaction.message.embeds[-1].fields}
+      print('input: ', fields)
+      roles = fields['Rôles']
+      joueurs = fields['Joueurs']
+
+      guild = reaction.message.guild
+      # Le joueur a t-il déjà réagit ?
+      if user.mention in joueurs:
+          # On le supprime de la liste des joueurs en le remplacant par libre
+          # joueurs = list(map(lambda j: j if j !=user.mention else 'libre', joueurs))
+          for i, r in enumerate(roles):
+              if joueurs[i] == user.mention:
+                  joueurs[i] = 'libre'
+                  await reaction.message.remove_reaction(r, user)
+                  break
+          #reaction.message
+
+      for i, r in enumerate(roles):
+          if reaction.emoji == r and joueurs[i] == 'libre':
+              joueurs[i] = user.mention
+              break
+
+      n_libre = sum(x== 'libre' for x in fields['Joueurs'])
+      print('output: ', roles, joueurs, n_libre)
+      embed = reaction.message.embeds[-1]
+      embed.clear_fields()
+      embed.add_field(name="Rôles", value=list_to_field(roles), inline=True)
+      embed.add_field(name="Joueurs", value=list_to_field(joueurs), inline=True)
+      await reaction.message.edit(embed=embed)
+
 #+end_src
 
 
