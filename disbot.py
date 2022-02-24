@@ -63,8 +63,9 @@ def main():
         voices = {v.name: v for v in ctx.guild.voice_channels}
         dest = voices[destination]
         users = voices[source].members
+        await ctx.send(content=f'{len(users)} Utilisateurs vont être déplacés dans le salon ***{destination}***', ephemeral=True)
         [await u.move_to(dest) for u in users]
-        await ctx.send(content=f'{len(users)} Utilisateurs déplacés dans le salon ***{destination}***', ephemeral=True)
+    
     
     villes = ["Bief de Nérécaille", "Boisclair", "Eaux Fétides", "Gré du vent",
               "Ile des Lames", "Levant", "Haute-Chute", "Marais des Trames",
