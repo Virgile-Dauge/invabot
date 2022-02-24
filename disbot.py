@@ -333,22 +333,25 @@ def main():
             except disnake.HTTPException:
                 # If we want to do something in case of errors we'd do it here.
                 ...
-    async def update_instance(reaction, user):
-        print('instance', reaction, user)
+    async def update_instance(reaction, user, add=True):
+        print('instance', add, reaction, reaction.me, user)
     
         if reaction.emoji == '✅':
+            if user != reaction.message.author:
+                return
             #Create vocal and swap users, then
             await reaction.message.delete()
             return
+    
         if reaction.emoji == '❌':
-            await reaction.message.delete()
+            if user == reaction.message.author:
+                await reaction.message.delete()
             return
         fields = {e.name: e.value.split('\n') for e in reaction.message.embeds[-1].fields}
         print('input: ', fields)
         roles = fields['Rôles']
         joueurs = fields['Joueurs']
     
-        guild = reaction.message.guild
         # Le joueur a t-il déjà réagit ?
         if user.mention in joueurs:
             # On le supprime de la liste des joueurs en le remplacant par libre
@@ -357,13 +360,19 @@ def main():
                 if joueurs[i] == user.mention:
                     joueurs[i] = 'libre'
                     await reaction.message.remove_reaction(r, user)
+                    disponibles = [d for d in reaction.message.reactions if d.emoji == r][-1]
+                    # On récupére les utilisateurs en prennat soint de filtrer le bot
+                    disponibles = [user async for user in reaction.users() if user.id != 921326765618643005]
+                    if disponibles:
+                        joueurs[i] = disponibles[0].mention
                     break
             #reaction.message
     
-        for i, r in enumerate(roles):
-            if reaction.emoji == r and joueurs[i] == 'libre':
-                joueurs[i] = user.mention
-                break
+        if add:
+            for i, r in enumerate(roles):
+                if reaction.emoji == r and joueurs[i] == 'libre':
+                    joueurs[i] = user.mention
+                    break
     
         n_libre = sum(x== 'libre' for x in fields['Joueurs'])
         print('output: ', roles, joueurs, n_libre)
@@ -378,7 +387,6 @@ def main():
          if user == bot.user:
              return
          if not reaction.message.embeds:
-             print('pas pour moi')
              return
          msg_type = reaction.message.embeds[-1].footer.text
     
@@ -388,6 +396,19 @@ def main():
              return
          if msg_type == 'Instance':
              await update_instance(reaction, user)
+             return
+    
+    @bot.event
+    async def on_reaction_remove(reaction, user):
+         if user == bot.user:
+             return
+         if not reaction.message.embeds:
+             return
+         msg_type = reaction.message.embeds[-1].footer.text
+         if msg_type == 'Invasion':
+             return
+         if msg_type == 'Instance':
+             await update_instance(reaction, user, add=False)
              return
     
     bot.run(token=open("bot.token").read()[:-1])
