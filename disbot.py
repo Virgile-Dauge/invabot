@@ -16,7 +16,15 @@ def get_roster(config):
 import json
 with open('config.json', 'r') as datafile:
     config = json.load(datafile)
-
+def list_to_field(l):
+    f = 'aucun'
+    if l:
+        f = ''
+        for u in l:
+            f += u + '\n'
+        if len(f)>1023:
+            return f[:1000]+'...'
+        return f
 def main():
     bot = commands.Bot(
         intents=disnake.Intents().all(),
@@ -130,7 +138,7 @@ def main():
             color=2003199,
             description="Réagis avec :ballot_box_with_check: à ce message **uniquement si tu es déjà dans le fort**. Attention, retourne vite en jeu, l'auto-AFK kick est rapide (2min). \n\n Si tu as réagi par erreur, merci de décocher ta réaction. :wink:",
         )
-        #embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
+        embed.set_footer(text='Invasion')
     
         # Envoi du message et ajout de la réaction
         await ctx.send(embed=embed)
@@ -190,6 +198,39 @@ def main():
         embed.set_thumbnail(url=img_url)
         await ctx.send(embed=embed, delete_after=60*25)
     
+    lieux = ["Lazarus", "Gènese", "Sirène"]
+    
+    async def autocomp_lieux(inter: disnake.ApplicationCommandInteraction, user_input: str):
+        return [l for l in lieux if l.lower().startswith(user_input.lower())]
+    
+    @bot.slash_command()
+    async def instance(ctx: disnake.ApplicationCommandInteraction,
+                       lieu: str=commands.Param(autocomplete=autocomp_lieux)):
+        """Crée un panneau d'inscription à une instance
+    
+            Parameters
+            ----------
+            lieu: La ville où se déroule l'invasion
+        """
+        embed = Embed()
+        embed.title = f'Instance {lieu}'
+        embed.description = f'Proposée par {ctx.user.mention}'
+        embed.color = 2003199
+    
+        roles = ['🛡', '⚔', '⚔', '⚔','⛑']
+        players = ['libre']*len(roles)
+        embed.add_field(name="Rôles", value=list_to_field(roles), inline=True)
+        embed.add_field(name="Joueurs", value=list_to_field(players), inline=True)
+        embed.set_footer(text='Instance')
+        # Envoi du message et ajout de la réaction
+        await ctx.send(embed=embed)
+        msg = await ctx.original_message()
+        for r in set(roles):
+            await msg.add_reaction(r)
+        await msg.add_reaction('✅')
+        await msg.add_reaction('❌')
+    
+    
     @bot.slash_command(
         description="Vérification du Gdoc et mise à jour des rôles",
         scope=906630964703289434,
@@ -244,16 +285,6 @@ def main():
                     # If we want to do something in case of errors we'd do it here.
                     pass
     
-        def list_to_field(l):
-            f = 'aucun'
-            if l:
-                f = ''
-                for u in l:
-                    f += u + '\n'
-            if len(f)>1023:
-                return f[:1000]+'...'
-            return f
-    
         def add_IG(l, roster_df):
             return [f"{i} | {roster_df.loc[i]['Pseudo IG']}" for i in l]
         wrong = add_IG(wrong, roster_df)
@@ -270,35 +301,46 @@ def main():
         #print(added, wrong)
     
     
+    async def check_user_role(reaction, user):
+        # Récupération des donénes du Gdoc roster
+        df = get_roster(config)
+        if dtag(user) not in df.index:
+            embed = Embed.from_dict(config["embeds"]["dm"])
+            embed.description += f'{config["gdoc"]["form"]}) ***!***'
+            try:
+                await user.send(embed=embed)
+            except disnake.errors.HTTPException as e:
+                pass
+        else:
+            guild = reaction.message.guild
+            role = guild.get_role(config["ids"]["role"])
+    
+            await user.edit(nick=df.at[dtag(user), "Pseudo IG"])
+            if role is None:
+                # Make sure the role still exists and is valid.
+                return
+            try:
+                # Finally, add the role.
+                await user.add_roles(role)
+            except disnake.HTTPException:
+                # If we want to do something in case of errors we'd do it here.
+                ...
     @bot.event
     async def on_reaction_add(reaction, user):
          if user == bot.user:
              return
-         print(user)
-         # Récupération des donénes du Gdoc roster
-         df = get_roster(config)
-         if dtag(user) not in df.index:
-             embed = Embed.from_dict(config["embeds"]["dm"])
-             embed.description += f'{config["gdoc"]["form"]}) ***!***'
-             try:
-                 await user.send(embed=embed)
-             except disnake.errors.HTTPException as e:
-                 pass
-         else:
-             guild = reaction.message.guild
-             role = guild.get_role(config["ids"]["role"])
+         if not reaction.message.embeds:
+             print('pas pour moi')
+             return
+         msg_type = reaction.message.embeds[0].footer.text
     
-             await user.edit(nick=df.at[dtag(user), "Pseudo IG"])
-             if role is None:
-                 # Make sure the role still exists and is valid.
-                 return
-    
-             try:
-                 # Finally, add the role.
-                 await user.add_roles(role)
-             except disnake.HTTPException:
-                 # If we want to do something in case of errors we'd do it here.
-                 pass
+         print(user, reaction.message.embeds[0].footer.text)
+         if reaction.message.embeds[0].footer.text == 'Invasion':
+             await check_user_role(reaction, user)
+             return
+         if reaction.message.embeds[0].footer.text == 'Instance':
+             await update_instance(reaction, user)
+             return
     
     bot.run(token=open("bot.token").read()[:-1])
 
