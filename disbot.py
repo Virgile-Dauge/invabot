@@ -225,12 +225,15 @@ def main():
         # Envoi du message et ajout de la réaction
         await ctx.send(embed=embed)
         msg = await ctx.original_message()
-        for r in set(roles):
+        unique = []
+        for r in roles:
+            if r not in unique:
+                unique +=[r]
+    
+        for r in unique:
             await msg.add_reaction(r)
         await msg.add_reaction('✅')
         await msg.add_reaction('❌')
-    
-    
     @bot.slash_command(
         description="Vérification du Gdoc et mise à jour des rôles",
         scope=906630964703289434,
@@ -325,6 +328,8 @@ def main():
             except disnake.HTTPException:
                 # If we want to do something in case of errors we'd do it here.
                 ...
+    async def update_instance(reaction, user):
+        print('instance', reaction, user)
     @bot.event
     async def on_reaction_add(reaction, user):
          if user == bot.user:
