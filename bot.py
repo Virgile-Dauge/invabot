@@ -236,16 +236,25 @@ def main():
     
     @bot.slash_command()
     async def instance(ctx: disnake.ApplicationCommandInteraction,
-                       lieu: str=commands.Param(autocomplete=autocomp_lieux)):
+                       lieu: str=commands.Param(autocomplete=autocomp_lieux),
+                       heure: str=commands.Param(default=None),
+                       prix: str=commands.Param(default=None)):
         """Crée un panneau d'inscription à une instance
     
             Parameters
             ----------
-            lieu: La ville où se déroule l'invasion
+            lieu: La ville où se déroule l'instance
+            heure: L'heure à laquelle se déroule l'instance
+            prix: Le prix par personne, gratuit c'est cool aussi ;)
         """
         embed = Embed()
         embed.title = f'Instance {lieu}'
-        embed.description = f'Proposée par {ctx.user.mention}'
+        embed.description = ''
+        if heure:
+            embed.description += f' 🕐 {heure}\n'
+        if prix:
+            embed.description += f' 💰 {prix}\n'
+        embed.description += f'Proposée par {ctx.user.mention}\n'
         embed.color = 2003199
     
         roles = ['🛡', '⚔', '⚔', '⚔','⛑']
