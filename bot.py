@@ -395,32 +395,25 @@ def main():
         await update_instance_embed(reaction, roles, joueurs)
     
     
-    
     async def update_instance_rm(reaction, user):
         roles, joueurs = instance_data(reaction)
         # Le joueur est-il séléctionné ?
         if user.mention in joueurs:
             # On le supprime de la liste des joueurs en le remplacant par libre
-            # joueurs = list(map(lambda j: j if j !=user.mention else 'libre', joueurs))
             for i, r in enumerate(roles):
                 if joueurs[i] == user.mention and r==reaction.emoji:
                     joueurs[i] = 'libre'
-    
-                    disponibles = [d for d in reaction.message.reactions if d.emoji == r][-1]
-                    # On récupére les utilisateurs en prennat soint de filtrer le bot
-                    disponibles = [u async for u in reaction.users() if u.id != 921326765618643005 and u.mention not in joueurs]
-                    if disponibles:
-                        joueurs[i] = disponibles[0].mention
-                        ...
                     break
     
-        n_libre = sum(x== 'libre' for x in joueurs)
-        print('output: ', roles, joueurs, n_libre)
-        embed = reaction.message.embeds[-1]
-        embed.clear_fields()
-        embed.add_field(name="Rôles", value=list_to_field(roles), inline=True)
-        embed.add_field(name="Joueurs", value=list_to_field(joueurs), inline=True)
-        await reaction.message.edit(embed=embed)
+            for i, r in enumerate(roles):
+                if joueurs[i] == 'libre':
+                    disponibles = [d for d in reaction.message.reactions if d.emoji == r][-1]
+                    # On récupére les utilisateurs en prennat soint de filtrer le bot
+                    disponibles = [u for u in await disponibles.users().flatten() if u != bot.user and u.mention not in joueurs]
+                    if disponibles:
+                        joueurs[i] = disponibles[0].mention
+    
+        await update_instance_embed(reaction, roles, joueurs)
     
     @bot.event
     async def on_reaction_add(reaction, user):
