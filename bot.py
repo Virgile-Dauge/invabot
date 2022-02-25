@@ -349,6 +349,13 @@ def main():
         #print(added, wrong)
     
     
+    async def update_invasion(reaction):
+        selected = await reaction.message.reactions[0].users().flatten()
+        embed = reaction.message.embeds[-1]
+        embed.clear_fields()
+        embed.add_field(name="Enregistrés :", value=len(selected)-1, inline=True)
+        await reaction.message.edit(embed=embed)
+    
     async def check_user_role(reaction, user):
         # Récupération des donénes du Gdoc roster
         df = get_roster(config)
@@ -362,6 +369,8 @@ def main():
         else:
             guild = reaction.message.guild
             role = guild.get_role(config["ids"]["role"])
+    
+            await update_invasion(reaction)
     
             await user.edit(nick=df.at[dtag(user), "Pseudo IG"])
             if role is None:
@@ -453,6 +462,7 @@ def main():
              return
          msg_type = reaction.message.embeds[-1].footer.text
          if msg_type == 'Invasion':
+             await update_invasion(reaction)
              return
          if msg_type == 'Instance':
              await update_instance_rm(reaction, user)
