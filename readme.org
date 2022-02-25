@@ -575,7 +575,15 @@ Remplissage du tableau
       img_url = page.iat[5, 1]
 
       comp = build_comp(roster, strat_df, config)
-      <<gen_embed>>
+      def gen_embed(comp):
+          e = Embed(title="Composition d'armée")
+          for k, v in comp.iteritems():
+              f = ''
+              for p in v.to_list():
+                  f += str(p) + '\n'
+              e.add_field(name=k, value=f, inline=True)
+          return e
+
       embed = gen_embed(comp)
       embed.title = f"Invasion de {ville}, {strat} :"
       #embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
