@@ -140,19 +140,6 @@ def main():
             self.strat=select.values[0]
             await inter.response.defer()
     
-        @disnake.ui.button(label='CB', style=disnake.ButtonStyle.secondary)
-        async def cb(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
-            #msg = await inter.original_message()
-            #print(inter.message.id, inter.response.is_done(), msg)
-            selected = await tags_from_id(inter, self.origin)
-            print(inter.response.is_done())
-            #await interaction.edit_original_message(content=f'{len(selected)} Joueurs enregistrés')
-            if not inter.response.is_done():
-                await inter.response.send_message(content=f'{len(selected)} Joueurs enregistrés')
-                print(inter.response.is_done())
-            else:
-                await inter.edit_original_message(content=f'{len(selected)} Joueurs enregistrés')
-    
         @disnake.ui.button(label='Composition', style=disnake.ButtonStyle.blurple)
         async def trigger(self, button: disnake.ui.Button, inter: disnake.MessageInteraction):
             #await interaction.delete_original_message()

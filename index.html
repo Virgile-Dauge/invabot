@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-02-25 ven. 16:28 -->
+<!-- 2022-02-25 ven. 18:33 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Invabot</title>
@@ -230,55 +230,55 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org2d51229">1. Documentation des rôles</a>
+<li><a href="#orgc6199e3">1. Documentation des rôles</a>
 <ul>
-<li><a href="#orgd5e27a7">1.1. Arc</a></li>
-<li><a href="#org943d788">1.2. Mousquet</a></li>
-<li><a href="#orga927242">1.3. Anti-Trash</a></li>
-<li><a href="#org03b5481">1.4. DPS debuff</a></li>
-<li><a href="#orgb01bd2c">1.5. Pustule boy</a></li>
-<li><a href="#org9096513">1.6. Réparateur</a></li>
-<li><a href="#org3ded03e">1.7. Artilleur</a></li>
-<li><a href="#org09a74e3">1.8. Heal</a></li>
-<li><a href="#org2040078">1.9. Mage AOE</a></li>
+<li><a href="#orga4bc8ae">1.1. Arc</a></li>
+<li><a href="#org16eee8f">1.2. Mousquet</a></li>
+<li><a href="#org9c99e8a">1.3. Anti-Trash</a></li>
+<li><a href="#orgaeca051">1.4. DPS debuff</a></li>
+<li><a href="#org133aff6">1.5. Pustule boy</a></li>
+<li><a href="#org9e1fca2">1.6. Réparateur</a></li>
+<li><a href="#org5f77394">1.7. Artilleur</a></li>
+<li><a href="#orgc98048f">1.8. Heal</a></li>
+<li><a href="#org18ce67d">1.9. Mage AOE</a></li>
 </ul>
 </li>
-<li><a href="#org8884904">2. Bot</a>
+<li><a href="#orgec9cdcf">2. Bot</a>
 <ul>
-<li><a href="#orgcdbb35a">2.1. Concept :</a></li>
-<li><a href="#org1f6bbaa">2.2. Configuration</a></li>
-<li><a href="#org7b7fd66">2.3. Utilitaires</a>
+<li><a href="#org4884f7e">2.1. Concept :</a></li>
+<li><a href="#org961d081">2.2. Configuration</a></li>
+<li><a href="#orgec28790">2.3. Utilitaires</a>
 <ul>
-<li><a href="#orgfe4483d">2.3.1. Dépendances</a></li>
-<li><a href="#org03bca2c">2.3.2. Chargement de la config</a></li>
-<li><a href="#orgfd88f69">2.3.3. Persistance</a></li>
-<li><a href="#orgf60f325">2.3.4. Chargement du token</a></li>
-<li><a href="#orga5133c2">2.3.5. Identifiant</a></li>
-<li><a href="#org1d5af72">2.3.6. Récupération du roster</a></li>
-<li><a href="#org46b8150">2.3.7. Récupération de la strat</a></li>
+<li><a href="#org4b2d6ab">2.3.1. Dépendances</a></li>
+<li><a href="#org692cbb1">2.3.2. Chargement de la config</a></li>
+<li><a href="#orgbce9a73">2.3.3. Persistance</a></li>
+<li><a href="#org34ee8d9">2.3.4. Chargement du token</a></li>
+<li><a href="#orgac0016b">2.3.5. Identifiant</a></li>
+<li><a href="#org4fb6c4e">2.3.6. Récupération du roster</a></li>
+<li><a href="#org4e5eaa4">2.3.7. Récupération de la strat</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgeaf50fe">3. Algo</a>
+<li><a href="#orgfe493e6">3. Algo</a>
 <ul>
-<li><a href="#org0e393bb">3.1. Test algo</a></li>
+<li><a href="#org48f80ec">3.1. Test algo</a></li>
 </ul>
 </li>
-<li><a href="#orgb6ac720">4. <span class="todo TODO">TODO</span> bot avec Disnake</a>
+<li><a href="#orgbdeece3">4. <span class="todo TODO">TODO</span> bot avec Disnake</a>
 <ul>
-<li><a href="#orgeccd582">4.1. Corp</a></li>
-<li><a href="#org2160a08">4.2. Commande inva</a></li>
-<li><a href="#orgd80f999">4.3. Commande verif</a></li>
-<li><a href="#orgecd4efa">4.4. Commande transfert</a></li>
-<li><a href="#org50ec56d">4.5. Commande Instance</a></li>
-<li><a href="#org6fdafdd">4.6. Gestion des réactions aux messages</a>
+<li><a href="#org5605469">4.1. Corp</a></li>
+<li><a href="#org9ae4873">4.2. Commande inva</a></li>
+<li><a href="#org2eb5c46">4.3. Commande verif</a></li>
+<li><a href="#org528a2de">4.4. Commande transfert</a></li>
+<li><a href="#orgd9a35f7">4.5. Commande Instance</a></li>
+<li><a href="#org646d9aa">4.6. Gestion des réactions aux messages</a>
 <ul>
-<li><a href="#org9ee38e8">4.6.1. On reaction add</a></li>
-<li><a href="#org7722894">4.6.2. On reaction remove</a></li>
-<li><a href="#org350506d">4.6.3. On s'assure que le joueur soit enregistré</a></li>
-<li><a href="#org6fa1a0f">4.6.4. Gestion ajout réaction message Instance</a></li>
-<li><a href="#org7db20d9">4.6.5. Gestion annulation réaction message Instance</a></li>
+<li><a href="#orgba7598a">4.6.1. On reaction add</a></li>
+<li><a href="#org3189e15">4.6.2. On reaction remove</a></li>
+<li><a href="#org26b2d13">4.6.3. On s'assure que le joueur soit enregistré</a></li>
+<li><a href="#org318c6a3">4.6.4. Gestion ajout réaction message Instance</a></li>
+<li><a href="#org9ea82ab">4.6.5. Gestion annulation réaction message Instance</a></li>
 </ul>
 </li>
 </ul>
@@ -287,8 +287,8 @@
 </div>
 </div>
 
-<div id="outline-container-org2d51229" class="outline-2">
-<h2 id="org2d51229"><span class="section-number-2">1.</span> Documentation des rôles</h2>
+<div id="outline-container-orgc6199e3" class="outline-2">
+<h2 id="orgc6199e3"><span class="section-number-2">1.</span> Documentation des rôles</h2>
 <div class="outline-text-2" id="text-1">
 <script async src="https://nwdb.info/embed.js"></script>
 <p>
@@ -309,8 +309,8 @@ Un joueur peut s'estimer :
 </dl>
 </div>
 
-<div id="outline-container-orgd5e27a7" class="outline-3">
-<h3 id="orgd5e27a7"><span class="section-number-3">1.1.</span> Arc</h3>
+<div id="outline-container-orga4bc8ae" class="outline-3">
+<h3 id="orga4bc8ae"><span class="section-number-3">1.1.</span> Arc</h3>
 <div class="outline-text-3" id="text-1-1">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>DPS les <b>têtes</b>, les <b>boss</b>, les engins de sièges et
@@ -326,8 +326,8 @@ Empowered</a> <b><i>(recommandé)</i></b>. <a href="https://nwdb.info/build?skil
 </div>
 </div>
 
-<div id="outline-container-org943d788" class="outline-3">
-<h3 id="org943d788"><span class="section-number-3">1.2.</span> Mousquet</h3>
+<div id="outline-container-org16eee8f" class="outline-3">
+<h3 id="org16eee8f"><span class="section-number-3">1.2.</span> Mousquet</h3>
 <div class="outline-text-3" id="text-1-2">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>DPS les <b>têtes</b> et les <b>boss</b>, dans cet ordre de priorité.</dd>
@@ -339,8 +339,8 @@ Stance</a> <b><i>(recommandé)</i></b>.</dd>
 </div>
 </div>
 
-<div id="outline-container-orga927242" class="outline-3">
-<h3 id="orga927242"><span class="section-number-3">1.3.</span> Anti-Trash</h3>
+<div id="outline-container-org9c99e8a" class="outline-3">
+<h3 id="org9c99e8a"><span class="section-number-3">1.3.</span> Anti-Trash</h3>
 <div class="outline-text-3" id="text-1-3">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Empêcher les <b>trash-mobs</b> d'atteindre les autres joueurs et les portes.</dd>
@@ -356,8 +356,8 @@ quelques pièces <b><i>(recommandé)</i></b></dd>
 </div>
 </div>
 
-<div id="outline-container-org03b5481" class="outline-3">
-<h3 id="org03b5481"><span class="section-number-3">1.4.</span> DPS debuff</h3>
+<div id="outline-container-orgaeca051" class="outline-3">
+<h3 id="orgaeca051"><span class="section-number-3">1.4.</span> DPS debuff</h3>
 <div class="outline-text-3" id="text-1-4">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Appliquer <b><i>rend</i></b> et <b><i>weaken</i></b> aux boss et les DPS</dd>
@@ -372,8 +372,8 @@ et pour de la survivabilité <a href="https://nwdb.info/db/perk/perkid_armor_def
 </div>
 </div>
 
-<div id="outline-container-orgb01bd2c" class="outline-3">
-<h3 id="orgb01bd2c"><span class="section-number-3">1.5.</span> Pustule boy</h3>
+<div id="outline-container-org133aff6" class="outline-3">
+<h3 id="org133aff6"><span class="section-number-3">1.5.</span> Pustule boy</h3>
 <div class="outline-text-3" id="text-1-5">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Tirer en <b>priorité sur les pustules</b> qui se forment
@@ -387,8 +387,8 @@ grâce à une meilleure cadence de tir.</dd>
 </div>
 </div>
 
-<div id="outline-container-org9096513" class="outline-3">
-<h3 id="org9096513"><span class="section-number-3">1.6.</span> Réparateur</h3>
+<div id="outline-container-org9e1fca2" class="outline-3">
+<h3 id="org9e1fca2"><span class="section-number-3">1.6.</span> Réparateur</h3>
 <div class="outline-text-3" id="text-1-6">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Gérer les ressources et <b>réparer les portes</b>.</dd>
@@ -404,8 +404,8 @@ d'une arme haut niveau/particulière.
 </div>
 </div>
 
-<div id="outline-container-org3ded03e" class="outline-3">
-<h3 id="org3ded03e"><span class="section-number-3">1.7.</span> Artilleur</h3>
+<div id="outline-container-org5f77394" class="outline-3">
+<h3 id="org5f77394"><span class="section-number-3">1.7.</span> Artilleur</h3>
 <div class="outline-text-3" id="text-1-7">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Tuer les bombers, les tireurs, les artilleries
@@ -422,8 +422,8 @@ d'une arme haut niveau/particulière.
 </p>
 </div>
 </div>
-<div id="outline-container-org09a74e3" class="outline-3">
-<h3 id="org09a74e3"><span class="section-number-3">1.8.</span> Heal</h3>
+<div id="outline-container-orgc98048f" class="outline-3">
+<h3 id="orgc98048f"><span class="section-number-3">1.8.</span> Heal</h3>
 <div class="outline-text-3" id="text-1-8">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>Maintenir l'équipe <b>Anti-trash</b> en vie en priorité
@@ -450,8 +450,8 @@ Gantelet du néant
 </div>
 
 
-<div id="outline-container-org2040078" class="outline-3">
-<h3 id="org2040078"><span class="section-number-3">1.9.</span> Mage AOE</h3>
+<div id="outline-container-org18ce67d" class="outline-3">
+<h3 id="org18ce67d"><span class="section-number-3">1.9.</span> Mage AOE</h3>
 <div class="outline-text-3" id="text-1-9">
 <dl class="org-dl">
 <dt><b>Objectif</b></dt><dd>DPS les <b>boss</b> dans les phases de fin, quand ils
@@ -469,12 +469,12 @@ Gantelet de glace pour bloquer les boss</dd>
 </div>
 
 
-<div id="outline-container-org8884904" class="outline-2">
-<h2 id="org8884904"><span class="section-number-2">2.</span> Bot</h2>
+<div id="outline-container-orgec9cdcf" class="outline-2">
+<h2 id="orgec9cdcf"><span class="section-number-2">2.</span> Bot</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgcdbb35a" class="outline-3">
-<h3 id="orgcdbb35a"><span class="section-number-3">2.1.</span> Concept :</h3>
+<div id="outline-container-org4884f7e" class="outline-3">
+<h3 id="org4884f7e"><span class="section-number-3">2.1.</span> Concept :</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Le bot à pour objectif de générer une composition d'armée à partir des
@@ -483,8 +483,8 @@ Le bot à pour objectif de générer une composition d'armée à partir des
 </div>
 </div>
 
-<div id="outline-container-org1f6bbaa" class="outline-3">
-<h3 id="org1f6bbaa"><span class="section-number-3">2.2.</span> Configuration</h3>
+<div id="outline-container-org961d081" class="outline-3">
+<h3 id="org961d081"><span class="section-number-3">2.2.</span> Configuration</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 La configuration du bot passera par un fichier json unique, contenant
@@ -542,12 +542,12 @@ des Gdoc à lire.
 
 
 
-<div id="outline-container-org7b7fd66" class="outline-3">
-<h3 id="org7b7fd66"><span class="section-number-3">2.3.</span> Utilitaires</h3>
+<div id="outline-container-orgec28790" class="outline-3">
+<h3 id="orgec28790"><span class="section-number-3">2.3.</span> Utilitaires</h3>
 <div class="outline-text-3" id="text-2-3">
 </div>
-<div id="outline-container-orgfe4483d" class="outline-4">
-<h4 id="orgfe4483d"><span class="section-number-4">2.3.1.</span> Dépendances</h4>
+<div id="outline-container-org4b2d6ab" class="outline-4">
+<h4 id="org4b2d6ab"><span class="section-number-4">2.3.1.</span> Dépendances</h4>
 <div class="outline-text-4" id="text-2-3-1">
 <div class="org-src-container">
 <pre class="src src-python">
@@ -558,15 +558,15 @@ des Gdoc à lire.
 </div>
 </div>
 </div>
-<div id="outline-container-org03bca2c" class="outline-4">
-<h4 id="org03bca2c"><span class="section-number-4">2.3.2.</span> Chargement de la config</h4>
+<div id="outline-container-org692cbb1" class="outline-4">
+<h4 id="org692cbb1"><span class="section-number-4">2.3.2.</span> Chargement de la config</h4>
 <div class="outline-text-4" id="text-2-3-2">
 <p>
 Le chargement de cette config se fera pour l'instant une seule fois au
 démarrage du bot.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="orgb4030f9"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement de la config du bot</span>
+<pre class="src src-python" id="org0763052"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement de la config du bot</span>
 <span style="color: #89DDFF;">import</span> json
 <span style="color: #89DDFF;">with</span> <span style="color: #82aaff;">open</span><span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'config.json'</span>, <span style="color: #c3e88d;">'r'</span><span style="color: #c792ea;">)</span> <span style="color: #89DDFF;">as</span> datafile:
     <span style="color: #ffcb6b;">config</span> = json.load<span style="color: #c792ea;">(</span>datafile<span style="color: #c792ea;">)</span>
@@ -583,14 +583,14 @@ démarrage du bot.
 </div>
 </div>
 
-<div id="outline-container-orgfd88f69" class="outline-4">
-<h4 id="orgfd88f69"><span class="section-number-4">2.3.3.</span> Persistance</h4>
+<div id="outline-container-orgbce9a73" class="outline-4">
+<h4 id="orgbce9a73"><span class="section-number-4">2.3.3.</span> Persistance</h4>
 <div class="outline-text-4" id="text-2-3-3">
 <p>
 Le chargement des données
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="orgd3bb1bb"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement de la config du bot</span>
+<pre class="src src-python" id="org45523f9"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement de la config du bot</span>
 <span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">load_data</span><span style="color: #c792ea;">(</span>path=<span style="color: #c3e88d;">'data.json'</span><span style="color: #c792ea;">)</span>:
     <span style="color: #89DDFF;">with</span> <span style="color: #82aaff;">open</span><span style="color: #c792ea;">(</span>path, <span style="color: #c3e88d;">'r'</span><span style="color: #c792ea;">)</span> <span style="color: #89DDFF;">as</span> datafile:
         <span style="color: #89DDFF;">return</span> json.load<span style="color: #c792ea;">(</span>datafile<span style="color: #c792ea;">)</span>
@@ -611,19 +611,19 @@ Le chargement des données
 </div>
 </div>
 </div>
-<div id="outline-container-orgf60f325" class="outline-4">
-<h4 id="orgf60f325"><span class="section-number-4">2.3.4.</span> Chargement du token</h4>
+<div id="outline-container-org34ee8d9" class="outline-4">
+<h4 id="org34ee8d9"><span class="section-number-4">2.3.4.</span> Chargement du token</h4>
 <div class="outline-text-4" id="text-2-3-4">
 <div class="org-src-container">
-<pre class="src src-python" id="org37a327b"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement du token</span>
+<pre class="src src-python" id="orgcb55b7d"><span style="color: #556369;"># </span><span style="color: #556369;">Chargement du token</span>
 <span style="color: #89DDFF;">with</span> <span style="color: #82aaff;">open</span><span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'bot.token'</span>, <span style="color: #c3e88d;">'r'</span><span style="color: #c792ea;">)</span> <span style="color: #89DDFF;">as</span> datafile:
     <span style="color: #ffcb6b;">token</span> = datafile.read<span style="color: #c792ea;">()</span>
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orga5133c2" class="outline-4">
-<h4 id="orga5133c2"><span class="section-number-4">2.3.5.</span> Identifiant</h4>
+<div id="outline-container-orgac0016b" class="outline-4">
+<h4 id="orgac0016b"><span class="section-number-4">2.3.5.</span> Identifiant</h4>
 <div class="outline-text-4" id="text-2-3-5">
 <p>
 Il est nécessaire d'avoir un identifiant unique entre discord et le
@@ -639,25 +639,25 @@ Je propose ici une rapide fonction d'aide pour récupérer le dtag
 depuis un objet <i>discord.User</i> :
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org8d7efa4"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">dtag</span><span style="color: #c792ea;">(</span>user<span style="color: #c792ea;">)</span>:
+<pre class="src src-python" id="orgdd5b769"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">dtag</span><span style="color: #c792ea;">(</span>user<span style="color: #c792ea;">)</span>:
     <span style="color: #89DDFF;">return</span> f<span style="color: #c3e88d;">'{user.name}#{user.discriminator}'</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org1d5af72" class="outline-4">
-<h4 id="org1d5af72"><span class="section-number-4">2.3.6.</span> Récupération du roster</h4>
+<div id="outline-container-org4fb6c4e" class="outline-4">
+<h4 id="org4fb6c4e"><span class="section-number-4">2.3.6.</span> Récupération du roster</h4>
 <div class="outline-text-4" id="text-2-3-6">
 <div class="org-src-container">
-<pre class="src src-python" id="orgda6e90a"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_roster</span><span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>:
+<pre class="src src-python" id="orgc2c182e"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_roster</span><span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>:
     <span style="color: #ffcb6b;">url</span> = f<span style="color: #c3e88d;">"{config['gdoc']['url']}gviz/tq?tqx=out:csv&amp;sheet={config['gdoc']['page_roster']}"</span>
     <span style="color: #556369;">#</span><span style="color: #556369;">return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')</span>
     <span style="color: #89DDFF;">return</span> pd.read_csv<span style="color: #c792ea;">(</span>url<span style="color: #c792ea;">)</span>.set_index<span style="color: #c792ea;">(</span><span style="color: #c3e88d;">'dtag'</span><span style="color: #c792ea;">)</span>
 </pre>
 </div>
 
-<pre class="example" id="orgd859460">
+<pre class="example" id="org6a225fc">
                 Pseudo             0           1     2           3
 dtag
 Chopekk#1234   Chopekk    DPS-Debuff    Mousquet  Heal  Anti-trash
@@ -667,8 +667,8 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 </pre>
 </div>
 </div>
-<div id="outline-container-org46b8150" class="outline-4">
-<h4 id="org46b8150"><span class="section-number-4">2.3.7.</span> Récupération de la strat</h4>
+<div id="outline-container-org4e5eaa4" class="outline-4">
+<h4 id="org4e5eaa4"><span class="section-number-4">2.3.7.</span> Récupération de la strat</h4>
 <div class="outline-text-4" id="text-2-3-7">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">get_strat</span><span style="color: #c792ea;">(</span>config, strat=<span style="color: #f78c6c;">None</span><span style="color: #c792ea;">)</span>:
@@ -680,7 +680,7 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 </pre>
 </div>
 
-<pre class="example" id="orgc937084">
+<pre class="example" id="orge4e9ba8">
      Groupe 1 Groupe 2    Groupe 3 Groupe 4    Groupe 5    Groupe 6    Groupe 7    Groupe 8 Groupe 9     Groupe 10
 0  Anti-Trash      Arc  Anti-Trash      Arc  Anti-Trash    Mousquet  Anti-Trash    Mousquet     Répa  Lance-flamme
 1        Heal      Arc        Heal      Arc        Heal    Mousquet        Heal    Mousquet     Répa  Lance-flamme
@@ -695,8 +695,8 @@ Carlito#4567      Slua    Anti-trash        Arti  Répa       Aucun
 
 
 
-<div id="outline-container-orgeaf50fe" class="outline-2">
-<h2 id="orgeaf50fe"><span class="section-number-2">3.</span> Algo</h2>
+<div id="outline-container-orgfe493e6" class="outline-2">
+<h2 id="orgfe493e6"><span class="section-number-2">3.</span> Algo</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Dépendances
@@ -787,7 +787,7 @@ Création des colonnes avec les noms de rôles, les lignes avec les noms
 de joueurs, et de la matrice de coûts.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="orga9e1968">
+<pre class="src src-python" id="orgaf61354">
 <span style="color: #ffcb6b;">cols</span> = <span style="color: #c792ea;">[</span>k <span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> roles.items<span style="color: #f78c6c;">()</span> <span style="color: #89DDFF;">for</span> _ <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">range</span><span style="color: #f78c6c;">(</span>v<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">]</span>
 <span style="color: #ffcb6b;">rows</span> = roster.index
 
@@ -805,7 +805,7 @@ Résolution du problème d'affectation avec la maximisation suivante :
 \[max \sum_{i} \sum_{j} C_{i,j} X_{i,j}\]
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org1d75fbc">
+<pre class="src src-python" id="org5722b20">
 <span style="color: #ffcb6b;">row_ind</span>, <span style="color: #ffcb6b;">X</span> = linear_sum_assignment<span style="color: #c792ea;">(</span>C, maximize=<span style="color: #f78c6c;">True</span><span style="color: #c792ea;">)</span>
 <span style="color: #ffcb6b;">score</span> = C<span style="color: #c792ea;">[</span>row_ind, X<span style="color: #c792ea;">]</span>.<span style="color: #82aaff;">sum</span><span style="color: #c792ea;">()</span>
 <span style="color: #ffcb6b;">assignent</span> = <span style="color: #c792ea;">{</span>p: cols<span style="color: #f78c6c;">[</span>t<span style="color: #f78c6c;">]</span> <span style="color: #89DDFF;">for</span> p, t <span style="color: #89DDFF;">in</span> <span style="color: #82aaff;">zip</span><span style="color: #f78c6c;">(</span>rows, X<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">}</span>
@@ -827,7 +827,7 @@ Analyse des résultats
 Remplissage du tableau
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org6a65046"><span style="color: #ffcb6b;">filed_roles</span> = <span style="color: #c792ea;">{}</span>
+<pre class="src src-python" id="org2436902"><span style="color: #ffcb6b;">filed_roles</span> = <span style="color: #c792ea;">{}</span>
 <span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> assignent.items<span style="color: #c792ea;">()</span>:
     <span style="color: #556369;">#</span><span style="color: #556369;">print(k, v)</span>
     <span style="color: #89DDFF;">if</span> v <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> filed_roles:
@@ -852,8 +852,8 @@ Remplissage du tableau
 </div>
 </div>
 
-<div id="outline-container-org0e393bb" class="outline-3">
-<h3 id="org0e393bb"><span class="section-number-3">3.1.</span> Test algo</h3>
+<div id="outline-container-org48f80ec" class="outline-3">
+<h3 id="org48f80ec"><span class="section-number-3">3.1.</span> Test algo</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 <pre class="src src-python">
@@ -869,7 +869,7 @@ Remplissage du tableau
 </div>
 </div>
 <ol class="org-ol">
-<li><a id="org709af9c"></a>Filtrage des joueurs<br />
+<li><a id="org4d3c1c1"></a>Filtrage des joueurs<br />
 <div class="outline-text-5" id="text-3-1-0-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #ffcb6b;">keys_to_extract</span> = <span style="color: #c792ea;">[]</span>
@@ -883,12 +883,12 @@ Remplissage du tableau
 </div>
 
 
-<div id="outline-container-orgb6ac720" class="outline-2">
-<h2 id="orgb6ac720"><span class="section-number-2">4.</span> <span class="todo TODO">TODO</span> bot avec Disnake</h2>
+<div id="outline-container-orgbdeece3" class="outline-2">
+<h2 id="orgbdeece3"><span class="section-number-2">4.</span> <span class="todo TODO">TODO</span> bot avec Disnake</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-orgeccd582" class="outline-3">
-<h3 id="orgeccd582"><span class="section-number-3">4.1.</span> Corp</h3>
+<div id="outline-container-org5605469" class="outline-3">
+<h3 id="org5605469"><span class="section-number-3">4.1.</span> Corp</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #89DDFF;">import</span> pandas <span style="color: #89DDFF;">as</span> pd
@@ -944,11 +944,11 @@ Remplissage du tableau
 </div>
 </div>
 
-<div id="outline-container-org2160a08" class="outline-3">
-<h3 id="org2160a08"><span class="section-number-3">4.2.</span> Commande inva</h3>
+<div id="outline-container-org9ae4873" class="outline-3">
+<h3 id="org9ae4873"><span class="section-number-3">4.2.</span> Commande inva</h3>
 <div class="outline-text-3" id="text-4-2">
 <div class="org-src-container">
-<pre class="src src-python" id="org220a8df"><span style="color: #ffcb6b;">villes</span> = <span style="color: #c792ea;">[</span><span style="color: #c3e88d;">"Bief de N&#233;r&#233;caille"</span>, <span style="color: #c3e88d;">"Boisclair"</span>, <span style="color: #c3e88d;">"Eaux F&#233;tides"</span>, <span style="color: #c3e88d;">"Gr&#233; du vent"</span>,
+<pre class="src src-python" id="org659c8b6"><span style="color: #ffcb6b;">villes</span> = <span style="color: #c792ea;">[</span><span style="color: #c3e88d;">"Bief de N&#233;r&#233;caille"</span>, <span style="color: #c3e88d;">"Boisclair"</span>, <span style="color: #c3e88d;">"Eaux F&#233;tides"</span>, <span style="color: #c3e88d;">"Gr&#233; du vent"</span>,
           <span style="color: #c3e88d;">"Ile des Lames"</span>, <span style="color: #c3e88d;">"Levant"</span>, <span style="color: #c3e88d;">"Haute-Chute"</span>, <span style="color: #c3e88d;">"Marais des Trames"</span>,
           <span style="color: #c3e88d;">"Rive tourment&#233;e"</span>, <span style="color: #c3e88d;">"Val des Larmes"</span>, <span style="color: #c3e88d;">"Falaise du roy"</span><span style="color: #c792ea;">]</span>
 
@@ -972,19 +972,6 @@ Remplissage du tableau
     <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">compo</span><span style="color: #c792ea;">(</span><span style="color: #89DDFF;">self</span>, select: disnake.ui.Select, inter: disnake.MessageInteraction<span style="color: #c792ea;">)</span>:
         <span style="color: #89DDFF;">self</span>.strat=select.values<span style="color: #c792ea;">[</span>0<span style="color: #c792ea;">]</span>
         <span style="color: #89DDFF;">await</span> inter.response.defer<span style="color: #c792ea;">()</span>
-
-    <span style="color: #c792ea;">@disnake.ui.button</span><span style="color: #c792ea;">(</span>label=<span style="color: #c3e88d;">'CB'</span>, style=disnake.ButtonStyle.secondary<span style="color: #c792ea;">)</span>
-    <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">cb</span><span style="color: #c792ea;">(</span><span style="color: #89DDFF;">self</span>, button: disnake.ui.Button, inter: disnake.MessageInteraction<span style="color: #c792ea;">)</span>:
-        <span style="color: #556369;">#</span><span style="color: #556369;">msg = await inter.original_message()</span>
-        <span style="color: #556369;">#</span><span style="color: #556369;">print(inter.message.id, inter.response.is_done(), msg)</span>
-        <span style="color: #ffcb6b;">selected</span> = <span style="color: #89DDFF;">await</span> tags_from_id<span style="color: #c792ea;">(</span>inter, <span style="color: #89DDFF;">self</span>.origin<span style="color: #c792ea;">)</span>
-        <span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>inter.response.is_done<span style="color: #f78c6c;">()</span><span style="color: #c792ea;">)</span>
-        <span style="color: #556369;">#</span><span style="color: #556369;">await interaction.edit_original_message(content=f'{len(selected)} Joueurs enregistr&#233;s')</span>
-        <span style="color: #89DDFF;">if</span> <span style="color: #89DDFF;">not</span> inter.response.is_done<span style="color: #c792ea;">()</span>:
-            <span style="color: #89DDFF;">await</span> inter.response.send_message<span style="color: #c792ea;">(</span>content=f<span style="color: #c3e88d;">'{len(selected)} Joueurs enregistr&#233;s'</span><span style="color: #c792ea;">)</span>
-            <span style="color: #89DDFF;">print</span><span style="color: #c792ea;">(</span>inter.response.is_done<span style="color: #f78c6c;">()</span><span style="color: #c792ea;">)</span>
-        <span style="color: #89DDFF;">else</span>:
-            <span style="color: #89DDFF;">await</span> inter.edit_original_message<span style="color: #c792ea;">(</span>content=f<span style="color: #c3e88d;">'{len(selected)} Joueurs enregistr&#233;s'</span><span style="color: #c792ea;">)</span>
 
     <span style="color: #c792ea;">@disnake.ui.button</span><span style="color: #c792ea;">(</span>label=<span style="color: #c3e88d;">'Composition'</span>, style=disnake.ButtonStyle.blurple<span style="color: #c792ea;">)</span>
     <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">trigger</span><span style="color: #c792ea;">(</span><span style="color: #89DDFF;">self</span>, button: disnake.ui.Button, inter: disnake.MessageInteraction<span style="color: #c792ea;">)</span>:
@@ -1054,6 +1041,14 @@ Remplissage du tableau
     <span style="color: #ffcb6b;">img_url</span> = page.iat<span style="color: #c792ea;">[</span>5, 1<span style="color: #c792ea;">]</span>
 
     <span style="color: #ffcb6b;">comp</span> = build_comp<span style="color: #c792ea;">(</span>roster, strat_df, config<span style="color: #c792ea;">)</span>
+    <span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">gen_embed</span><span style="color: #c792ea;">(</span>comp<span style="color: #c792ea;">)</span>:
+        <span style="color: #ffcb6b;">e</span> = Embed<span style="color: #c792ea;">(</span>title=<span style="color: #c3e88d;">"Composition d'arm&#233;e"</span><span style="color: #c792ea;">)</span>
+        <span style="color: #89DDFF;">for</span> k, v <span style="color: #89DDFF;">in</span> comp.iteritems<span style="color: #c792ea;">()</span>:
+            <span style="color: #ffcb6b;">f</span> = <span style="color: #c3e88d;">''</span>
+            <span style="color: #89DDFF;">for</span> p <span style="color: #89DDFF;">in</span> v.to_list<span style="color: #c792ea;">()</span>:
+                <span style="color: #ffcb6b;">f</span> += <span style="color: #82aaff;">str</span><span style="color: #c792ea;">(</span>p<span style="color: #c792ea;">)</span> + <span style="color: #c3e88d;">'\n'</span>
+            e.add_field<span style="color: #c792ea;">(</span>name=k, value=f, inline=<span style="color: #f78c6c;">True</span><span style="color: #c792ea;">)</span>
+        <span style="color: #89DDFF;">return</span> e
 
     <span style="color: #ffcb6b;">embed</span> = gen_embed<span style="color: #c792ea;">(</span>comp<span style="color: #c792ea;">)</span>
     <span style="color: #ffcb6b;">embed.title</span> = f<span style="color: #c3e88d;">"Invasion de {ville}, {strat} :"</span>
@@ -1066,11 +1061,11 @@ Remplissage du tableau
 </div>
 </div>
 </div>
-<div id="outline-container-orgd80f999" class="outline-3">
-<h3 id="orgd80f999"><span class="section-number-3">4.3.</span> Commande verif</h3>
+<div id="outline-container-org2eb5c46" class="outline-3">
+<h3 id="org2eb5c46"><span class="section-number-3">4.3.</span> Commande verif</h3>
 <div class="outline-text-3" id="text-4-3">
 <div class="org-src-container">
-<pre class="src src-python" id="org48b8237"><span style="color: #c792ea;">@bot.slash_command</span><span style="color: #c792ea;">(</span>
+<pre class="src src-python" id="org657e38c"><span style="color: #c792ea;">@bot.slash_command</span><span style="color: #c792ea;">(</span>
     description=<span style="color: #c3e88d;">"V&#233;rification du Gdoc et mise &#224; jour des r&#244;les"</span>,
     scope=906630964703289434,
 <span style="color: #c792ea;">)</span>
@@ -1144,11 +1139,11 @@ Remplissage du tableau
 </div>
 </div>
 </div>
-<div id="outline-container-orgecd4efa" class="outline-3">
-<h3 id="orgecd4efa"><span class="section-number-3">4.4.</span> Commande transfert</h3>
+<div id="outline-container-org528a2de" class="outline-3">
+<h3 id="org528a2de"><span class="section-number-3">4.4.</span> Commande transfert</h3>
 <div class="outline-text-3" id="text-4-4">
 <div class="org-src-container">
-<pre class="src src-python" id="orgf291ee3">
+<pre class="src src-python" id="org4d7b3ff">
 <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">autocomp_sources</span><span style="color: #c792ea;">(</span>ctx: disnake.ApplicationCommandInteraction, user_input: <span style="color: #82aaff;">str</span><span style="color: #c792ea;">)</span>:
     <span style="color: #ffcb6b;">voices</span> = <span style="color: #c792ea;">[</span>v <span style="color: #89DDFF;">for</span> v <span style="color: #89DDFF;">in</span> ctx.guild.voice_channels <span style="color: #89DDFF;">if</span> v.members<span style="color: #c792ea;">]</span>
     <span style="color: #89DDFF;">return</span> <span style="color: #c792ea;">[</span>v.name <span style="color: #89DDFF;">for</span> v <span style="color: #89DDFF;">in</span> voices <span style="color: #89DDFF;">if</span> v.name.lower<span style="color: #f78c6c;">()</span>.startswith<span style="color: #f78c6c;">(</span>user_input.lower<span style="color: #c3e88d;">()</span><span style="color: #f78c6c;">)</span><span style="color: #c792ea;">]</span>
@@ -1180,27 +1175,36 @@ Remplissage du tableau
 </div>
 </div>
 
-<div id="outline-container-org50ec56d" class="outline-3">
-<h3 id="org50ec56d"><span class="section-number-3">4.5.</span> Commande Instance</h3>
+<div id="outline-container-orgd9a35f7" class="outline-3">
+<h3 id="orgd9a35f7"><span class="section-number-3">4.5.</span> Commande Instance</h3>
 <div class="outline-text-3" id="text-4-5">
 <div class="org-src-container">
-<pre class="src src-python" id="org3bfdbf8"><span style="color: #ffcb6b;">lieux</span> = <span style="color: #c792ea;">[</span><span style="color: #c3e88d;">"Lazarus"</span>, <span style="color: #c3e88d;">"G&#232;nese"</span>, <span style="color: #c3e88d;">"Sir&#232;ne"</span><span style="color: #c792ea;">]</span>
+<pre class="src src-python" id="org33a80e7"><span style="color: #ffcb6b;">lieux</span> = <span style="color: #c792ea;">[</span><span style="color: #c3e88d;">"Lazarus"</span>, <span style="color: #c3e88d;">"G&#232;nese"</span>, <span style="color: #c3e88d;">"Sir&#232;ne"</span><span style="color: #c792ea;">]</span>
 
 <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">autocomp_lieux</span><span style="color: #c792ea;">(</span>inter: disnake.ApplicationCommandInteraction, user_input: <span style="color: #82aaff;">str</span><span style="color: #c792ea;">)</span>:
     <span style="color: #89DDFF;">return</span> <span style="color: #c792ea;">[</span>l <span style="color: #89DDFF;">for</span> l <span style="color: #89DDFF;">in</span> lieux <span style="color: #89DDFF;">if</span> l.lower<span style="color: #f78c6c;">()</span>.startswith<span style="color: #f78c6c;">(</span>user_input.lower<span style="color: #c3e88d;">()</span><span style="color: #f78c6c;">)</span><span style="color: #c792ea;">]</span>
 
 <span style="color: #c792ea;">@bot.slash_command</span><span style="color: #c792ea;">()</span>
 <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">instance</span><span style="color: #c792ea;">(</span>ctx: disnake.ApplicationCommandInteraction,
-                   lieu: <span style="color: #82aaff;">str</span>=commands.Param<span style="color: #f78c6c;">(</span>autocomplete=autocomp_lieux<span style="color: #f78c6c;">)</span><span style="color: #c792ea;">)</span>:
+                   lieu: <span style="color: #82aaff;">str</span>=commands.Param<span style="color: #f78c6c;">(</span>autocomplete=autocomp_lieux<span style="color: #f78c6c;">)</span>,
+                   heure: <span style="color: #82aaff;">str</span>=commands.Param<span style="color: #f78c6c;">(</span>default=<span style="color: #f78c6c;">None</span><span style="color: #f78c6c;">)</span>,
+                   prix: <span style="color: #82aaff;">str</span>=commands.Param<span style="color: #f78c6c;">(</span>default=<span style="color: #f78c6c;">None</span><span style="color: #f78c6c;">)</span><span style="color: #c792ea;">)</span>:
     <span style="color: #556369;">"""Cr&#233;e un panneau d'inscription &#224; une instance</span>
 
 <span style="color: #556369;">        Parameters</span>
 <span style="color: #556369;">        ----------</span>
-<span style="color: #556369;">        lieu: La ville o&#249; se d&#233;roule l'invasion</span>
+<span style="color: #556369;">        lieu: La ville o&#249; se d&#233;roule l'instance</span>
+<span style="color: #556369;">        heure: L'heure &#224; laquelle se d&#233;roule l'instance</span>
+<span style="color: #556369;">        prix: Le prix par personne, gratuit c'est cool aussi ;)</span>
 <span style="color: #556369;">    """</span>
     <span style="color: #ffcb6b;">embed</span> = Embed<span style="color: #c792ea;">()</span>
     <span style="color: #ffcb6b;">embed.title</span> = f<span style="color: #c3e88d;">'Instance {lieu}'</span>
-    <span style="color: #ffcb6b;">embed.description</span> = f<span style="color: #c3e88d;">'Propos&#233;e par {ctx.user.mention}'</span>
+    <span style="color: #ffcb6b;">embed.description</span> = <span style="color: #c3e88d;">''</span>
+    <span style="color: #89DDFF;">if</span> heure:
+        <span style="color: #ffcb6b;">embed.description</span> += f<span style="color: #c3e88d;">' &#128336; {heure}\n'</span>
+    <span style="color: #89DDFF;">if</span> prix:
+        <span style="color: #ffcb6b;">embed.description</span> += f<span style="color: #c3e88d;">' &#128176; {prix}\n'</span>
+    <span style="color: #ffcb6b;">embed.description</span> += f<span style="color: #c3e88d;">'Propos&#233;e par {ctx.user.mention}\n'</span>
     <span style="color: #ffcb6b;">embed.color</span> = 2003199
 
     <span style="color: #ffcb6b;">roles</span> = <span style="color: #c792ea;">[</span><span style="color: #c3e88d;">'&#128737;'</span>, <span style="color: #c3e88d;">'&#9876;'</span>, <span style="color: #c3e88d;">'&#9876;'</span>, <span style="color: #c3e88d;">'&#9876;'</span>,<span style="color: #c3e88d;">'&#9937;'</span><span style="color: #c792ea;">]</span>
@@ -1221,8 +1225,8 @@ Remplissage du tableau
 </div>
 </div>
 </div>
-<div id="outline-container-org6fdafdd" class="outline-3">
-<h3 id="org6fdafdd"><span class="section-number-3">4.6.</span> Gestion des réactions aux messages</h3>
+<div id="outline-container-org646d9aa" class="outline-3">
+<h3 id="org646d9aa"><span class="section-number-3">4.6.</span> Gestion des réactions aux messages</h3>
 <div class="outline-text-3" id="text-4-6">
 <p>
 Certain des messages issus des commandes du bot nécessitent une
@@ -1251,11 +1255,11 @@ le contenu du message. Plus particulièrement dans le <b>footer</b> de
 l'embed du message.
 </p>
 </div>
-<div id="outline-container-org9ee38e8" class="outline-4">
-<h4 id="org9ee38e8"><span class="section-number-4">4.6.1.</span> On reaction add</h4>
+<div id="outline-container-orgba7598a" class="outline-4">
+<h4 id="orgba7598a"><span class="section-number-4">4.6.1.</span> On reaction add</h4>
 <div class="outline-text-4" id="text-4-6-1">
 <div class="org-src-container">
-<pre class="src src-python" id="orgf7ddc4e"><span style="color: #c792ea;">@bot.event</span>
+<pre class="src src-python" id="org71f6a57"><span style="color: #c792ea;">@bot.event</span>
 <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">on_reaction_add</span><span style="color: #c792ea;">(</span>reaction, user<span style="color: #c792ea;">)</span>:
      <span style="color: #89DDFF;">if</span> user == bot.user:
          <span style="color: #89DDFF;">return</span>
@@ -1274,11 +1278,11 @@ l'embed du message.
 </div>
 </div>
 </div>
-<div id="outline-container-org7722894" class="outline-4">
-<h4 id="org7722894"><span class="section-number-4">4.6.2.</span> On reaction remove</h4>
+<div id="outline-container-org3189e15" class="outline-4">
+<h4 id="org3189e15"><span class="section-number-4">4.6.2.</span> On reaction remove</h4>
 <div class="outline-text-4" id="text-4-6-2">
 <div class="org-src-container">
-<pre class="src src-python" id="orge690bb8"><span style="color: #c792ea;">@bot.event</span>
+<pre class="src src-python" id="org91cf394"><span style="color: #c792ea;">@bot.event</span>
 <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">on_reaction_remove</span><span style="color: #c792ea;">(</span>reaction, user<span style="color: #c792ea;">)</span>:
      <span style="color: #89DDFF;">if</span> user == bot.user:
          <span style="color: #89DDFF;">return</span>
@@ -1286,6 +1290,7 @@ l'embed du message.
          <span style="color: #89DDFF;">return</span>
      <span style="color: #ffcb6b;">msg_type</span> = reaction.message.embeds<span style="color: #c792ea;">[</span>-1<span style="color: #c792ea;">]</span>.footer.text
      <span style="color: #89DDFF;">if</span> msg_type == <span style="color: #c3e88d;">'Invasion'</span>:
+         <span style="color: #89DDFF;">await</span> update_invasion<span style="color: #c792ea;">(</span>reaction<span style="color: #c792ea;">)</span>
          <span style="color: #89DDFF;">return</span>
      <span style="color: #89DDFF;">if</span> msg_type == <span style="color: #c3e88d;">'Instance'</span>:
          <span style="color: #89DDFF;">await</span> update_instance_rm<span style="color: #c792ea;">(</span>reaction, user<span style="color: #c792ea;">)</span>
@@ -1295,11 +1300,18 @@ l'embed du message.
 </div>
 </div>
 </div>
-<div id="outline-container-org350506d" class="outline-4">
-<h4 id="org350506d"><span class="section-number-4">4.6.3.</span> On s'assure que le joueur soit enregistré</h4>
+<div id="outline-container-org26b2d13" class="outline-4">
+<h4 id="org26b2d13"><span class="section-number-4">4.6.3.</span> On s'assure que le joueur soit enregistré</h4>
 <div class="outline-text-4" id="text-4-6-3">
 <div class="org-src-container">
-<pre class="src src-python" id="org8bf204c"><span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">check_user_role</span><span style="color: #c792ea;">(</span>reaction, user<span style="color: #c792ea;">)</span>:
+<pre class="src src-python" id="org2ec819a"><span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">update_invasion</span><span style="color: #c792ea;">(</span>reaction<span style="color: #c792ea;">)</span>:
+    <span style="color: #ffcb6b;">selected</span> = <span style="color: #89DDFF;">await</span> reaction.message.reactions<span style="color: #c792ea;">[</span>0<span style="color: #c792ea;">]</span>.users<span style="color: #c792ea;">()</span>.flatten<span style="color: #c792ea;">()</span>
+    <span style="color: #ffcb6b;">embed</span> = reaction.message.embeds<span style="color: #c792ea;">[</span>-1<span style="color: #c792ea;">]</span>
+    embed.clear_fields<span style="color: #c792ea;">()</span>
+    embed.add_field<span style="color: #c792ea;">(</span>name=<span style="color: #c3e88d;">"Enregistr&#233;s :"</span>, value=<span style="color: #82aaff;">len</span><span style="color: #f78c6c;">(</span>selected<span style="color: #f78c6c;">)</span>-1, inline=<span style="color: #f78c6c;">True</span><span style="color: #c792ea;">)</span>
+    <span style="color: #89DDFF;">await</span> reaction.message.edit<span style="color: #c792ea;">(</span>embed=embed<span style="color: #c792ea;">)</span>
+
+<span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">check_user_role</span><span style="color: #c792ea;">(</span>reaction, user<span style="color: #c792ea;">)</span>:
     <span style="color: #556369;"># </span><span style="color: #556369;">R&#233;cup&#233;ration des don&#233;nes du Gdoc roster</span>
     <span style="color: #ffcb6b;">df</span> = get_roster<span style="color: #c792ea;">(</span>config<span style="color: #c792ea;">)</span>
     <span style="color: #89DDFF;">if</span> dtag<span style="color: #c792ea;">(</span>user<span style="color: #c792ea;">)</span> <span style="color: #89DDFF;">not</span> <span style="color: #89DDFF;">in</span> df.index:
@@ -1312,6 +1324,8 @@ l'embed du message.
     <span style="color: #89DDFF;">else</span>:
         <span style="color: #ffcb6b;">guild</span> = reaction.message.guild
         <span style="color: #ffcb6b;">role</span> = guild.get_role<span style="color: #c792ea;">(</span>config<span style="color: #f78c6c;">[</span><span style="color: #c3e88d;">"ids"</span><span style="color: #f78c6c;">][</span><span style="color: #c3e88d;">"role"</span><span style="color: #f78c6c;">]</span><span style="color: #c792ea;">)</span>
+
+        <span style="color: #89DDFF;">await</span> update_invasion<span style="color: #c792ea;">(</span>reaction<span style="color: #c792ea;">)</span>
 
         <span style="color: #89DDFF;">await</span> user.edit<span style="color: #c792ea;">(</span>nick=df.at<span style="color: #f78c6c;">[</span>dtag<span style="color: #c3e88d;">(</span>user<span style="color: #c3e88d;">)</span>, <span style="color: #c3e88d;">"Pseudo IG"</span><span style="color: #f78c6c;">]</span><span style="color: #c792ea;">)</span>
         <span style="color: #89DDFF;">if</span> role <span style="color: #89DDFF;">is</span> <span style="color: #f78c6c;">None</span>:
@@ -1328,11 +1342,11 @@ l'embed du message.
 </div>
 </div>
 
-<div id="outline-container-org6fa1a0f" class="outline-4">
-<h4 id="org6fa1a0f"><span class="section-number-4">4.6.4.</span> Gestion ajout réaction message Instance</h4>
+<div id="outline-container-org318c6a3" class="outline-4">
+<h4 id="org318c6a3"><span class="section-number-4">4.6.4.</span> Gestion ajout réaction message Instance</h4>
 <div class="outline-text-4" id="text-4-6-4">
 <div class="org-src-container">
-<pre class="src src-python" id="org9d0f6d8"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">instance_data</span><span style="color: #c792ea;">(</span>reaction<span style="color: #c792ea;">)</span>:
+<pre class="src src-python" id="org9482ea0"><span style="color: #89DDFF;">def</span> <span style="color: #82aaff;">instance_data</span><span style="color: #c792ea;">(</span>reaction<span style="color: #c792ea;">)</span>:
     <span style="color: #ffcb6b;">fields</span> = <span style="color: #c792ea;">{</span>e.name: e.value.split<span style="color: #f78c6c;">(</span><span style="color: #c3e88d;">'\n'</span><span style="color: #f78c6c;">)</span> <span style="color: #89DDFF;">for</span> e <span style="color: #89DDFF;">in</span> reaction.message.embeds<span style="color: #f78c6c;">[</span>-1<span style="color: #f78c6c;">]</span>.fields<span style="color: #c792ea;">}</span>
     <span style="color: #89DDFF;">return</span> fields<span style="color: #c792ea;">[</span><span style="color: #c3e88d;">'R&#244;les'</span><span style="color: #c792ea;">]</span>, fields<span style="color: #c792ea;">[</span><span style="color: #c3e88d;">'Joueurs'</span><span style="color: #c792ea;">]</span>
 
@@ -1373,11 +1387,11 @@ l'embed du message.
 </div>
 </div>
 
-<div id="outline-container-org7db20d9" class="outline-4">
-<h4 id="org7db20d9"><span class="section-number-4">4.6.5.</span> Gestion annulation réaction message Instance</h4>
+<div id="outline-container-org9ea82ab" class="outline-4">
+<h4 id="org9ea82ab"><span class="section-number-4">4.6.5.</span> Gestion annulation réaction message Instance</h4>
 <div class="outline-text-4" id="text-4-6-5">
 <div class="org-src-container">
-<pre class="src src-python" id="org37bbfb1">
+<pre class="src src-python" id="org26b8516">
 <span style="color: #89DDFF;">async def</span> <span style="color: #82aaff;">update_instance_rm</span><span style="color: #c792ea;">(</span>reaction, user<span style="color: #c792ea;">)</span>:
     <span style="color: #ffcb6b;">roles</span>, <span style="color: #ffcb6b;">joueurs</span> = instance_data<span style="color: #c792ea;">(</span>reaction<span style="color: #c792ea;">)</span>
     <span style="color: #556369;"># </span><span style="color: #556369;">Le joueur est-il s&#233;l&#233;ctionn&#233; ?</span>
@@ -1412,7 +1426,7 @@ l'embed du message.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: ipsum</p>
-<p class="date">Created: 2022-02-25 ven. 16:28</p>
+<p class="date">Created: 2022-02-25 ven. 18:33</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
