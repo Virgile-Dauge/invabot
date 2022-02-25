@@ -817,16 +817,16 @@ l'embed du message.
 #+begin_src python
   async def update_instance(reaction, user, add=True):
       print('instance', add, reaction, reaction.me, user)
-
+      cmd_author = reaction.message.interaction.user
       if reaction.emoji == '✅':
-          if user != reaction.message.author:
+          if user != cmd_author:
               return
           #Create vocal and swap users, then
           await reaction.message.delete()
           return
 
       if reaction.emoji == '❌':
-          if user == reaction.message.author:
+          if user == cmd_author:
               await reaction.message.delete()
           return
       fields = {e.name: e.value.split('\n') for e in reaction.message.embeds[-1].fields}
@@ -835,7 +835,7 @@ l'embed du message.
       joueurs = fields['Joueurs']
 
       # Le joueur a t-il déjà réagit ?
-      if user.mention in joueurs:
+      if not add and user.mention in joueurs:
           # On le supprime de la liste des joueurs en le remplacant par libre
           # joueurs = list(map(lambda j: j if j !=user.mention else 'libre', joueurs))
           for i, r in enumerate(roles):
