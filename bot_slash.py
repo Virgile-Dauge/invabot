@@ -10,14 +10,6 @@ bot = interactions.Client(token=open("bot.token").read()[:-1])
 async def on_ready():
     print("Bot is now online.")
 
-@bot.command(
-    name="coucou",
-    description="simple testing command",
-    scope=906630964703289434
-)
-async def coucou(ctx: interactions.CommandContext):
-    await ctx.send("Hello world!")
-
 @bot.command(name="invasion",
     description="Création du panneau d'inscription",
     scope=906630964703289434,
@@ -41,7 +33,6 @@ async def invasion(ctx: interactions.CommandContext, ville="NomVille"):
     """
 
     embed = interactions.Embed(
-        title=f"Inscription {ville}",
         color= 2003199,
         description="Réagis avec :ballot_box_with_check: à ce message **uniquement si tu es déjà dans le fort**. Attention, retourne vite en jeu, l'auto-AFK kick est rapide (2min). \n\n Si tu as réagi par erreur, merci de décocher ta réaction. :wink:",
         inline=False,
@@ -58,7 +49,10 @@ async def invasion(ctx: interactions.CommandContext, ville="NomVille"):
         label="Désinscription",
         custom_id="out_callback",
     )
-    msg = await ctx.send(f"Invasion de {ville}, inscrit-toi **uniquement si tu es dans le fort !**", components=[in_bt, out_bt])
+    msg = await ctx.send(f"Invasion de {ville}, inscrit-toi **uniquement si tu es dans le fort !**",
+                         embeds=embed,
+                         components=[in_bt, out_bt])
+
     #await msg.add_reaction('☑')
 
     #add_to_hist(ctx.author, msg.id)
@@ -74,13 +68,13 @@ async def in_callback(ctx: interactions.ComponentContext):
     """ Défini le comportement lorsqu'un joueur s'inscrit
     """
     #print(ctx)
-    await ctx.send("Tu es bien inscrit !", ephemeral=True, components=[])
+    await ctx.send("Tu es bien inscrit !", ephemeral=True, components=[], embeds=[])
 
 @bot.component("out_callback")
 async def out_callback(ctx: interactions.ComponentContext):
     """ Défini le comportement lorsqu'un joueur s'inscrit
     """
     #print(ctx)
-    await ctx.send("Tu es bien désinscrit, merci !", ephemeral=True, components=[])
+    await ctx.send("Tu es bien désinscrit, merci !", ephemeral=True, components=[], embeds=[])
 
 bot.start()

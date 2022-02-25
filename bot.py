@@ -1,8 +1,10 @@
 import pandas as pd
 from algo import build_comp
 
-import discord
-from discord.ext import commands
+# Chargement de la config du bot
+import json
+with open('config.json', 'r') as datafile:
+    config = json.load(datafile)
 
 # Chargement de la config du bot
 import json
@@ -16,7 +18,6 @@ with open('bot.token', 'r') as datafile:
 def dtag(user):
     return f'{user.name}#{user.discriminator}'
 
-import pandas as pd
 def get_roster(config):
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
     #return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
@@ -28,6 +29,9 @@ def get_strat(config, strat=None):
     else:
         url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
     return pd.read_csv(url).iloc[0:5, 0:12]
+
+import discord
+from discord.ext import commands
 
 intents = discord.Intents.default()
 intents.reactions = True
@@ -42,12 +46,6 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(bot))
     game = discord.Game("Venez chez Bakhu")
     await bot.change_presence(status=discord.Status.online, activity=game)
-
-async def rm_cmd(ctx):
-  try:
-      await ctx.message.delete()
-  except Exception as e:
-      print(e)
 
 async def send_error_message(ctx, title='Erreur', desc=''):
     """ Génére un embed orange avec le titre et la description fournie et l'envoie sur le ctx donné"""
@@ -160,7 +158,7 @@ async def comp(ctx, strat='Strat_principale'):
         return
     comp = build_comp(roster, strat_df, config)
     def gen_embed(comp):
-       e = discord.Embed(title="Composition d'armée")
+       e = Embed(title="Composition d'armée")
        for k, v in comp.iteritems():
            f = ''
            for p in v.to_list():
