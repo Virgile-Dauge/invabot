@@ -415,7 +415,7 @@ Remplissage du tableau
 * TODO bot avec Disnake
 
 ** Corp
-#+begin_src python :tangle disbot.py :noweb tangle
+#+begin_src python :tangle bot.py :noweb tangle
   import pandas as pd
   from algo import build_comp
 
@@ -456,7 +456,8 @@ Remplissage du tableau
       <<dis_instance>>
       <<dis_verif>>
       <<check_user>>
-      <<update_instance>>
+      <<update_instance_add>>
+      <<update_instance_rm>>
       <<on_reaction>>
       <<on_reaction_rm>>
       bot.run(token=open("bot.token").read()[:-1])
@@ -699,16 +700,25 @@ Remplissage du tableau
 
   @bot.slash_command()
   async def instance(ctx: disnake.ApplicationCommandInteraction,
-                     lieu: str=commands.Param(autocomplete=autocomp_lieux)):
+                     lieu: str=commands.Param(autocomplete=autocomp_lieux),
+                     heure: str=commands.Param(default=None),
+                     prix: str=commands.Param(default=None)):
       """Crée un panneau d'inscription à une instance
 
           Parameters
           ----------
-          lieu: La ville où se déroule l'invasion
+          lieu: La ville où se déroule l'instance
+          heure: L'heure à laquelle se déroule l'instance
+          prix: Le prix par personne, gratuit c'est cool aussi ;)
       """
       embed = Embed()
       embed.title = f'Instance {lieu}'
-      embed.description = f'Proposée par {ctx.user.mention}'
+      embed.description = ''
+      if heure:
+          embed.description += f' 🕐 {heure}\n'
+      if prix:
+          embed.description += f' 💰 {prix}\n'
+      embed.description += f'Proposée par {ctx.user.mention}\n'
       embed.color = 2003199
 
       roles = ['🛡', '⚔', '⚔', '⚔','⛑']
@@ -757,7 +767,6 @@ l'embed du message.
             return
         msg_type = reaction.message.embeds[-1].footer.text
 
-        print(user, reaction.message.embeds[-1].footer.text)
         if msg_type == 'Invasion':
             await check_user_role(reaction, user)
             return
@@ -779,7 +788,7 @@ l'embed du message.
         if msg_type == 'Invasion':
             return
         if msg_type == 'Instance':
-            await update_instance(reaction, user, add=False)
+            await update_instance_rm(reaction, user)
             return
 
  #+end_src
@@ -813,521 +822,71 @@ l'embed du message.
 #+end_src
 
 *** Gestion ajout réaction message Instance
-#+name: update_instance
+#+name: update_instance_add
 #+begin_src python
-  async def update_instance(reaction, user, add=True):
-      print('instance', add, reaction, reaction.me, user)
-
-      if reaction.emoji == '✅':
-          if user != reaction.message.author:
-              return
-          #Create vocal and swap users, then
-          await reaction.message.delete()
-          return
-
-      if reaction.emoji == '❌':
-          if user == reaction.message.author:
-              await reaction.message.delete()
-          return
+  def instance_data(reaction):
       fields = {e.name: e.value.split('\n') for e in reaction.message.embeds[-1].fields}
-      print('input: ', fields)
-      roles = fields['Rôles']
-      joueurs = fields['Joueurs']
+      return fields['Rôles'], fields['Joueurs']
 
-      # Le joueur a t-il déjà réagit ?
-      if user.mention in joueurs:
-          # On le supprime de la liste des joueurs en le remplacant par libre
-          # joueurs = list(map(lambda j: j if j !=user.mention else 'libre', joueurs))
-          for i, r in enumerate(roles):
-              if joueurs[i] == user.mention:
-                  joueurs[i] = 'libre'
-                  await reaction.message.remove_reaction(r, user)
-                  disponibles = [d for d in reaction.message.reactions if d.emoji == r][-1]
-                  # On récupére les utilisateurs en prennat soint de filtrer le bot
-                  disponibles = [user async for user in reaction.users() if user.id != 921326765618643005]
-                  if disponibles:
-                      joueurs[i] = disponibles[0].mention
-                  break
-          #reaction.message
-
-      if add:
-          for i, r in enumerate(roles):
-              if reaction.emoji == r and joueurs[i] == 'libre':
-                  joueurs[i] = user.mention
-                  break
-
-      n_libre = sum(x== 'libre' for x in fields['Joueurs'])
-      print('output: ', roles, joueurs, n_libre)
+  async def update_instance_embed(reaction, roles, joueurs):
+      # Récupération et mise à jour du message initial
       embed = reaction.message.embeds[-1]
       embed.clear_fields()
       embed.add_field(name="Rôles", value=list_to_field(roles), inline=True)
       embed.add_field(name="Joueurs", value=list_to_field(joueurs), inline=True)
       await reaction.message.edit(embed=embed)
 
+  async def update_instance(reaction, user, add=True):
+      cmd_author = reaction.message.interaction.user
+      if reaction.emoji == '✅':
+          if user == cmd_author:
+              #Create vocal and swap users, then
+              #voice = await reaction.message.channel.category.create_voice_channel('coucou')
+              #print(reaction.message.channel.category.name)
+              #await reaction.message.delete(delay=60)
+              return
+
+      if reaction.emoji == '❌':
+          if user == cmd_author:
+              await reaction.message.delete()
+          return
+
+      roles, joueurs = instance_data(reaction)
+
+      if user.mention not in joueurs:
+          for i, r in enumerate(roles):
+              if reaction.emoji == r and joueurs[i] == 'libre':
+                  joueurs[i] = user.mention
+                  break
+
+      await update_instance_embed(reaction, roles, joueurs)
+#+end_src
+
+*** Gestion annulation réaction message Instance
+#+name: update_instance_rm
+#+begin_src python
+
+  async def update_instance_rm(reaction, user):
+      roles, joueurs = instance_data(reaction)
+      # Le joueur est-il séléctionné ?
+      if user.mention in joueurs:
+          # On le supprime de la liste des joueurs en le remplacant par libre
+          for i, r in enumerate(roles):
+              if joueurs[i] == user.mention and r==reaction.emoji:
+                  joueurs[i] = 'libre'
+                  break
+
+          for i, r in enumerate(roles):
+              if joueurs[i] == 'libre':
+                  disponibles = [d for d in reaction.message.reactions if d.emoji == r][-1]
+                  # On récupére les utilisateurs en prennat soint de filtrer le bot
+                  disponibles = [u for u in await disponibles.users().flatten() if u != bot.user and u.mention not in joueurs]
+                  if disponibles:
+                      joueurs[i] = disponibles[0].mention
+
+      await update_instance_embed(reaction, roles, joueurs)
+
 #+end_src
 
 
 https://github.com/DisnakeDev/disnake
-
-
-* Implémentation Discord.py
- https://discordpy.readthedocs.io/en/stable/
-
- Création du bot
- #+begin_src python :tangle bot.py :noweb yes
-   import discord
-   from discord.ext import commands
-
-   intents = discord.Intents.default()
-   intents.reactions = True
-   intents.members = True
-   bot = commands.Bot(command_prefix="!", intents=intents)
-
-   msgs = {}
-   msgs_ids = []
-
-   @bot.event
-   async def on_ready():
-       print('We have logged in as {0.user}'.format(bot))
-       game = discord.Game("Venez chez Bakhu")
-       await bot.change_presence(status=discord.Status.online, activity=game)
- #+end_src
-
-*** Embed d'erreur
- #+begin_src python :tangle bot.py
-   async def send_error_message(ctx, title='Erreur', desc=''):
-       """ Génére un embed orange avec le titre et la description fournie et l'envoie sur le ctx donné"""
-       embed = discord.Embed(title=title)
-       embed.color = 16748319
-       embed.description = desc
-       await ctx.channel.send(embed=embed, delete_after=10)
-       return
- #+end_src
-*** Clear
-#+name: clear
-#+begin_src python :tangle bot.py
-   @bot.command()
-   async def clear(ctx, opt='me'):
-       #global hist
-       #await rm_cmd(ctx)
-       if opt == 'me':
-           deleted = await ctx.channel.purge(check=lambda msg: msg.author == ctx.author)
-           await ctx.channel.send('Deleted {} message(s)'.format(len(deleted)), delete_after=2)
-           #print(hist[ctx.author])
-       elif opt == 'all':
-           guild = ctx.guild
-           lead_role = guild.get_role(config["ids"]["leads"])
-
-           if ctx.author not in lead_role.members:
-               embed = discord.Embed(title='Droits insuffisants')
-               embed.color = 16748319
-               embed.description = f'Rôle ***{lead_role}*** requis'
-               await ctx.channel.send(embed=embed, delete_after=10)
-               return
-
-           await ctx.channel.purge()
-           global msgs
-           msgs = {}
-           global msgs_ids
-           msgs_ids = []
- #+end_src
-
-*** Inva
- Commande d'ajout du panneau d'inscription, sur lequel les joueurs dans
- le fort doivent se signaler sera `!inva nomVille`
- #+begin_src python :tangle bot.py
-   @bot.command()
-   async def inva(ctx, arg="NomVille"):
-       """ Génére un tableau d'inscription dans le channel
-       """
-       # Suppression du message d'invocation
-       await rm_cmd(ctx)
-
-       embed = discord.Embed.from_dict(config["embeds"]["panneau"])
-       embed.title += f' {arg}'
-       embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
-
-       msg = await ctx.channel.send(embed=embed, delete_after=60*20)
-       await msg.add_reaction('☑')
-
-       #add_to_hist(ctx.author, msg.id)
-
-       author_id = dtag(ctx.author)
-       msgs[author_id] = msg.id
-       global msgs_ids
-       msgs_ids += [msg.id]
-       #add_to_hist(ctx.author, msg.id)
-
- #+end_src
-*** Composition d'armée
-
- La commande de demande de *composition* sera la suivante `!comp`. La
- fonction associée doit récupérer le message /panneau/ à partir de
- l'identité de l'appelant. Puis, récupérer la liste des joueurs qui ont
- réagi sur le panneau.
- #+begin_src python :tangle bot.py :noweb yes
-   @bot.command()
-   async def comp(ctx, strat='Strat_principale'):
-       """ Génére une composition d'armée
-       """
-       # Suppression du message d'invocation
-       await rm_cmd(ctx)
-
-       author_dtag = dtag(ctx.author)
-       channel = ctx.channel
-
-       # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
-       if author_dtag not in msgs:
-           await send_error_message(ctx=ctx,
-                              title='Pas de tableau correspondant...',
-                              desc=f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`')
-           return
-
-       # Récupération du message avec les réacs
-       msg_id = msgs[author_dtag]
-       main_msg = await channel.fetch_message(msg_id)
-
-       # Récupération de la liste des users
-       selected = await main_msg.reactions[0].users().flatten()
-       selected_tags = [dtag(u) for u in selected][1:]
-       selected_snow = {t: u.id for t, u in zip(selected_tags, selected)}
-
-       # Récupération des donénes du Gdoc roster
-       roster = get_roster(config)
-
-       # Joueurs séléctionnés n'ayant pas rempli le Gdoc
-       not_registered = [u for u in selected_tags if u not in roster.index]
-
-       # Filtrage du roster avec les joueurs séléctionnés
-       roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
-       #print(roster)
-
-       if strat not in config['gdoc']['strats']:
-           await send_error_message(ctx,
-                                    title='Stratégie non trouvée',
-                                    desc=f"Le document en ligne ne contient pas de page ***{strat}***")
-           return
-       # Récupération de la strat
-       url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={strat}"
-       try:
-           page = pd.read_csv(url)
-           strat_df = page.iloc[0:5, 0:10]
-           img_url = page.iat[5, 1]
-           #strat_df = pd.read_csv(url)
-           #print(page, img_url)
-       except Exception as e:
-           await send_error_message(ctx,
-                                    title='Erreur accès gdoc',
-                                    desc=f"Le document en ligne n'est pas accessible.")
-           return
-       comp = build_comp(roster, strat_df, config)
-       <<gen_embed>>
-       embed = gen_embed(comp)
-       embed.title = f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, {strat} :"
-       embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
-       embed.color = 2003199
-       embed.set_thumbnail(url=img_url)
-       await channel.send(embed=embed, delete_after=60*25)
-       #add_to_hist(ctx.author, msg.id)
-
- #+end_src
-
-#+name: gen_embed
-#+begin_src python
-  def gen_embed(comp):
-     e = Embed(title="Composition d'armée")
-     for k, v in comp.iteritems():
-         f = ''
-         for p in v.to_list():
-             f += str(p) + '\n'
-         e.add_field(name=k, value=f, inline=True)
-     return e
-
-
-#+end_src
-
-*** Comptage des inscrits
-
- #+begin_src python :tangle bot.py :noweb yes
-   @bot.command()
-   async def cb(ctx):
-       """ Compte les inscrits enregistrés
-       """
-       # Suppression du message d'invocation
-       await rm_cmd(ctx)
-
-       author_dtag = dtag(ctx.author)
-       channel = ctx.channel
-
-       # On s'assure que l'utilisateur qui demande le calcul ait déjà fait la commande principale
-       if author_dtag not in msgs:
-           await send_error_message(ctx=ctx,
-                                 title='Pas de tableau correspondant...',
-                                 desc=f'Laissez le lead calculer la composition ! \n\nSi vous êtes lead, commencez par utiliser la commande : \n `!inva nomville`')
-           return
-
-       # Récupération du message avec les réacs
-       msg_id = msgs[author_dtag]
-       main_msg = await channel.fetch_message(msg_id)
-       #print(main_msg.embeds[0].title.split(' ')[-1])
-       # Récupération de la liste des users
-       selected = await main_msg.reactions[0].users().flatten()
-       selected_tags = [dtag(u) for u in selected][1:]
-
-       # Récupération des donénes du Gdoc roster
-       roster = get_roster(config)
-
-       # Joueurs séléctionnés n'ayant pas rempli le Gdoc
-       not_registered = [u for u in selected_tags if u not in roster.index]
-
-       # Filtrage du roster avec les joueurs séléctionnés
-       roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
-
-       embed = discord.Embed(title=f"Invasion de {main_msg.embeds[0].title.split(' ')[-1]}, **{len(roster)}** enregistrés.")
-       embed.color = 2003199
-       embed.description = f"S'il y a tout le monde, le lead peut utiliser :\n\n `!comp`"
-       embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
-       await ctx.channel.send(embed=embed, delete_after=2)
- #+end_src
-*** DM des joueurs qui n'ont pas renseigné leurs rôles
-
- Cette phase n'est pas absolument nécessaire, mais elle permet de
- notifier directement en message privé les utilisateurs qui se
- signalent dans le fort mais qui n'ont pas correctement rempli le
- gdoc. Cela leur laisse potentiellement le temps de le faire avant que
- le lead demande le calcul de la composition du groupement de défense.
- #+begin_src python :tangle bot.py
-   @bot.event
-   async def on_reaction_add(reaction, user):
-        # On vérifie que la réaction est sur un message panneau
-        if reaction.message.id not in msgs_ids:
-            return
-        if user == bot.user:
-            return
-
-        # Récupération des donénes du Gdoc roster
-        df = get_roster(config)
-        if dtag(user) not in df.index:
-            embed = discord.Embed.from_dict(config["embeds"]["dm"])
-            embed.description += f'{config["gdoc"]["form"]}) ***!***'
-            try:
-                await user.send(embed=embed)
-            except discord.errors.HTTPException as e:
-                pass
-        else:
-            guild = reaction.message.guild
-            role = guild.get_role(config["ids"]["role"])
-            if role is None:
-                # Make sure the role still exists and is valid.
-                return
-
-            try:
-                # Finally, add the role.
-                await user.add_roles(role)
-            except discord.HTTPException:
-                # If we want to do something in case of errors we'd do it here.
-                pass
-
- #+end_src
-
-*** Vérification des enregistrés
- #+begin_src python :tangle bot.py
-   @bot.command()
-   async def verif(ctx):
-       """ Attribue les rôles
-       """
-       print(f'!verif command invoked by {dtag(ctx.author)}')
-       # Suppression du message d'invocation
-       await rm_cmd(ctx)
-
-       guild = ctx.guild
-       lead_role = guild.get_role(config["ids"]["leads"])
-
-       if ctx.author not in lead_role.members:
-           await send_error_message(ctx=ctx,
-                                 title='Droits insuffisants',
-                                 desc=f'Rôle ***{lead_role}*** requis')
-           return
-       # Récupération des donénes du Gdoc roster
-       roster_df = get_roster(config)
-       roster = list(roster_df.index)
-
-
-       members = {dtag(m): m for m in guild.members}
-
-       role = guild.get_role(config["ids"]["role"])
-       verified = [dtag(m) for m in role.members]
-
-       added = []
-       wrong = []
-       for u in roster:
-          if u not in members:
-              wrong += [u]
-          elif u not in verified:
-              if role is None:
-                  # Make sure the role still exists and is valid.
-                  return
-
-              try:
-                  # Finally, add the role.
-                  await members[u].add_roles(role)
-                  added += [u]
-              except discord.HTTPException:
-                  # If we want to do something in case of errors we'd do it here.
-                  pass
-
-       removed = []
-       for u in verified:
-           if u not in roster:
-               try:
-                   # Finally, remove the role.
-                   await members[u].remove_roles(role)
-                   removed += [u]
-
-                   # Send DM to user
-                   embed = discord.Embed.from_dict(config["embeds"]["change"])
-                   embed.description += f'{config["gdoc"]["form"]}) ***!***'
-                   await members[u].send(embed=embed)
-               except discord.HTTPException:
-                   # If we want to do something in case of errors we'd do it here.
-                   pass
-
-       def list_to_field(l):
-           f = 'aucun'
-           if l:
-               f = ''
-               for u in l:
-                   f += u + '\n'
-           if len(f)>1023:
-               return f[:1000]+'...'
-           return f
-
-       def add_IG(l, roster_df):
-           return [f"{i} | {roster_df.loc[i]['Pseudo IG']}" for i in l]
-       wrong = add_IG(wrong, roster_df)
-       added = add_IG(added, roster_df)
-       embed = discord.Embed()
-       embed.title = f'Vérification du gdoc'
-       embed.color = 2003199
-       embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
-
-       embed.add_field(name="Joueurs nouvellement vérifiés", value=list_to_field(added), inline=False)
-       embed.add_field(name="Discord tag dans le Gdoc ne correspondant à aucun membre du discord", value=list_to_field(wrong), inline=False)
-       embed.add_field(name=f"Joueurs ayant changé de Discord tag (rôle {role} supprimé)", value=list_to_field(removed), inline=False)
-       await ctx.channel.send(embed=embed, delete_after=20*60)
-       #print(added, wrong)
-
-
- #+end_src
-*** Run
-
- #+begin_src python :tangle bot.py
- bot.run(token)
- #+end_src
-
-* Bot avec interactions
-https://discord-interactions.readthedocs.io/en/latest/index.html
-
-** Création et démarrage
- #+begin_src python :tangle bot_slash.py :noweb tangle
-   import logging
-   import interactions
-
-   from interactions import Embed, Option, Button
-   #logging.basicConfig(level=logging.DEBUG)
-
-   bot = interactions.Client(token=open("bot.token").read()[:-1])
-
-   @bot.event
-   async def on_ready():
-       print("Bot is now online.")
-
-   <<inva_cmd>>
-   <<in_callback>>
-   <<out_callback>>
-   bot.start()
- #+end_src
-
-** Commande panneau
-  Commande d'ajout du panneau d'inscription, sur lequel les joueurs dans
- le fort doivent se signaler sera `!inva nomVille`
-#+name: inva_cmd
- #+begin_src python
-  @bot.command(name="invasion",
-      description="Création du panneau d'inscription",
-      scope=906630964703289434,
-      options=[
-          interactions.Option(
-              type=interactions.OptionType.STRING,
-              name="ville",
-              description="Dans quelle ville se passe l'invasion ?",
-              required=False,
-              #choices=[
-                  #interactions.Choice(name="Choose me! :(", value="choice_one")
-                  #interactions.Choice(name="Haute-Chute", value="Haute-Chute"),
-                  #interactions.Choice(name="Grés-du-vent", value="Grés-du-vent")
-              #]
-          )
-      ]
-
-  )
-  async def invasion(ctx: interactions.CommandContext, ville="NomVille"):
-      """ Génére un tableau d'inscription dans le channel
-      """
-
-      embed = interactions.Embed(
-          color= 2003199,
-          description="Réagis avec :ballot_box_with_check: à ce message **uniquement si tu es déjà dans le fort**. Attention, retourne vite en jeu, l'auto-AFK kick est rapide (2min). \n\n Si tu as réagi par erreur, merci de décocher ta réaction. :wink:",
-          inline=False,
-      )
-      #embed.set_footer(text=ctx.author.name, icon_url = ctx.author.avatar_url)
-
-      in_bt = interactions.Button(
-          style=interactions.ButtonStyle.PRIMARY,
-          label="Inscription",
-          custom_id="in_callback",
-      )
-      out_bt = interactions.Button(
-          style=interactions.ButtonStyle.SECONDARY,
-          label="Désinscription",
-          custom_id="out_callback",
-      )
-      msg = await ctx.send(f"Invasion de {ville}, inscrit-toi **uniquement si tu es dans le fort !**",
-                           embeds=embed,
-                           components=[in_bt, out_bt])
-
-      #await msg.add_reaction('☑')
-
-      #add_to_hist(ctx.author, msg.id)
-
-      #author_id = dtag(ctx.author)
-      #msgs[author_id] = msg.id
-      #global msgs_ids
-      #msgs_ids += [msg.id]
-      #add_to_hist(ctx.author, msg.id)
-
- #+end_src
-
-** Callback inscription
-#+name: in_callback
- #+begin_src python
-  @bot.component("in_callback")
-  async def in_callback(ctx: interactions.ComponentContext):
-      """ Défini le comportement lorsqu'un joueur s'inscrit
-      """
-      #print(ctx)
-      await ctx.send("Tu es bien inscrit !", ephemeral=True, components=[], embeds=[])
-
- #+end_src
-
-** Callback desinscription
-#+name: out_callback
- #+begin_src python
-  @bot.component("out_callback")
-  async def out_callback(ctx: interactions.ComponentContext):
-      """ Défini le comportement lorsqu'un joueur s'inscrit
-      """
-      #print(ctx)
-      await ctx.send("Tu es bien désinscrit, merci !", ephemeral=True, components=[], embeds=[])
-
- #+end_src
