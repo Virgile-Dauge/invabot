@@ -369,14 +369,14 @@ def main():
         await reaction.message.edit(embed=embed)
     
     async def update_instance(reaction, user, add=True):
-        print('instance', add, reaction, reaction.me, user)
         cmd_author = reaction.message.interaction.user
         if reaction.emoji == '✅':
-            if user != cmd_author:
+            if user == cmd_author:
+                #Create vocal and swap users, then
+                #voice = await reaction.message.channel.category.create_voice_channel('coucou')
+                #print(reaction.message.channel.category.name)
+                #await reaction.message.delete(delay=60)
                 return
-            #Create vocal and swap users, then
-            await reaction.message.delete()
-            return
     
         if reaction.emoji == '❌':
             if user == cmd_author:
@@ -391,9 +391,7 @@ def main():
                     joueurs[i] = user.mention
                     break
     
-        print('output: ', roles, joueurs)
         await update_instance_embed(reaction, roles, joueurs)
-    
     
     async def update_instance_rm(reaction, user):
         roles, joueurs = instance_data(reaction)
@@ -423,7 +421,6 @@ def main():
              return
          msg_type = reaction.message.embeds[-1].footer.text
     
-         print(user, reaction.message.embeds[-1].footer.text)
          if msg_type == 'Invasion':
              await check_user_role(reaction, user)
              return
