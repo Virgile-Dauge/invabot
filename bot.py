@@ -356,6 +356,18 @@ def main():
             except disnake.HTTPException:
                 # If we want to do something in case of errors we'd do it here.
                 ...
+    def instance_data(reaction):
+        fields = {e.name: e.value.split('\n') for e in reaction.message.embeds[-1].fields}
+        return fields['Rôles'], fields['Joueurs']
+    
+    async def update_instance_embed(reaction, roles, joueurs):
+        # Récupération et mise à jour du message initial
+        embed = reaction.message.embeds[-1]
+        embed.clear_fields()
+        embed.add_field(name="Rôles", value=list_to_field(roles), inline=True)
+        embed.add_field(name="Joueurs", value=list_to_field(joueurs), inline=True)
+        await reaction.message.edit(embed=embed)
+    
     async def update_instance(reaction, user, add=True):
         print('instance', add, reaction, reaction.me, user)
         cmd_author = reaction.message.interaction.user
@@ -370,35 +382,39 @@ def main():
             if user == cmd_author:
                 await reaction.message.delete()
             return
-        fields = {e.name: e.value.split('\n') for e in reaction.message.embeds[-1].fields}
-        print('input: ', fields)
-        roles = fields['Rôles']
-        joueurs = fields['Joueurs']
     
-        # Le joueur a t-il déjà réagit ?
-        if not add and user.mention in joueurs:
-            # On le supprime de la liste des joueurs en le remplacant par libre
-            # joueurs = list(map(lambda j: j if j !=user.mention else 'libre', joueurs))
-            for i, r in enumerate(roles):
-                if joueurs[i] == user.mention:
-                    joueurs[i] = 'libre'
-                    await reaction.message.remove_reaction(r, user)
-                    disponibles = [d for d in reaction.message.reactions if d.emoji == r][-1]
-                    # On récupére les utilisateurs en prennat soint de filtrer le bot
-                    disponibles = [u async for u in reaction.users() if u.id != 921326765618643005 and u.mention not in joueurs and u != user]
-                    if disponibles:
-                        joueurs[i] = disponibles[0].mention
-                        ...
-                    break
-            #reaction.message
+        roles, joueurs = instance_data(reaction)
     
-        if add:
+        if user.mention not in joueurs:
             for i, r in enumerate(roles):
                 if reaction.emoji == r and joueurs[i] == 'libre':
                     joueurs[i] = user.mention
                     break
     
-        n_libre = sum(x== 'libre' for x in fields['Joueurs'])
+        print('output: ', roles, joueurs)
+        await update_instance_embed(reaction, roles, joueurs)
+    
+    
+    
+    async def update_instance_rm(reaction, user):
+        roles, joueurs = instance_data(reaction)
+        # Le joueur est-il séléctionné ?
+        if user.mention in joueurs:
+            # On le supprime de la liste des joueurs en le remplacant par libre
+            # joueurs = list(map(lambda j: j if j !=user.mention else 'libre', joueurs))
+            for i, r in enumerate(roles):
+                if joueurs[i] == user.mention and r==reaction.emoji:
+                    joueurs[i] = 'libre'
+    
+                    disponibles = [d for d in reaction.message.reactions if d.emoji == r][-1]
+                    # On récupére les utilisateurs en prennat soint de filtrer le bot
+                    disponibles = [u async for u in reaction.users() if u.id != 921326765618643005 and u.mention not in joueurs]
+                    if disponibles:
+                        joueurs[i] = disponibles[0].mention
+                        ...
+                    break
+    
+        n_libre = sum(x== 'libre' for x in joueurs)
         print('output: ', roles, joueurs, n_libre)
         embed = reaction.message.embeds[-1]
         embed.clear_fields()
@@ -432,7 +448,7 @@ def main():
          if msg_type == 'Invasion':
              return
          if msg_type == 'Instance':
-             await update_instance(reaction, user, add=False)
+             await update_instance_rm(reaction, user)
              return
     
     bot.run(token=open("bot.token").read()[:-1])
