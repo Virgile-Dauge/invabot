@@ -460,6 +460,7 @@ Remplissage du tableau
       <<update_instance_rm>>
       <<on_reaction>>
       <<on_reaction_rm>>
+      <<on_voice_state_update>>
       bot.run(token=open("bot.token").read()[:-1])
 
   if __name__ == "__main__":
@@ -846,9 +847,11 @@ l'embed du message.
       if reaction.emoji == '✅':
           if user == cmd_author:
               #Create vocal and swap users, then
-              #voice = await reaction.message.channel.category.create_voice_channel('coucou')
-              #print(reaction.message.channel.category.name)
-              #await reaction.message.delete(delay=60)
+              message = reaction.message
+              categories = message.guild.categories
+              category = disnake.utils.find(lambda c: c.id == 948167052722573322, categories)
+              await category.create_voice_channel(f'Instance de {user.display_name}')
+              await message.delete(delay=60)
               return
 
       if reaction.emoji == '❌':
@@ -893,5 +896,15 @@ l'embed du message.
 
 #+end_src
 
+** Gestion des changement d'état vocaux
+(aka quand un user change de channel vocal)
 
-https://github.com/DisnakeDev/disnake
+#+name: on_voice_state_update
+#+begin_src python
+  @bot.event
+  async def on_voice_state_update(member, before, after):
+      if before is not None and before.channel.category_id == 948167052722573322:
+          if not before.channel.members:
+              await before.channel.delete()
+
+#+end_src

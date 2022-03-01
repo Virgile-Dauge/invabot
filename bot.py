@@ -386,9 +386,11 @@ def main():
         if reaction.emoji == '✅':
             if user == cmd_author:
                 #Create vocal and swap users, then
-                #voice = await reaction.message.channel.category.create_voice_channel('coucou')
-                #print(reaction.message.channel.category.name)
-                #await reaction.message.delete(delay=60)
+                message = reaction.message
+                categories = message.guild.categories
+                category = disnake.utils.find(lambda c: c.id == 948167052722573322, categories)
+                await category.create_voice_channel(f'Instance de {user.display_name}')
+                await message.delete(delay=60)
                 return
     
         if reaction.emoji == '❌':
@@ -454,6 +456,12 @@ def main():
          if msg_type == 'Instance':
              await update_instance_rm(reaction, user)
              return
+    
+    @bot.event
+    async def on_voice_state_update(member, before, after):
+        if before is not None and before.channel.category_id == 948167052722573322:
+            if not before.channel.members:
+                await before.channel.delete()
     
     bot.run(token=open("bot.token").read()[:-1])
 
