@@ -903,7 +903,7 @@ l'embed du message.
 #+begin_src python
   @bot.event
   async def on_voice_state_update(member, before, after):
-      if before is not None and before.channel.category_id == 948167052722573322:
+      if before.channel and before.channel.category_id == 948167052722573322:
           if not before.channel.members:
               await before.channel.delete()
 
