@@ -172,6 +172,12 @@ def main():
         msg = await ctx.original_message()
         await msg.add_reaction('☑')
     
+        # Création du vocal
+        invasions_cat = 906648457824051252
+        category = disnake.utils.find(lambda c: c.id == invasions_cat, ctx.guild.categories)
+        await category.create_voice_channel(f'{ville}', user_limit=99)
+        await category.create_voice_channel(f'🔩 Réparations {ville}')
+    
         # Envoi d'un message caché à l'invocateur
         trigger = CompTrigger(msg.id, timeout=10*60)
         await ctx.send("Calcul", view=trigger, ephemeral=True)
@@ -473,11 +479,15 @@ def main():
     @bot.event
     async def on_voice_state_update(member, before, after):
         instances_cat = 948167052722573322
-        waiting_voice = 948198317983146034
-        if before.channel and before.channel.category_id == instances_cat:
-            if not before.channel.members and before.channel.id != waiting_voice:
-                await before.channel.delete()
+        invasions_cat = 906648457824051252
+        to_purge = [instances_cat, invasions_cat]
     
+        invasions_waiting = 948204662086058076
+        instances_waiting = 948198317983146034
+        protected = [invasions_waiting, instances_waiting]
+        if before.channel and before.channel.category_id in to_purge:
+            if not before.channel.members and before.channel.id not in protected:
+                await before.channel.delete()
     bot.run(token=open("bot.token").read()[:-1])
 
 if __name__ == "__main__":
