@@ -382,23 +382,36 @@ def main():
         await reaction.message.edit(embed=embed)
     
     async def update_instance(reaction, user, add=True):
-        cmd_author = reaction.message.interaction.user
+        message = reaction.message
+        cmd_author = message.interaction.user
+    
+        roles, joueurs = instance_data(reaction)
+    
         if reaction.emoji == '✅':
             if user == cmd_author:
-                #Create vocal and swap users, then
-                message = reaction.message
+                # Create vocal and swap users
+    
                 categories = message.guild.categories
                 category = disnake.utils.find(lambda c: c.id == 948167052722573322, categories)
-                await category.create_voice_channel(f'Instance de {user.display_name}')
+                voice = await category.create_voice_channel(f'Instance de {user.display_name}')
+    
+                ids = [int(j[3:-1]) for j in joueurs if j != 'libre']
+    
+                users = await message.guild.getch_members(ids, presences=True)
+    
+                for u in users:
+                    if u.voice:
+                        await u.move_to(voice)
+                    else:
+                        invite = await voice.create_invite()
+                        await u.send(f"L'instance a démarré, rejoins ici : {invite} ", embed=message.embeds[-1])
                 await message.delete(delay=60)
                 return
     
         if reaction.emoji == '❌':
             if user == cmd_author:
-                await reaction.message.delete()
+                await message.delete()
             return
-    
-        roles, joueurs = instance_data(reaction)
     
         if user.mention not in joueurs:
             for i, r in enumerate(roles):
