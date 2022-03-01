@@ -473,7 +473,7 @@ def main():
     @bot.event
     async def on_voice_state_update(member, before, after):
         if before.channel and before.channel.category_id == 948167052722573322:
-            if not before.channel.members:
+            if not before.channel.members and before.channel.id != 948198317983146034:
                 await before.channel.delete()
     
     bot.run(token=open("bot.token").read()[:-1])
