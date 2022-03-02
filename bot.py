@@ -345,170 +345,120 @@ def main():
         #print(added, wrong)
     
     
-    from typing import List
-    class MyModal(disnake.ui.Modal):
-        def __init__(self) -> None:
-            components = [
-                disnake.ui.TextInput(
-                    label="Name",
-                    placeholder="The name of the tag",
-                    custom_id="name",
-                    style=disnake.TextInputStyle.short,
-                    max_length=50,
-                ),
-                disnake.ui.TextInput(
-                    label="Description",
-                    placeholder="The description of the tag",
-                    custom_id="description",
-                    style=disnake.TextInputStyle.short,
-                    min_length=5,
-                    max_length=50,
-                ),
-                disnake.ui.TextInput(
-                    label="Content",
-                    placeholder="The content of the tag",
-                    custom_id="content",
-                    style=disnake.TextInputStyle.paragraph,
-                    min_length=5,
-                    max_length=1024,
-                ),
-            ]
-            super().__init__(title="Create Tag", custom_id="create_tag", components=components)
+    import math
+    def progress_bar(percent, full='🟩', empty='⬜'):
+        done = math.floor(percent*10)
+        return full* done + empty*(10-done) + ' ' + f'{percent*100:.1f}%'
     
-        async def callback(self, inter: disnake.ModalInteraction) -> None:
-            embed = disnake.Embed(title="Tag Creation")
-            for key, value in inter.text_values.items():
-                embed.add_field(name=key.capitalize(), value=value, inline=False)
-            await inter.response.send_message(embed=embed)
+    def display_progress(actuel, objectif):
+        def display_num(n):
+            s = str(n)
+            if s.endswith('000'):
+                s = s[:-3] + 'k'
+            return s
+        return display_num(actuel)+ ' ̸ ' + display_num(objectif) + ' ' + progress_bar(actuel/objectif, full='▆', empty='▁')
     
-        async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
-            await inter.response.send_message("Oops, something went wrong.", ephemeral=True)
+    def progress_embed(title, actuel, objectif, contrib={}, top=5):
+        embed = disnake.Embed()
+        embed.title = title
+        embed.description = display_progress(actuel, objectif)
     
-    # Defines a custom button that contains the logic of the game.
-    # The ['TicTacToe'] bit is for type hinting purposes to tell your IDE or linter
-    # what the type of `self.view` is. It is not required.
-    class TicTacToeButton(disnake.ui.Button["TicTacToe"]):
-        def __init__(self, x: int, y: int):
-            # A label is required, but we don't need one so a zero-width space is used
-            # The row parameter tells the View which row to place the button under.
-            # A View can only contain up to 5 rows -- each row can only have 5 buttons.
-            # Since a Tic Tac Toe grid is 3x3 that means we have 3 rows and 3 columns.
-            super().__init__(style=disnake.ButtonStyle.secondary, label="\u200b", row=y)
-            self.x = x
-            self.y = y
+        contrib_str=''
+        if contrib:
+            s = dict(sorted(contrib.items(), key=lambda item: item[1]))
+            for k, v in s.items():
+                contrib_str += f'{k}  {v}\n'
+            embed.add_field('Contributeurs', contrib_str)
+        return embed
     
-        # This function is called whenever this particular button is pressed
-        # This is part of the "meat" of the game logic
-        async def callback(self, interaction: disnake.MessageInteraction):
-            assert self.view is not None
-            view: TicTacToe = self.view
-            state = view.board[self.y][self.x]
-            if state in (view.X, view.O):
-                return
+    class Dropdown(disnake.ui.Select):
+      def __init__(self, **kwargs):
     
-            if view.current_player == view.X:
-                self.style = disnake.ButtonStyle.danger
-                self.label = "X"
-                self.disabled = True
-                view.board[self.y][self.x] = view.X
-                view.current_player = view.O
-                content = "It is now O's turn"
-            else:
-                self.style = disnake.ButtonStyle.success
-                self.label = "O"
-                self.disabled = True
-                view.board[self.y][self.x] = view.O
-                view.current_player = view.X
-                content = "It is now X's turn"
+          # Set the options that will be presented inside the dropdown
+          options = [
+              disnake.SelectOption(
+                  label="1",
+              ),
+              disnake.SelectOption(
+                  label="10",
+              ),
+              disnake.SelectOption(
+                  label="100",
+              ),
+              disnake.SelectOption(
+                  label="1000",
+              ),
+          ]
     
-            winner = view.check_board_winner()
-            if winner is not None:
-                if winner == view.X:
-                    content = "X won!"
-                elif winner == view.O:
-                    content = "O won!"
-                else:
-                    content = "It's a tie!"
+          # The placeholder is what will be shown when no option is chosen
+          # The min and max values indicate we can only pick one of the three options
+          # The options parameter defines the dropdown options. We defined this above
+          super().__init__(
+              placeholder="Valeur",
+              min_values=1,
+              max_values=1,
+              options=options,
+              **kwargs
+          )
     
-                for child in view.children:
-                    child.disabled = True
+      async def callback(self, interaction: disnake.MessageInteraction):
+          await interaction.response.defer()
     
-                view.stop()
-    
-            await interaction.response.edit_message(content=content, view=view)
-    
-    
-    # This is our actual board View
-    class TicTacToe(disnake.ui.View):
-        # This tells the IDE or linter that all our children will be TicTacToeButtons
-        # This is not required
-        children: List[TicTacToeButton]
-        X = -1
-        O = 1
-        Tie = 2
-    
-        def __init__(self):
+    class ProgressView(disnake.ui.View):
+        def __init__(self, title, objectif):
             super().__init__()
-            self.current_player = self.X
-            self.board = [
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-            ]
+            self.title = title
+            self.actual = 0
+            self.objectif = objectif
+            self.contributors = {}
+            #self.add_item(disnake.ui.Button(style=disnake.ButtonStyle.secondary,
+            #                                label=display_progress(0, objectif),
+            #                                row=0, disabled=True))
+            #self.add_item(Dropdown(row=0))
     
-            # Our board is made up of 3 by 3 TicTacToeButtons
-            # The TicTacToeButton maintains the callbacks and helps steer
-            # the actual game.
-            for x in range(3):
-                for y in range(3):
-                    self.add_item(TicTacToeButton(x, y))
+        async def update(self, val, interaction: disnake.MessageInteraction):
+            #self.actual = self.actual + int(self.children[-1].values[0])
+            self.actual = self.actual + val
+            author = interaction.author.mention
+            if author not in self.contributors:
+                self.contributors[author] = val
+            else:
+                self.contributors[author] += val
+            await interaction.response.edit_message(embed=progress_embed(self.title,
+                                                                         self.actual,
+                                                                         self.objectif,
+                                                                         self.contributors))
     
-        # This method checks for the board winner -- it is used by the TicTacToeButton
-        def check_board_winner(self):
-            for across in self.board:
-                value = sum(across)
-                if value == 3:
-                    return self.O
-                elif value == -3:
-                    return self.X
+        @disnake.ui.button(label="+1", style=disnake.ButtonStyle.green, row=0)
+        async def ajout1(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+            await self.update(1, interaction)
     
-            # Check vertical
-            for line in range(3):
-                value = self.board[0][line] + self.board[1][line] + self.board[2][line]
-                if value == 3:
-                    return self.O
-                elif value == -3:
-                    return self.X
+        @disnake.ui.button(label="+10", style=disnake.ButtonStyle.green, row=0)
+        async def ajout10(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+            await self.update(10, interaction)
     
-            # Check diagonals
-            diag = self.board[0][2] + self.board[1][1] + self.board[2][0]
-            if diag == 3:
-                return self.O
-            elif diag == -3:
-                return self.X
+        @disnake.ui.button(label="+100", style=disnake.ButtonStyle.green, row=0)
+        async def ajout100(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+            await self.update(100, interaction)
     
-            diag = self.board[0][0] + self.board[1][1] + self.board[2][2]
-            if diag == 3:
-                return self.O
-            elif diag == -3:
-                return self.X
+        @disnake.ui.button(label="+1000", style=disnake.ButtonStyle.green, row=0)
+        async def ajout1000(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+            await self.update(1000, interaction)
     
-            # If we're here, we need to check if a tie was made
-            if all(i != 0 for row in self.board for i in row):
-                return self.Tie
-    
-            return None
     @bot.slash_command()
-    async def event(ctx: disnake.CommandInteraction):
+    async def collecte(ctx: disnake.CommandInteraction,
+                       item: str,
+                       objectif: int):
         """Créé un événement
     
            Parameters
            ----------
-    
+           item: Item désiré
+           objectif: Qauntité totale désirée
         """
-        await ctx.send('coucou', view=TicTacToe())
-    
-    
+        title = f'Collecte de {item}'
+        #await ctx.send('coucou', view=ProgressView(objectif=objectif))
+        await ctx.send(embed=progress_embed(title, 0, objectif), view=ProgressView(title=title, objectif=objectif))
 
     async def update_invasion(reaction):
         selected = await reaction.message.reactions[0].users().flatten()
