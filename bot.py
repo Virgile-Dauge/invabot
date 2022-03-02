@@ -406,7 +406,7 @@ def main():
     
     class ProgressView(disnake.ui.View):
         def __init__(self, title, objectif):
-            super().__init__()
+            super().__init__(timeout=None)
             self.title = title
             self.actual = 0
             self.objectif = objectif
