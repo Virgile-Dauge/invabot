@@ -306,7 +306,7 @@ def main():
                    # Finally, add the role.
                    await members[u].add_roles(role)
                    added += [u]
-               except discord.HTTPException:
+               except disnake.HTTPException:
                    # If we want to do something in case of errors we'd do it here.
                    pass
     
@@ -322,7 +322,7 @@ def main():
                     embed = Embed.from_dict(config["embeds"]["change"])
                     embed.description += f'{config["gdoc"]["form"]}) ***!***'
                     await members[u].send(embed=embed)
-                except discord.HTTPException:
+                except disnake.HTTPException:
                     # If we want to do something in case of errors we'd do it here.
                     pass
     
