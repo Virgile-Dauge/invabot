@@ -37,6 +37,8 @@ import disnake
 from disnake.ext import commands
 from disnake import Embed, Emoji
 
+import re
+
 
 def dtag(user):
     return f'{user.name}#{user.discriminator}'
@@ -88,6 +90,7 @@ def main():
                 data[p] = 1
         #print(data)
         save_data(data)
+
     
     async def autocomp_sources(ctx: disnake.ApplicationCommandInteraction, user_input: str):
         voices = [v for v in ctx.guild.voice_channels if v.members]
@@ -306,7 +309,7 @@ def main():
                    # Finally, add the role.
                    await members[u].add_roles(role)
                    added += [u]
-               except discord.HTTPException:
+               except disnake.HTTPException:
                    # If we want to do something in case of errors we'd do it here.
                    pass
     
@@ -322,7 +325,7 @@ def main():
                     embed = Embed.from_dict(config["embeds"]["change"])
                     embed.description += f'{config["gdoc"]["form"]}) ***!***'
                     await members[u].send(embed=embed)
-                except discord.HTTPException:
+                except disnake.HTTPException:
                     # If we want to do something in case of errors we'd do it here.
                     pass
     
@@ -342,6 +345,121 @@ def main():
         #print(added, wrong)
     
     
+    import math
+    def progress_bar(percent, full='🟩', empty='⬜'):
+        done = math.floor(percent*10)
+        return full* done + empty*(10-done) + ' ' + f'{percent*100:.1f}%'
+    
+    def display_progress(actuel, objectif):
+        def display_num(n):
+            s = str(n)
+            if s.endswith('000'):
+                s = s[:-3] + 'k'
+            return s
+        return display_num(actuel)+ ' ̸ ' + display_num(objectif) + ' ' + progress_bar(actuel/objectif, full='▆', empty='▁')
+    
+    def progress_embed(title, actuel, objectif, contrib={}, top=5):
+        embed = disnake.Embed()
+        embed.title = title
+        embed.description = display_progress(actuel, objectif)
+    
+        contrib_str=''
+        if contrib:
+            s = dict(sorted(contrib.items(), key=lambda item: item[1]))
+            for k, v in s.items():
+                contrib_str += f'{k}  {v}\n'
+            embed.add_field('Contributeurs', contrib_str)
+        return embed
+    
+    class Dropdown(disnake.ui.Select):
+      def __init__(self, **kwargs):
+    
+          # Set the options that will be presented inside the dropdown
+          options = [
+              disnake.SelectOption(
+                  label="1",
+              ),
+              disnake.SelectOption(
+                  label="10",
+              ),
+              disnake.SelectOption(
+                  label="100",
+              ),
+              disnake.SelectOption(
+                  label="1000",
+              ),
+          ]
+    
+          # The placeholder is what will be shown when no option is chosen
+          # The min and max values indicate we can only pick one of the three options
+          # The options parameter defines the dropdown options. We defined this above
+          super().__init__(
+              placeholder="Valeur",
+              min_values=1,
+              max_values=1,
+              options=options,
+              **kwargs
+          )
+    
+      async def callback(self, interaction: disnake.MessageInteraction):
+          await interaction.response.defer()
+    
+    class ProgressView(disnake.ui.View):
+        def __init__(self, title, objectif):
+            super().__init__(timeout=None)
+            self.title = title
+            self.actual = 0
+            self.objectif = objectif
+            self.contributors = {}
+            #self.add_item(disnake.ui.Button(style=disnake.ButtonStyle.secondary,
+            #                                label=display_progress(0, objectif),
+            #                                row=0, disabled=True))
+            #self.add_item(Dropdown(row=0))
+    
+        async def update(self, val, interaction: disnake.MessageInteraction):
+            #self.actual = self.actual + int(self.children[-1].values[0])
+            self.actual = self.actual + val
+            author = interaction.author.mention
+            if author not in self.contributors:
+                self.contributors[author] = val
+            else:
+                self.contributors[author] += val
+            await interaction.response.edit_message(embed=progress_embed(self.title,
+                                                                         self.actual,
+                                                                         self.objectif,
+                                                                         self.contributors))
+    
+        @disnake.ui.button(label="+1", style=disnake.ButtonStyle.green, row=0)
+        async def ajout1(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+            await self.update(1, interaction)
+    
+        @disnake.ui.button(label="+10", style=disnake.ButtonStyle.green, row=0)
+        async def ajout10(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+            await self.update(10, interaction)
+    
+        @disnake.ui.button(label="+100", style=disnake.ButtonStyle.green, row=0)
+        async def ajout100(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+            await self.update(100, interaction)
+    
+        @disnake.ui.button(label="+1000", style=disnake.ButtonStyle.green, row=0)
+        async def ajout1000(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+            await self.update(1000, interaction)
+    
+    @bot.slash_command()
+    async def collecte(ctx: disnake.CommandInteraction,
+                       item: str,
+                       objectif: int):
+        """Créé un événement
+    
+           Parameters
+           ----------
+           item: Item désiré
+           objectif: Qauntité totale désirée
+        """
+        title = f'Collecte de {item}'
+        #await ctx.send('coucou', view=ProgressView(objectif=objectif))
+        await ctx.send(embed=progress_embed(title, 0, objectif), view=ProgressView(title=title, objectif=objectif))
+
     async def update_invasion(reaction):
         selected = await reaction.message.reactions[0].users().flatten()
         embed = reaction.message.embeds[-1]
@@ -401,9 +519,9 @@ def main():
                 category = disnake.utils.find(lambda c: c.id == 948167052722573322, categories)
                 voice = await category.create_voice_channel(f'Instance de {user.display_name}')
     
-                ids = [int(j[3:-1]) for j in joueurs if j != 'libre']
+                ids = [int(re.sub("[^0-9]", "", j)) for j in joueurs if j != 'libre']
     
-                users = await message.guild.getch_members(ids, presences=True)
+                users = await message.guild.getch_members(ids)
     
                 for u in users:
                     if u.voice:
@@ -426,7 +544,6 @@ def main():
                     break
     
         await update_instance_embed(reaction, roles, joueurs)
-    
     async def update_instance_rm(reaction, user):
         roles, joueurs = instance_data(reaction)
         # Le joueur est-il séléctionné ?

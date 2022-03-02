@@ -423,6 +423,8 @@ Remplissage du tableau
   from disnake.ext import commands
   from disnake import Embed, Emoji
 
+  import re
+
 
   <<dtag>>
   <<get_roster>>
@@ -451,10 +453,13 @@ Remplissage du tableau
           sync_commands_debug=True
       )
       <<data>>
-      <<dis_transfert>>
-      <<dis_inva_cmd>>
-      <<dis_instance>>
-      <<dis_verif>>
+
+      <<slash_transfert>>
+      <<slash_invasion>>
+      <<slash_instance>>
+      <<slash_verif>>
+      <<slash_collecte>>
+
       <<check_user>>
       <<update_instance_add>>
       <<update_instance_rm>>
@@ -466,9 +471,9 @@ Remplissage du tableau
   if __name__ == "__main__":
       main()
 #+end_src
-
-** Commande inva
-#+name: dis_inva_cmd
+** Slash commands
+*** Commande inva
+#+name: slash_invasion
  #+begin_src python :noweb yes
   villes = ["Bief de Nérécaille", "Boisclair", "Eaux Fétides", "Gré du vent",
             "Ile des Lames", "Levant", "Haute-Chute", "Marais des Trames",
@@ -586,8 +591,8 @@ Remplissage du tableau
       await ctx.send(embed=embed, delete_after=60*25)
 
  #+end_src
-** Commande verif
-#+name: dis_verif
+*** Commande verif
+#+name: slash_verif
  #+begin_src python
   @bot.slash_command(
       description="Vérification du Gdoc et mise à jour des rôles",
@@ -623,7 +628,7 @@ Remplissage du tableau
                  # Finally, add the role.
                  await members[u].add_roles(role)
                  added += [u]
-             except discord.HTTPException:
+             except disnake.HTTPException:
                  # If we want to do something in case of errors we'd do it here.
                  pass
 
@@ -639,7 +644,7 @@ Remplissage du tableau
                   embed = Embed.from_dict(config["embeds"]["change"])
                   embed.description += f'{config["gdoc"]["form"]}) ***!***'
                   await members[u].send(embed=embed)
-              except discord.HTTPException:
+              except disnake.HTTPException:
                   # If we want to do something in case of errors we'd do it here.
                   pass
 
@@ -660,8 +665,8 @@ Remplissage du tableau
 
 
  #+end_src
-** Commande transfert
-#+name: dis_transfert
+*** Commande transfert
+#+name: slash_transfert
  #+begin_src python
 
   async def autocomp_sources(ctx: disnake.ApplicationCommandInteraction, user_input: str):
@@ -692,8 +697,8 @@ Remplissage du tableau
 
  #+end_src
 
-** Commande Instance
-#+name: dis_instance
+*** Commande Instance
+#+name: slash_instance
  #+begin_src python
   lieux = ["Lazarus", "Gènese", "Sirène"]
 
@@ -738,6 +743,125 @@ Remplissage du tableau
       await msg.add_reaction('✅')
       await msg.add_reaction('❌')
  #+end_src
+*** Commande event
+#+name: slash_collecte
+#+begin_src python
+  import math
+  def progress_bar(percent, full='🟩', empty='⬜'):
+      done = math.floor(percent*10)
+      return full* done + empty*(10-done) + ' ' + f'{percent*100:.1f}%'
+
+  def display_progress(actuel, objectif):
+      def display_num(n):
+          s = str(n)
+          if s.endswith('000'):
+              s = s[:-3] + 'k'
+          return s
+      return display_num(actuel)+ ' ̸ ' + display_num(objectif) + ' ' + progress_bar(actuel/objectif, full='▆', empty='▁')
+
+  def progress_embed(title, actuel, objectif, contrib={}, top=5):
+      embed = disnake.Embed()
+      embed.title = title
+      embed.description = display_progress(actuel, objectif)
+
+      contrib_str=''
+      if contrib:
+          s = dict(sorted(contrib.items(), key=lambda item: item[1]))
+          for k, v in s.items():
+              contrib_str += f'{k}  {v}\n'
+          embed.add_field('Contributeurs', contrib_str)
+      return embed
+
+  class Dropdown(disnake.ui.Select):
+    def __init__(self, **kwargs):
+
+        # Set the options that will be presented inside the dropdown
+        options = [
+            disnake.SelectOption(
+                label="1",
+            ),
+            disnake.SelectOption(
+                label="10",
+            ),
+            disnake.SelectOption(
+                label="100",
+            ),
+            disnake.SelectOption(
+                label="1000",
+            ),
+        ]
+
+        # The placeholder is what will be shown when no option is chosen
+        # The min and max values indicate we can only pick one of the three options
+        # The options parameter defines the dropdown options. We defined this above
+        super().__init__(
+            placeholder="Valeur",
+            min_values=1,
+            max_values=1,
+            options=options,
+            ,**kwargs
+        )
+
+    async def callback(self, interaction: disnake.MessageInteraction):
+        await interaction.response.defer()
+
+  class ProgressView(disnake.ui.View):
+      def __init__(self, title, objectif):
+          super().__init__(timeout=None)
+          self.title = title
+          self.actual = 0
+          self.objectif = objectif
+          self.contributors = {}
+          #self.add_item(disnake.ui.Button(style=disnake.ButtonStyle.secondary,
+          #                                label=display_progress(0, objectif),
+          #                                row=0, disabled=True))
+          #self.add_item(Dropdown(row=0))
+
+      async def update(self, val, interaction: disnake.MessageInteraction):
+          #self.actual = self.actual + int(self.children[-1].values[0])
+          self.actual = self.actual + val
+          author = interaction.author.mention
+          if author not in self.contributors:
+              self.contributors[author] = val
+          else:
+              self.contributors[author] += val
+          await interaction.response.edit_message(embed=progress_embed(self.title,
+                                                                       self.actual,
+                                                                       self.objectif,
+                                                                       self.contributors))
+
+      @disnake.ui.button(label="+1", style=disnake.ButtonStyle.green, row=0)
+      async def ajout1(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+          await self.update(1, interaction)
+
+      @disnake.ui.button(label="+10", style=disnake.ButtonStyle.green, row=0)
+      async def ajout10(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+          await self.update(10, interaction)
+
+      @disnake.ui.button(label="+100", style=disnake.ButtonStyle.green, row=0)
+      async def ajout100(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+          await self.update(100, interaction)
+
+      @disnake.ui.button(label="+1000", style=disnake.ButtonStyle.green, row=0)
+      async def ajout1000(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+          await self.update(1000, interaction)
+
+  @bot.slash_command()
+  async def collecte(ctx: disnake.CommandInteraction,
+                     item: str,
+                     objectif: int):
+      """Créé un événement
+
+         Parameters
+         ----------
+         item: Item désiré
+         objectif: Qauntité totale désirée
+      """
+      title = f'Collecte de {item}'
+      #await ctx.send('coucou', view=ProgressView(objectif=objectif))
+      await ctx.send(embed=progress_embed(title, 0, objectif), view=ProgressView(title=title, objectif=objectif))
+#+end_src
+
 ** Gestion des réactions aux messages
 
 Certain des messages issus des commandes du bot nécessitent une
@@ -862,9 +986,9 @@ l'embed du message.
               category = disnake.utils.find(lambda c: c.id == 948167052722573322, categories)
               voice = await category.create_voice_channel(f'Instance de {user.display_name}')
 
-              ids = [int(j[3:-1]) for j in joueurs if j != 'libre']
+              ids = [int(re.sub("[^0-9]", "", j)) for j in joueurs if j != 'libre']
 
-              users = await message.guild.getch_members(ids, presences=True)
+              users = await message.guild.getch_members(ids)
 
               for u in users:
                   if u.voice:
@@ -892,7 +1016,6 @@ l'embed du message.
 *** Gestion annulation réaction message Instance
 #+name: update_instance_rm
 #+begin_src python
-
   async def update_instance_rm(reaction, user):
       roles, joueurs = instance_data(reaction)
       # Le joueur est-il séléctionné ?
@@ -932,4 +1055,58 @@ l'embed du message.
       if before.channel and before.channel.category_id in to_purge:
           if not before.channel.members and before.channel.id not in protected:
               await before.channel.delete()
+#+end_src
+
+
+* Test ui
+
+** Modal (sorte de formulaire)
+#+begin_src python
+  class MyModal(disnake.ui.Modal):
+      def __init__(self) -> None:
+          components = [
+              disnake.ui.TextInput(
+                  label="Name",
+                  placeholder="The name of the tag",
+                  custom_id="name",
+                  style=disnake.TextInputStyle.short,
+                  max_length=50,
+              ),
+              disnake.ui.TextInput(
+                  label="Description",
+                  placeholder="The description of the tag",
+                  custom_id="description",
+                  style=disnake.TextInputStyle.short,
+                  min_length=5,
+                  max_length=50,
+              ),
+              disnake.ui.TextInput(
+                  label="Content",
+                  placeholder="The content of the tag",
+                  custom_id="content",
+                  style=disnake.TextInputStyle.paragraph,
+                  min_length=5,
+                  max_length=1024,
+              ),
+          ]
+          super().__init__(title="Create Tag", custom_id="create_tag", components=components)
+
+      async def callback(self, inter: disnake.ModalInteraction) -> None:
+          embed = disnake.Embed(title="Tag Creation")
+          for key, value in inter.text_values.items():
+              embed.add_field(name=key.capitalize(), value=value, inline=False)
+          await inter.response.send_message(embed=embed)
+
+      async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
+          await inter.response.send_message("Oops, something went wrong.", ephemeral=True)
+
+  @bot.slash_command()
+  async def testmodal(ctx: disnake.CommandInteraction):
+      """Créé un événement
+
+         Parameters
+         ----------
+
+      """
+      await ctx.response.send_modal(modal=MyModal())
 #+end_src
