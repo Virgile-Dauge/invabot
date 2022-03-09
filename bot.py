@@ -233,8 +233,9 @@ def main():
         embed.set_thumbnail(url=img_url)
         await ctx.send(embed=embed, delete_after=60*25)
     
-    lieux = ["Lazarus", "Gènese", "Sirène"]
-    
+    donjons = ["Lazarus", "Gènese", "Dynastie", "Etoile", "Profondeur", "Amrine"]
+    zones_elites = ["Sirène", "Palais", "Mines", "Myrk", "Malveillance"]
+    lieux = donjons + zones_elites
     async def autocomp_lieux(inter: disnake.ApplicationCommandInteraction, user_input: str):
         return [l for l in lieux if l.lower().startswith(user_input.lower())]
     
@@ -242,7 +243,11 @@ def main():
     async def instance(ctx: disnake.ApplicationCommandInteraction,
                        lieu: str=commands.Param(autocomplete=autocomp_lieux),
                        heure: str=commands.Param(default=None),
-                       prix: str=commands.Param(default=None)):
+                       prix: str=commands.Param(default=None),
+                       tanks: int=commands.Param(default=None),
+                       dps: int=commands.Param(default=None),
+                       heals: int=commands.Param(default=None),
+                       mutation: int=commands.Param(default=None)):
         """Crée un panneau d'inscription à une instance
     
             Parameters
@@ -250,9 +255,15 @@ def main():
             lieu: La ville où se déroule l'instance
             heure: L'heure à laquelle se déroule l'instance
             prix: Le prix par personne, gratuit c'est cool aussi ;)
+            tanks: Le nombre de tanks attendus
+            dps: Le nombre de dps attendus
+            heals: Le nombre de heals attendus
+            mutation: Le niveau de mutation (si mutation)
         """
         embed = Embed()
         embed.title = f'Instance {lieu}'
+        if mutation:
+            embed.title += f' M{mutation}'
         embed.description = ''
         if heure:
             embed.description += f' 🕐 {heure}\n'
@@ -261,7 +272,18 @@ def main():
         embed.description += f'Proposée par {ctx.user.mention}\n'
         embed.color = 2003199
     
-        roles = ['🛡', '⚔', '⚔', '⚔','⛑']
+        # Si nombre custom
+        if tanks or dps or heals:
+            if not tanks:
+                tanks = 1
+            if not dps:
+                dps = 3
+            if not heals:
+                heals = 1
+            roles = ['🛡']*tanks + ['⚔']*dps + ['⛑']*heals
+        else:
+            roles = ['🛡', '⚔', '⚔', '⚔','⛑']
+    
         players = ['libre']*len(roles)
         embed.add_field(name="Rôles", value=list_to_field(roles), inline=True)
         embed.add_field(name="Joueurs", value=list_to_field(players), inline=True)
