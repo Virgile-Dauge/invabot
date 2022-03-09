@@ -178,8 +178,9 @@ def main():
         # Création du vocal
         invasions_cat = 906648457824051252
         category = disnake.utils.find(lambda c: c.id == invasions_cat, ctx.guild.categories)
-        await category.create_voice_channel(f'{ville}', user_limit=99)
+    
         await category.create_voice_channel(f'🔩 Réparations {ville}')
+        await category.create_voice_channel(f'{ville}', user_limit=99)
     
         # Envoi d'un message caché à l'invocateur
         trigger = CompTrigger(msg.id, timeout=10*60)
