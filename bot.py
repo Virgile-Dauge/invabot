@@ -387,7 +387,7 @@ def main():
     
         contrib_str=''
         if contrib:
-            s = dict(sorted(contrib.items(), key=lambda item: item[1]))
+            s = dict(sorted(contrib.items(), key=lambda item: item[1], reverse=True))
             for k, v in s.items():
                 contrib_str += f'{k}  {v}\n'
             embed.add_field('Contributeurs', contrib_str)
