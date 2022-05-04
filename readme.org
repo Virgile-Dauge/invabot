@@ -1,9 +1,9 @@
 This file is part of Invabot.
 
 Invabot is free software: you can redistribute it
-and/or modify it under the terms of the GNU General 
+and/or modify it under the terms of the GNU General
 Public License as published by the Free Software
-Foundation, either version 3 of the License, or 
+Foundation, either version 3 of the License, or
 any later version.
 
 Invabot is distributed in the hope that it will be
@@ -16,121 +16,193 @@ You should have received a copy of the GNU General
 Public License along with Invabot. If not, see
 <https://www.gnu.org/licenses/>
 
+#+PROPERTY: header-args+ :comments both
+#+PROPERTY: header-args+ :mkdirp yes
+#+PROPERTY: header-args+ :padline yes
+#+STARTUP: overview
 
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+TITLE: Invabot
 
-* Documentation des rôles
-#+begin_export html
-<script async src="https://nwdb.info/embed.js"></script>
-#+end_export
-Cette section a pour objectif de présenter les différents rôles utiles
-en invasion. Chaque rôle comporte des composantes indispensables,
-illustrées par le sigle suivant : /(obligatoire)/. Afin de mieux
-maîtriser la répartition des rôles, il sera demandé aux joueurs
-d'évaluer leur pertinence pour chacun de ces rôles.
+* Algorithme d'attribution des rôles
+Cette section définit l'algorithme d'attribution des rôles, qui est
+indépendant de /Discord/.
 
-Un joueur peut s'estimer :
+** Principe
 
-- Capable :: S'il répond à tous les critères tagués */(obligatoire)/*
-- Opti :: S'il répond a tous les critères tagués */(obligatoire)/* *ET* */(recommandé)/*.
+Attribuer un rôle à chaque joueur, en optimisant la pertinence totale
+des attributions.
+** Licence
+#+begin_src python :tangle algo.py
+# This file is part of Invabot.
 
-** Arc
-- *Objectif* :: DPS les *têtes*, les *boss*, les engins de sièges et
-  AoE les trashs, dans cet ordre de priorité.
-- *Arme principale* :: Arc 580 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly
-  Empowered]] */(recommandé)/*. [[https://nwdb.info/build?skills=4-iw75uo-ngewxw][Build arc]] */(recommandé)/*
-- *Arme secondaire* :: Arme débuff distance comme la hachette ou la lance avec [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] sur pièce d'armure */(recommandé)/*
-- *Armure et perks* :: Légère avec perks pour l'arc[[https://nwdb.info/db/perk/perkid_ability_bow_poisonshot][ Enfeebling Poison Shot]] et [[https://nwdb.info/db/perk/perkid_ability_bow_rapidshot][Penetrating Rapid Shot]] */(recommandé)/*
-[[https://nwdb.info/db/perk/perkid_ability_spear_javelin][      Sundering Javelin]] */(recommandé si lance en secondaire)/*
+# Invabot is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software
+# Foundation, either version 3 of the License, or
+# any later version.
 
-** Mousquet
+# Invabot is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License
+# for more details.
 
-- *Objectif* :: DPS les *têtes* et les *boss*, dans cet ordre de priorité.
-- *Arme principale* :: Mousquet 570 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
-  [[https://nwdb.info/db/perk/perkid_weapon_dmgbasic][Enchanted]] */(recommandé)/*  [[https://nwdb.info/build?skills=6-nm5y04-qtbfgg][Build Mousquet]] */(recommandé)/*
-- *Armure et perks* :: Légère avec perks pour le mousquet [[https://nwdb.info/db/perk/perkid_ability_musket_shootersstance][Empowering Shooter's
-  Stance]] */(recommandé)/*.
+# You should have received a copy of the GNU General
+# Public License along with Invabot. If not, see
+# <https://www.gnu.org/licenses/>
 
-** Anti-Trash
+#+end_src
 
-- *Objectif* :: Empêcher les *trash-mobs* d'atteindre les autres joueurs et les portes.
-- *Arme principale* :: Hache double 580 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/*
-  [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(obligatoire)/* et [[https://nwdb.info/db/item/sapphirecutt4 [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] (recommandé).
-  [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] */(obligatoire)/*
-- *Arme secondaire* :: Arme CàC, Marteau pour le contrôle ?
-- *Armure et perks* :: Lourde */(recommandé)/* [[https://nwdb.info/db/perk/perkid_ability_greataxe_gravitywell][Insatiable Gravity Well]]
-  */(obligatoire)*/ [[https://nwdb.info/db/perk/perkid_ability_greataxe_maelstrom][Enfeebling Maelstrom]] et [[https://nwdb.info/db/perk/perkid_ability_greataxe_whirlwind][Fortifying Whirlwind]]
-  */(recommandé)/* et pour de la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur
-  quelques pièces */(recommandé)/*
+** Dépendances
+#+begin_src python :tangle algo.py
+  import numpy as np
+  import pandas as pd
+  from scipy.optimize import linear_sum_assignment
 
-** DPS debuff
+  from typing import Dict, List, Tuple
+  import numpy.typing as npt
 
-- *Objectif* :: Appliquer */rend/* et */weaken/* aux boss et les DPS
-- *Arme principale* :: Lance 580 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] */(obligatoire)/* et
-  [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] ou [[https://nwdb.info/db/perk/perkid_weaponmelee_dmgback][Rogue]] */(recommandé)/*. [[https://nwdb.info/build?skills=10-l71p4w-tsmm2s][Build lance]]
-  */(obligatoire)/*
-- *Arme secondaire* :: Arc préféré, mais peut être une arme de CàC.
-- *Armure* :: Légère avec perks [[https://nwdb.info/db/perk/perkid_ability_spear_javelin][Sundering Javelin]] */(obligatoire)/*
-  [[https://nwdb.info/db/perk/perkid_ability_spear_skewer][Enfeebling Skewer]] */(obligatoire)/* [[https://nwdb.info/db/perk/perkid_ability_spear_perforate][Fortifying Perforate]] */(recommandé)/*
-  et pour de la survivabilité [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
+  NDArrayInt = npt.NDArray[np.int_]
+#+end_src
 
-** Pustule boy
-- *Objectif* :: Tirer en *priorité sur les pustules* qui se forment
-  lors de l'impact d'un bison à l'intérieur du fort. Aider au centre.
+** Données d'entrée
+Les données d'entrées sont :
+- un roster :: un ensemble de joueurs représenté par une
+  [[https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html][DataFrame]]. Chaque ligne de cette structure représente un joueur
+  ainsi que sa compétence (un entier) pour chaque rôle prédéfini.
 
-- *Arme principale* :: Arme distante */(obligatoire)/*, les armes
-  Néant/Arc/Feu */(recommandé)/* sont plus efficaces dans ce rôle
-  grâce à une meilleure cadence de tir.
-- *Arme secondaire* ::  Arc/Mousquet */(recommandé)/*
+- une stratégie :: un ensemble de rôles à attribuer,
+  représenté par une [[https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html][DataFrame]], et structuré sous forme de groupes.
 
-** Réparateur
-- *Objectif* :: Gérer les ressources et *réparer les portes*.
-- *Arme principale* :: Hachette avec [[https://nwdb.info/db/ability/ult_passive_hatchet_immortalwhen0hp][Defy Death]] */(recommandé)/*
-- *Arme secondaire* :: Arme avec mobilité */(recommandé)/*
+*** Données de test
+ #+begin_src python :tangle algo.py
+   def get_test_roster():
+       url = "https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/gviz/tq?tqx=out:csv&sheet=Roster"
+       return pd.read_csv(url).set_index('dtag')
+ #+end_src
+#+begin_src python :tangle algo.py
+  def get_test_strat():
+      url = "https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/gviz/tq?tqx=out:csv&sheet=Strat_principale"
+      page = pd.read_csv(url)
+      return page.iloc[0:5, 0:10]
+#+end_src
+** Identification des rôles à attribuer
 
-PS: Si vous n'avez jamais joué Hachette, il suffit de débloquer 12
-points de compétence. C'est assez rapide et vous n'avez pas besoin
-d'une arme haut niveau/particulière.
+La première étape consiste à extraire, depuis la stratégie d'entrée,
+les rôles à attribuer.
 
-** Artilleur
+#+begin_src python :tangle algo.py
+  def extraction_roles(strat: pd.DataFrame) -> Dict[str, int]:
+      roles = {}
+      for index, row in strat.iterrows():
+          for v in row:
+              v = v.split(' ')[0]
+              if v in roles:
+                  roles[v] += 1
+              else:
+                  roles[v] = 1
+      return roles
+#+end_src
 
-- *Objectif* :: Tuer les bombers, les tireurs, les artilleries
-  ennemies et les trash mob, en respectant cet ordre de priorité.
+** Matrice de coûts
+Maintenant que les rôles sont déterminés, l'objectif est d'affecter
+pour chacun un joueur. C'est un classique d'optimisation combinatoire,
+connu sous le terme de problème d'[[https://en.wikipedia.org/wiki/Assignment_problem][affectation]].
 
-- *Arme principale* :: Épée avec la compétence [[https://nwdb.info/db/ability/ultimate_sword_swordmaster][Leadership]] */(obligatoire)/*
-- *Arme secondaire* :: Bâton de feu/vie/hachette */(recommandé)/*
+La programmation linéaire est une technique éprouvée pour résoudre ce
+problème. L'idée est de représenter le problème par une matrice $C$ de
+pertinence (ou de coût si minimisation), où chaque élément $C_{i,j}$
+représente la pertinence d'attribuer le rôle $i$ au joueur $j$.
 
-PS: Si vous n'avez jamais joué l'épée, il suffit de débloquer 12
-points de compétence. C'est assez rapide et vous n'avez pas besoin
-d'une arme haut niveau/particulière.
-** Heal
-- *Objectif* :: Maintenir l'équipe *Anti-trash* en vie en priorité
-  puis empêcher les *trash-mobs* d'atteindre les autres joueurs et les
-  portes.
-- *Arme principale* :: Bâton de vie 580 GS min */(obligatoire)/* avec [[https://nwdb.info/db/perk/perkid_weaponlife_healoutgoing][Blessed]]
-  */(recommandé)/*
-- *Arme secondaire* :: Hache double avec [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] et [[https://nwdb.info/db/item/ambercutt4][Pristine
-  Amber]] */(recommandé)/* [[https://nwdb.info/build?skills=8-j1mxog-kc3hhg][Build Hache double]] */(recommandé)/*
+Nous avons besoin de créer la matrice $C$ ainsi que des labels de
+lignes /rows/ et de colonnes /cols/ faisant le lien entre les index
+$i$ et $j$ et les noms de rôles/joueurs.
 
-  OU
+ #+name: cout
+ #+begin_src python :tangle algo.py
+   def matrice_cout(roles: pd.DataFrame, roster: pd.DataFrame) -> Tuple[List[str], List[str], NDArrayInt]:
+       cols = [k for k, v in roles.items() for _ in range(v)]
+       rows = roster.index
 
-  Gantelet du néant
+       C = np.zeros((len(rows), len(cols)), dtype=int)
 
-- *Armure* :: [[https://nwdb.info/db/perk/perkid_armor_defcorrupted][Corrupted Ward]] sur quelques pièces */(recommandé)/*
+       for i, r in enumerate(rows):
+           for j, c in enumerate(cols):
+               #print(roster.at[r, c])
+               C[i, j] = int(roster.at[r, c])
+       return rows, cols, C
+ #+end_src
 
+** Résolution
+Puis, il faut trouver la matrice d'assignation $X$ qui va maximiser la
+pertinence totale de la manière suivante :
 
-** Mage AOE
+$$max \sum_{i} \sum_{j} C_{i,j} X_{i,j}$$
 
-- *Objectif* :: DPS les *boss* dans les phases de fin, quand ils
-  s'accumulent sur les portes.
-- *Arme principale* :: Bâton de feu 580 GS min. [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] avec [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(obligatoire)/*
-  et [[https://nwdb.info/db/perk/perkid_weapon_empoweroncrit][Keenly Empowered]] */(recommandé)/*.
-- *Arme secondaire possible* :: Mousquet [[https://nwdb.info/db/perk/perkid_weapon_dmgcorrupted][Corrupted Bane]] et [[https://nwdb.info/db/perk/perkid_weapon_dmgbasic][Enchanted]] avec
-  [[https://nwdb.info/db/item/sapphirecutt4][Pristine Sapphire]] */(recommandé)/*
-  OU
-  Gantelet de glace pour bloquer les boss
-- *Armure* :: Légère
+Nous utiliserons pour cela la fonction [[https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linear_sum_assignment.html][linear_sum_assignment]] de
+[[https://docs.scipy.org/doc/scipy/index.html][Scipy]]. Ensuite, nous créons un dictionnaire avec les assignations
+choisies.
+
+#+begin_src python :tangle algo.py
+  def solve(rows: List[str], cols: List[str], C: NDArrayInt) -> Dict[str, str]:
+      row_ind, X = linear_sum_assignment(C, maximize=True)
+      # score = C[row_ind, X].sum()
+      return {p: cols[t] for p, t in zip(rows, X)}
+#+end_src
+
+** Exploitation des résultats
+Remplissage de la composition des groupes en fonciton des assignations
+calculées.
+#+begin_src python :tangle algo.py
+  def creation_compo(assignations: Dict[str, str], roster: pd.DataFrame) -> pd.DataFrame:
+      filed_roles = {}
+      for k, v in assignations.items():
+          if v not in filed_roles:
+              filed_roles[v] = [k]
+          else:
+              filed_roles[v] += [k]
+
+      max_roles = {k: v.max() for k,v in roster.iteritems()}
+
+      comp = strat.copy()
+      for i, row in comp.iterrows():
+          for j, v in row.items():
+              label = ''
+              if len(v.split(' ')) > 1:
+                  v, label = v.split(' ')
+              if v in filed_roles and filed_roles[v]:
+                  p = filed_roles[v].pop()
+                  role_txt = f"[{comp.at[i, j]}]({config['doc']['url']})"
+                  #if role_txt in config['doc']:
+                  #    role_txt = f"[{role_txt}]({config['doc'][url]})"
+                  comp.at[i, j] = f'{p} *{role_txt}* {roster.at[p, v] / max_roles[v]:.1f}'
+      return comp
+#+end_src
+** Processus complet
+ #+begin_src python :tangle algo.py
+   def build_comp(roster: pd.DataFrame, strat: pd.DataFrame, config):
+       roles = extraction_roles(strat)
+       print(roles)
+       assignation = solve(*matrice_cout(roles, roster))
+       return creation_compo(assignation, roster)
+ #+end_src
+** Test algorithme
+
+#+begin_src python :tangle algo.py
+  import json
+  <<config>>
+  if __name__ == '__main__':
+      with open('config.json', 'r') as datafile:
+          config = json.load(datafile)
+      roster = get_test_roster()
+      roster.to_csv('roster.csv')
+      print(roster)
+      strat = get_test_strat()
+      strat.to_csv('strat.csv')
+      print(strat)
+      print(build_comp(roster, strat, config))
+#+end_src
 
 
 * Bot
@@ -144,7 +216,7 @@ d'une arme haut niveau/particulière.
  La configuration du bot passera par un fichier json unique, contenant
  le corps des différents messages à transmettre ainsi que les adresses
  des Gdoc à lire.
- #+begin_src json :tangle config.json
+ #+begin_src json :tangle config.json :comments no
    {
    "ids": {
        "role": 917546013248606238,
@@ -191,65 +263,55 @@ d'une arme haut niveau/particulière.
  #+end_src
 
 
-
 ** Utilitaires
-*** Dépendances
+*** Licence
 #+begin_src python :tangle bot.py
+# This file is part of Invabot.
 
-   import pandas as pd
-   from algo import build_comp
+# Invabot is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software
+# Foundation, either version 3 of the License, or
+# any later version.
+
+# Invabot is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License
+# for more details.
+
+# You should have received a copy of the GNU General
+# Public License along with Invabot. If not, see
+# <https://www.gnu.org/licenses/>
 
 #+end_src
-*** Chargement de la config
+*** Dépendances
+#+begin_src python :tangle bot.py
+  import json
+  import pandas as pd
+  from algo import build_comp
+#+end_src
+*** Chargement de la configuration du bot
 
  Le chargement de cette config se fera pour l'instant une seule fois au
  démarrage du bot.
 #+name: config
  #+begin_src python :tangle bot.py
-   # Chargement de la config du bot
-   import json
    with open('config.json', 'r') as datafile:
        config = json.load(datafile)
  #+end_src
 
- #+begin_src python :tangle bot.py
-   # Chargement de la config du bot
-   import json
-   with open('config.json', 'r') as datafile:
-       config = json.load(datafile)
- #+end_src
-
-*** Persistance
-
- Le chargement des données
-#+name: data
- #+begin_src python
-  # Chargement de la config du bot
-  def load_data(path='data.json'):
-      with open(path, 'r') as datafile:
-          return json.load(datafile)
-  def save_data(data, path='data.json'):
-      with open(path, 'w') as datafile:
-          json.dump(data, datafile, sort_keys=True, indent=4)
-  def add_participation(participants):
-      #print(participants)
-      data = load_data()
-      for p in participants:
-          if p in data:
-              data[p] +=1
-          else:
-              data[p] = 1
-      #print(data)
-      save_data(data)
- #+end_src
 *** Chargement du token
+Le /token discord/ est nécessaire pour lier le programme à l'identité
+/Discord/ du bot. Il est évidemment privé et *ne dois jamais* être
+inclus dans le dépôt Git.
 #+Name: token
  #+begin_src python :tangle bot.py
    # Chargement du token
    with open('bot.token', 'r') as datafile:
        token = datafile.read()
  #+end_src
-*** Identifiant
+*** Identifier de manière unique les utilisateurs
 
  Il est nécessaire d'avoir un identifiant unique entre discord et le
  gdoc pour faire le lien. Discord gère les identifiants sous forme d'un
@@ -304,134 +366,6 @@ d'une arme haut niveau/particulière.
  #+end_example
 
 
-
-* Algo
-Dépendances
-#+begin_src python :tangle algo.py
-import numpy as np
-import pandas as pd
-from scipy.optimize import linear_sum_assignment
-#+end_src
-
-Récupération du roster de test
- #+begin_src python :tangle algo.py
-   def get_test_roster():
-       page= 'Roster'
-       url = f"https://docs.google.com/spreadsheets/d/1FgtMvUQbLxP7qvXt2tnVwFFyX9KWnuREHu7o0RtX13M/gviz/tq?tqx=out:csv&sheet={page}"
-       #return pd.read_csv(url).iloc[:, 0:16].dropna().set_index('dtag')
-       return pd.read_csv(url).set_index('dtag')
- #+end_src
-
-#+begin_src python :tangle algo.py
-    def get_test_strat():
-      page= 'Strat'
-      url = f"https://docs.google.com/spreadsheets/d/1vDZ_p6Bq2oyyY0CV1SQ0FBRtJoGbtiurM9cOQWHJ-qo/gviz/tq?tqx=out:csv&sheet={page}"
-      return pd.read_csv(url).iloc[0:5, 0:12]
-#+end_src
-
-#+RESULTS:
-: None
-
- Identification des Rôles :
- #+begin_src python :tangle algo.py :noweb yes
-
-   def build_comp(roster, strat, config):
-       roles = {}
-       for index, row in strat.iterrows():
-           for v in row:
-               v = v.split(' ')[0]
-               if v in roles:
-                   roles[v] += 1
-               else:
-                   roles[v] = 1
-
-       max_roles = {k: v.max() for k,v in roster.iteritems()}
-       <<cout>>
-       <<res>>
-       <<comp>>
- #+end_src
-
-Création des colonnes avec les noms de rôles, les lignes avec les noms
-de joueurs, et de la matrice de coûts.
- #+name: cout
- #+begin_src python
-
-   cols = [k for k, v in roles.items() for _ in range(v)]
-   rows = roster.index
-
-   C = np.zeros((len(rows), len(cols)), dtype=int)
-
-   for i, r in enumerate(rows):
-       for j, c in enumerate(cols):
-           C[i, j] = roster.at[r, c]
- #+end_src
-
-
-Résolution du problème d'affectation avec la maximisation suivante :
-$$max \sum_{i} \sum_{j} C_{i,j} X_{i,j}$$
-#+name: res
-#+begin_src python
-
-row_ind, X = linear_sum_assignment(C, maximize=True)
-score = C[row_ind, X].sum()
-assignent = {p: cols[t] for p, t in zip(rows, X)}
-
-#+end_src
-
-Analyse des résultats
-#+begin_src python :tangle no
-  for k, v in assignent.items():
-      print(k, v, roster.at[k, v])
-
-#+end_src
-
-Remplissage du tableau
-#+name: comp
-#+begin_src python
-  filed_roles = {}
-  for k, v in assignent.items():
-      #print(k, v)
-      if v not in filed_roles:
-          filed_roles[v] = [k]
-      else:
-          filed_roles[v] += [k]
-
-  comp = strat.copy()
-  for i, row in comp.iterrows():
-      for j, v in row.items():
-          label = ''
-          if len(v.split(' ')) > 1:
-              v, label = v.split(' ')
-          if v in filed_roles and filed_roles[v]:
-              p = filed_roles[v].pop()
-              role_txt = f"[{comp.at[i, j]}]({config['doc']['url']})"
-              #if role_txt in config['doc']:
-              #    role_txt = f"[{role_txt}]({config['doc'][url]})"
-              comp.at[i, j] = f'{p} *{role_txt}* {roster.at[p, v] / max_roles[v]:.1f}'
-  return comp
-#+end_src
-
-** Test algo
-
-#+begin_src python :tangle algo.py
-
-  if __name__ == '__main__':
-      roster = get_test_roster().set_index('Pseudo IG')
-      roster.to_csv('roster.csv')
-      print(roster)
-      strat = get_test_strat()
-      strat.to_csv('strat.csv')
-      print(strat)
-      print(build_comp(roster, strat))
-#+end_src
-**** Filtrage des joueurs
- #+begin_src python :tangle no
- keys_to_extract = []
- a_subset = {key: players[key] for key in keys_to_extract}
- #+end_src
-
-
-* TODO bot avec Disnake
 
 ** Corp
 #+begin_src python :tangle bot.py :noweb tangle
@@ -571,7 +505,6 @@ Remplissage du tableau
       selected = await msg.reactions[0].users().flatten()
 
       selected_tags = [dtag(u) for u in selected if dtag(u) != 'Invasion#5489']
-      #selected_tags = [dtag(u) for u in selected][1:]
 
       # Récupération des donénes du Gdoc roster
       roster = get_roster(config)
@@ -582,7 +515,7 @@ Remplissage du tableau
       # Filtrage du roster avec les joueurs séléctionnés
       roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
 
-      add_participation(roster.index)
+      #add_participation(roster.index)
 
       strat=trigger.strat
 
