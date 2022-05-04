@@ -92,7 +92,6 @@ def matrice_cout(roles: pd.DataFrame, roster: pd.DataFrame) -> Tuple[List[str], 
 
     for i, r in enumerate(rows):
         for j, c in enumerate(cols):
-            #print(roster.at[r, c])
             C[i, j] = int(roster.at[r, c])
     return rows, cols, C
 # cout ends here
@@ -120,7 +119,7 @@ def solve(rows: List[str], cols: List[str], C: NDArrayInt) -> Dict[str, str]:
 # calculées.
 
 # [[file:readme.org::*Exploitation des résultats][Exploitation des résultats:1]]
-def creation_compo(assignations: Dict[str, str], roster: pd.DataFrame) -> pd.DataFrame:
+def creation_compo(assignations: Dict[str, str], strat: pd.DataFrame, roster: pd.DataFrame) -> pd.DataFrame:
     filed_roles = {}
     for k, v in assignations.items():
         if v not in filed_roles:
@@ -139,8 +138,6 @@ def creation_compo(assignations: Dict[str, str], roster: pd.DataFrame) -> pd.Dat
             if v in filed_roles and filed_roles[v]:
                 p = filed_roles[v].pop()
                 role_txt = f"[{comp.at[i, j]}]({config['doc']['url']})"
-                #if role_txt in config['doc']:
-                #    role_txt = f"[{role_txt}]({config['doc'][url]})"
                 comp.at[i, j] = f'{p} *{role_txt}* {roster.at[p, v] / max_roles[v]:.1f}'
     return comp
 # Exploitation des résultats:1 ends here
@@ -150,9 +147,8 @@ def creation_compo(assignations: Dict[str, str], roster: pd.DataFrame) -> pd.Dat
 # [[file:readme.org::*Processus complet][Processus complet:1]]
 def build_comp(roster: pd.DataFrame, strat: pd.DataFrame, config):
     roles = extraction_roles(strat)
-    print(roles)
     assignation = solve(*matrice_cout(roles, roster))
-    return creation_compo(assignation, roster)
+    return creation_compo(assignation, strat, roster)
 # Processus complet:1 ends here
 
 # Test algorithme

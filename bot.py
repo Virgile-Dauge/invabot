@@ -1,9 +1,12 @@
+# Licence
+
+# [[file:readme.org::*Licence][Licence:1]]
 # This file is part of Invabot.
 
 # Invabot is free software: you can redistribute it
-# and/or modify it under the terms of the GNU General 
+# and/or modify it under the terms of the GNU General
 # Public License as published by the Free Software
-# Foundation, either version 3 of the License, or 
+# Foundation, either version 3 of the License, or
 # any later version.
 
 # Invabot is distributed in the hope that it will be
@@ -15,39 +18,82 @@
 # You should have received a copy of the GNU General
 # Public License along with Invabot. If not, see
 # <https://www.gnu.org/licenses/>
+# Licence:1 ends here
 
+# Dépendances
+
+# [[file:readme.org::*Dépendances][Dépendances:1]]
+import json
 import pandas as pd
 from algo import build_comp
+# Dépendances:1 ends here
 
-# Chargement de la config du bot
-import json
+# Chargement de la configuration du bot
+
+#  Le chargement de cette config se fera pour l'instant une seule fois au
+#  démarrage du bot.
+# #+name: config
+
+# [[file:readme.org::config][config]]
 with open('config.json', 'r') as datafile:
     config = json.load(datafile)
+# config ends here
 
-# Chargement de la config du bot
-import json
-with open('config.json', 'r') as datafile:
-    config = json.load(datafile)
+# Chargement du token
+# Le /token discord/ est nécessaire pour lier le programme à l'identité
+# /Discord/ du bot. Il est évidemment privé et *ne dois jamais* être
+# inclus dans le dépôt Git.
+# #+Name: token
 
+# [[file:readme.org::token][token]]
 # Chargement du token
 with open('bot.token', 'r') as datafile:
     token = datafile.read()
+# token ends here
 
+# Identifier de manière unique les utilisateurs
+
+#  Il est nécessaire d'avoir un identifiant unique entre discord et le
+#  gdoc pour faire le lien. Discord gère les identifiants sous forme d'un
+#  entier appelé /snowflake/. Toutefois, il est difficilement accessible
+#  pour les joueurs, et ce sont les joueurs qui vont devoir renseigner
+#  leur identifiant unique sur le gdoc. Il est donc plus simple
+#  d'utiliser ici le *discord tag*, par exemple `Virgile#1234`.
+
+#  Je propose ici une rapide fonction d'aide pour récupérer le dtag
+#  depuis un objet /discord.User/ :
+#  #+name: dtag
+
+# [[file:readme.org::dtag][dtag]]
 def dtag(user):
     return f'{user.name}#{user.discriminator}'
+# dtag ends here
 
+# Récupération du roster
+# #+name: get_roster
+
+# [[file:readme.org::get_roster][get_roster]]
 def get_roster(config):
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
     #return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
     return pd.read_csv(url).set_index('dtag')
+# get_roster ends here
 
+# Récupération de la strat
+
+
+# [[file:readme.org::*Récupération de la strat][Récupération de la strat:1]]
 def get_strat(config, strat=None):
     if strat is None:
         url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
     else:
         url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_strat']}"
     return pd.read_csv(url).iloc[0:5, 0:12]
+# Récupération de la strat:1 ends here
 
+# Corp
+
+# [[file:readme.org::*Corp][Corp:1]]
 import pandas as pd
 from algo import build_comp
 
@@ -64,8 +110,6 @@ def get_roster(config):
     url = f"{config['gdoc']['url']}gviz/tq?tqx=out:csv&sheet={config['gdoc']['page_roster']}"
     #return pd.read_csv(url).iloc[1:, 0:6].dropna().set_index('dtag')
     return pd.read_csv(url).set_index('dtag')
-# Chargement de la config du bot
-import json
 with open('config.json', 'r') as datafile:
     config = json.load(datafile)
 def list_to_field(l):
@@ -91,23 +135,7 @@ def main():
         test_guilds=[906630964703289434], # Optional
         sync_commands_debug=True
     )
-    # Chargement de la config du bot
-    def load_data(path='data.json'):
-        with open(path, 'r') as datafile:
-            return json.load(datafile)
-    def save_data(data, path='data.json'):
-        with open(path, 'w') as datafile:
-            json.dump(data, datafile, sort_keys=True, indent=4)
-    def add_participation(participants):
-        #print(participants)
-        data = load_data()
-        for p in participants:
-            if p in data:
-                data[p] +=1
-            else:
-                data[p] = 1
-        #print(data)
-        save_data(data)
+    
 
     
     async def autocomp_sources(ctx: disnake.ApplicationCommandInteraction, user_input: str):
@@ -213,7 +241,6 @@ def main():
         selected = await msg.reactions[0].users().flatten()
     
         selected_tags = [dtag(u) for u in selected if dtag(u) != 'Invasion#5489']
-        #selected_tags = [dtag(u) for u in selected][1:]
     
         # Récupération des donénes du Gdoc roster
         roster = get_roster(config)
@@ -223,8 +250,6 @@ def main():
     
         # Filtrage du roster avec les joueurs séléctionnés
         roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
-    
-        add_participation(roster.index)
     
         strat=trigger.strat
     
@@ -252,7 +277,7 @@ def main():
         embed.set_thumbnail(url=img_url)
         await ctx.send(embed=embed, delete_after=60*25)
     
-    donjons = ["Lazarus", "Gènese", "Dynastie", "Etoile", "Profondeur", "Amrine"]
+    donjons = ["Lazarus", "Gènese", "Dynastie", "Etoile", "Profondeur", "Amrine", "Tempête"]
     zones_elites = ["Sirène", "Palais", "Mines", "Myrk", "Malveillance"]
     lieux = donjons + zones_elites
     async def autocomp_lieux(inter: disnake.ApplicationCommandInteraction, user_input: str):
@@ -650,3 +675,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+# Corp:1 ends here

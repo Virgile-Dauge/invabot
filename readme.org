@@ -129,7 +129,6 @@ $i$ et $j$ et les noms de rôles/joueurs.
 
        for i, r in enumerate(rows):
            for j, c in enumerate(cols):
-               #print(roster.at[r, c])
                C[i, j] = int(roster.at[r, c])
        return rows, cols, C
  #+end_src
@@ -155,7 +154,7 @@ choisies.
 Remplissage de la composition des groupes en fonciton des assignations
 calculées.
 #+begin_src python :tangle algo.py
-  def creation_compo(assignations: Dict[str, str], roster: pd.DataFrame) -> pd.DataFrame:
+  def creation_compo(assignations: Dict[str, str], strat: pd.DataFrame, roster: pd.DataFrame) -> pd.DataFrame:
       filed_roles = {}
       for k, v in assignations.items():
           if v not in filed_roles:
@@ -174,8 +173,6 @@ calculées.
               if v in filed_roles and filed_roles[v]:
                   p = filed_roles[v].pop()
                   role_txt = f"[{comp.at[i, j]}]({config['doc']['url']})"
-                  #if role_txt in config['doc']:
-                  #    role_txt = f"[{role_txt}]({config['doc'][url]})"
                   comp.at[i, j] = f'{p} *{role_txt}* {roster.at[p, v] / max_roles[v]:.1f}'
       return comp
 #+end_src
@@ -183,9 +180,8 @@ calculées.
  #+begin_src python :tangle algo.py
    def build_comp(roster: pd.DataFrame, strat: pd.DataFrame, config):
        roles = extraction_roles(strat)
-       print(roles)
        assignation = solve(*matrice_cout(roles, roster))
-       return creation_compo(assignation, roster)
+       return creation_compo(assignation, strat, roster)
  #+end_src
 ** Test algorithme
 
@@ -261,7 +257,6 @@ calculées.
    }
    }
  #+end_src
-
 
 ** Utilitaires
 *** Licence
@@ -366,7 +361,6 @@ inclus dans le dépôt Git.
  #+end_example
 
 
-
 ** Corp
 #+begin_src python :tangle bot.py :noweb tangle
   import pandas as pd
@@ -425,7 +419,7 @@ inclus dans le dépôt Git.
       main()
 #+end_src
 ** Slash commands
-*** Commande inva
+*** Commande invasion
 #+name: slash_invasion
  #+begin_src python :noweb yes
   villes = ["Bief de Nérécaille", "Boisclair", "Eaux Fétides", "Gré du vent",
@@ -514,8 +508,6 @@ inclus dans le dépôt Git.
 
       # Filtrage du roster avec les joueurs séléctionnés
       roster = roster.filter(items=selected_tags, axis=0).set_index('Pseudo IG')
-
-      #add_participation(roster.index)
 
       strat=trigger.strat
 
@@ -653,7 +645,7 @@ inclus dans le dépôt Git.
 *** Commande Instance
 #+name: slash_instance
  #+begin_src python
-  donjons = ["Lazarus", "Gènese", "Dynastie", "Etoile", "Profondeur", "Amrine"]
+  donjons = ["Lazarus", "Gènese", "Dynastie", "Etoile", "Profondeur", "Amrine", "Tempête"]
   zones_elites = ["Sirène", "Palais", "Mines", "Myrk", "Malveillance"]
   lieux = donjons + zones_elites
   async def autocomp_lieux(inter: disnake.ApplicationCommandInteraction, user_input: str):
