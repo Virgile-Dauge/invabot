@@ -661,16 +661,20 @@ def main():
     
     @bot.event
     async def on_voice_state_update(member, before, after):
-        instances_cat = 948167052722573322
+        pve_cat = 919868329521455135
         invasions_cat = 906648457824051252
-        to_purge = [instances_cat, invasions_cat]
+        to_purge = [pve_cat, invasions_cat]
     
-        invasions_waiting = 948204662086058076
-        instances_waiting = 948198317983146034
-        protected = [invasions_waiting, instances_waiting]
+        invasions_waiting = 971423215744348240
+        pve_creation = 971424838860292096
+        protected = [invasions_waiting, pve_creation]
         if before.channel and before.channel.category_id in to_purge:
             if not before.channel.members and before.channel.id not in protected:
                 await before.channel.delete()
+        if after.channel and after.channel.id == pve_creation:
+            voice = await after.channel.category.create_voice_channel(f'Salon créé par {member.display_name}')
+            await member.move_to(voice)
+    
     bot.run(token=open("bot.token").read()[:-1])
 
 if __name__ == "__main__":
